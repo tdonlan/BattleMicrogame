@@ -11,4 +11,7 @@ x-timer that moves a drag UI element
 x-button - click and measure tiem with dragger
 
 x-have downtime between clicks
--translate the clickvalue to a percent to hit
+x-translate the clickvalue to a percent to hit
+
+-need a small buffer after slider complete (have some buffer room built into the SliderValue?) so you can click right at 100?
+

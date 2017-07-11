@@ -37,39 +37,38 @@ public class GameControllerScript : MonoBehaviour
 	void Update ()
 	{
 		if (isCooldown) {
-			ClickValue = 0;
 			slider.value = 0;
 			cooldownTimer += Time.deltaTime;
 			if (cooldownTimer >= totalCooldownTimer) {
+				LogValue ();
 				isCooldown = !isCooldown;
+
+				totalTurnTimer = getNewTimerValue ();
 				cooldownTimer = 0;
+				turnTimer = 0;
+				ClickValue = 0;
+				roundCount++;
 			}
 		} else {
 			turnTimer += Time.deltaTime;
 			SliderValue = Mathf.RoundToInt ((turnTimer / totalTurnTimer) * 100);
 			slider.value = SliderValue;
 			if (turnTimer >= totalTurnTimer) {
-				roundCount++;
-				turnTimer = 0;
-				totalTurnTimer = getTimerValue ();
 				isCooldown = !isCooldown;
-				LogValue ();
-
 			}
 		}
 	}
 
-	private float getTimerValue ()
+	private float getNewTimerValue ()
 	{
 		return .5f + ((float)r.NextDouble () * 2f);
 	}
 
 	public void ClickButton ()
 	{
-		if (!isCooldown) {
-			ClickValue = SliderValue;
-			text.text = string.Format ("{0} - {1}", ClickValue, getAccuracy ());
-		}
+		float clickTime = turnTimer + cooldownTimer;
+		ClickValue = Mathf.RoundToInt ((clickTime / totalTurnTimer) * 100);
+		text.text = string.Format ("{0} - {1}", ClickValue, getAccuracy ());
 	}
 
 	private float getAccuracy ()
