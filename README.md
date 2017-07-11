@@ -10,5 +10,5 @@
 x-timer that moves a drag UI element
 x-button - click and measure tiem with dragger
 
--have downtime between clicks
+x-have downtime between clicks
 -translate the clickvalue to a percent to hit

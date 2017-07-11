@@ -8,7 +8,10 @@ public class GameControllerScript : MonoBehaviour
 {
 	private System.Random r;
 
+	private int roundCount = 1;
+
 	public int SliderValue;
+	public int ClickValue;
 	public int TotalSliderValue = 100;
 
 	private float turnTimer = 0;
@@ -22,6 +25,7 @@ public class GameControllerScript : MonoBehaviour
 	public Slider slider;
 	public Button button;
 	public Text text;
+	public Text logText;
 
 	// Use this for initialization
 	void Start ()
@@ -33,6 +37,7 @@ public class GameControllerScript : MonoBehaviour
 	void Update ()
 	{
 		if (isCooldown) {
+			ClickValue = 0;
 			slider.value = 0;
 			cooldownTimer += Time.deltaTime;
 			if (cooldownTimer >= totalCooldownTimer) {
@@ -44,9 +49,12 @@ public class GameControllerScript : MonoBehaviour
 			SliderValue = Mathf.RoundToInt ((turnTimer / totalTurnTimer) * 100);
 			slider.value = SliderValue;
 			if (turnTimer >= totalTurnTimer) {
+				roundCount++;
 				turnTimer = 0;
 				totalTurnTimer = getTimerValue ();
 				isCooldown = !isCooldown;
+				LogValue ();
+
 			}
 		}
 	}
@@ -59,7 +67,23 @@ public class GameControllerScript : MonoBehaviour
 	public void ClickButton ()
 	{
 		if (!isCooldown) {
-			text.text = string.Format ("{0}", SliderValue);
+			ClickValue = SliderValue;
+			text.text = string.Format ("{0} - {1}", ClickValue, getAccuracy ());
 		}
+	}
+
+	private float getAccuracy ()
+	{
+		if (ClickValue > TotalSliderValue) {
+			ClickValue = TotalSliderValue - (ClickValue - TotalSliderValue);
+		}
+
+		float acc = (float)ClickValue / (float)TotalSliderValue;
+		return acc;
+	}
+
+	private void LogValue ()
+	{
+		logText.text += string.Format ("{0} - {1}\n", roundCount, getAccuracy ());
 	}
 }
