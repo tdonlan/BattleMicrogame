@@ -4,8 +4,18 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum AttackType
+{
+	Attack,
+	Dodge,
+	Counter
+}
+
 public class GameControllerScript : MonoBehaviour
 {
+
+
+
 	private System.Random r;
 
 	private int roundCount = 1;
@@ -64,12 +74,12 @@ public class GameControllerScript : MonoBehaviour
 		return .5f + ((float)r.NextDouble () * 2f);
 	}
 
-	public void ClickButton ()
+	public void ClickButton (int iAttackType)
 	{
 		float clickTime = turnTimer + cooldownTimer;
 		ClickValue = Mathf.RoundToInt ((clickTime / totalTurnTimer) * 100);
 		var acc = getAccuracy ();
-		text.text = string.Format ("{0}\n{1} - {2}", getAccValue (acc), ClickValue, acc);
+		text.text = string.Format ("{0} - {1}\n{2} - {3}", (AttackType)iAttackType, getAccValue (acc), ClickValue, acc);
 	}
 
 	private float getAccuracy ()
@@ -93,7 +103,6 @@ public class GameControllerScript : MonoBehaviour
 		} else {
 			return "Fail!";
 		}
-
 	}
 
 	private void LogValue ()
