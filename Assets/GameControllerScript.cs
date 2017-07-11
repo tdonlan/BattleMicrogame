@@ -68,7 +68,8 @@ public class GameControllerScript : MonoBehaviour
 	{
 		float clickTime = turnTimer + cooldownTimer;
 		ClickValue = Mathf.RoundToInt ((clickTime / totalTurnTimer) * 100);
-		text.text = string.Format ("{0} - {1}", ClickValue, getAccuracy ());
+		var acc = getAccuracy ();
+		text.text = string.Format ("{0}\n{1} - {2}", getAccValue (acc), ClickValue, acc);
 	}
 
 	private float getAccuracy ()
@@ -81,8 +82,23 @@ public class GameControllerScript : MonoBehaviour
 		return acc;
 	}
 
+	private string getAccValue (float acc)
+	{
+		if (acc >= .98f) {
+			return "CRIT!";
+		} else if (acc >= .85f) {
+			return "Hit";
+		} else if (acc > .5f) {
+			return "Miss";
+		} else {
+			return "Fail!";
+		}
+
+	}
+
 	private void LogValue ()
 	{
-		logText.text += string.Format ("{0} - {1}\n", roundCount, getAccuracy ());
+		var acc = getAccuracy ();
+		logText.text += string.Format ("{0} - {1}\n", roundCount, acc);
 	}
 }
