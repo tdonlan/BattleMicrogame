@@ -33,5 +33,11 @@ x-create data structure to hold enemy attack ordering - call in loop (attack typ
 
 x-should only be able to click button once per round.
 
+2017-07-14
+
+-BUG - if you dont click anything, no one wins the round (no effect), should default to enemy win
+-BUG - whenyou click to restart after a battle, the last entry persists in the log
+-clear the output text after each round
+-better helpers to reset vars.
 
 
