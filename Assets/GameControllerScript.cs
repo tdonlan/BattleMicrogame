@@ -105,6 +105,33 @@ public class GameControllerScript : MonoBehaviour
 		var acc = getAccuracy ();
 		var outcome = getTurnOutcome ((AttackType)iAttackType, currentTurnData.enemyAttackType);
 		text.text = string.Format ("{0} - {1}\n{2} - {3}", outcome, getAccValue (acc), ClickValue, acc);
+		ResolveBattle (outcome, acc);
+	}
+
+	private void ResolveBattle (Outcome outcome, float accuracy)
+	{
+		//TODO: add multipliers based on accuracy.
+
+		bool enemyDead = false;
+		bool playerDead = false;
+		switch (outcome) {
+		case Outcome.Win:
+			enemyDead = enemy.Hit (player.Damage);
+			break;
+		case Outcome.Draw:
+			enemyDead = enemy.Hit (Mathf.RoundToInt (player.Damage * .5f));
+			playerDead = player.Hit (Mathf.RoundToInt (enemy.Damage * .5f));
+			break;
+		case Outcome.Lose:
+			playerDead = player.Hit (enemy.Damage);
+			break;
+
+		}
+
+		PlayerHPSlider.value = player.HPSliderValue;
+		EnemyHPSlider.value = enemy.HPSliderValue;
+
+		//TODO;check for enemy/ player dead and popup battle over screen.
 	}
 
 	//who wins the battle?
@@ -120,7 +147,6 @@ public class GameControllerScript : MonoBehaviour
 			return Outcome.Win;
 		}
 		return Outcome.Lose;
-	
 	}
 
 	private float getAccuracy ()
@@ -132,6 +158,8 @@ public class GameControllerScript : MonoBehaviour
 		float acc = (float)ClickValue / (float)TotalSliderValue;
 		return acc;
 	}
+
+
 
 	private string getAccValue (float acc)
 	{

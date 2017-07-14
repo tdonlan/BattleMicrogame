@@ -12,6 +12,13 @@ public class Enemy
 	public int HP;
 	public int TotalHP;
 
+	public int HPSliderValue {
+		get {
+			return Mathf.RoundToInt (((float)HP / (float)TotalHP) * 100);
+		}
+	}
+
+
 	public int Damage;
 
 	public int turnIndex = 0;

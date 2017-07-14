@@ -10,6 +10,13 @@ public class Player
 	public int TotalHP;
 	public int HP;
 
+	public int HPSliderValue {
+		get {
+			return Mathf.RoundToInt (((float)HP / (float)TotalHP) * 100);
+		}
+	}
+
+
 	public int Damage;
 
 	public Player ()
