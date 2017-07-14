@@ -25,7 +25,7 @@ public class Player
 		this.TotalHP = 100;
 		this.HP = this.TotalHP;
 		this.Level = 1;
-		this.Damage = 10;
+		this.Damage = 20;
 	}
 
 	public bool Hit (int damage)

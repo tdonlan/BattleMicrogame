@@ -47,6 +47,7 @@ public class GameControllerScript : MonoBehaviour
 	private float turnTimer = 0;
 	private float totalTurnTimer = 2f;
 
+	private bool isPaused = false;
 	private bool isCooldown = true;
 	private float cooldownTimer = 0;
 	private float totalCooldownTimer = .5f;
@@ -60,6 +61,7 @@ public class GameControllerScript : MonoBehaviour
 	public Button button;
 	public Text text;
 	public Text logText;
+	public GameOverScript gameOverScript;
 
 	public Slider PlayerHPSlider;
 	public Slider EnemyHPSlider;
@@ -76,20 +78,33 @@ public class GameControllerScript : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if (isCooldown) {
-			slider.value = 0;
-			cooldownTimer += Time.deltaTime;
-			if (cooldownTimer >= totalCooldownTimer) {
-				nextTurn ();
-			}
-		} else {
-			turnTimer += Time.deltaTime;
-			SliderValue = Mathf.RoundToInt ((turnTimer / totalTurnTimer) * 100);
-			slider.value = SliderValue;
-			if (turnTimer >= totalTurnTimer) {
-				isCooldown = !isCooldown;
+		if (!isPaused) {
+			if (isCooldown) {
+				slider.value = 0;
+				cooldownTimer += Time.deltaTime;
+				if (cooldownTimer >= totalCooldownTimer) {
+					nextTurn ();
+				}
+			} else {
+				turnTimer += Time.deltaTime;
+				SliderValue = Mathf.RoundToInt ((turnTimer / totalTurnTimer) * 100);
+				slider.value = SliderValue;
+				if (turnTimer >= totalTurnTimer) {
+					isCooldown = !isCooldown;
+				}
 			}
 		}
+	}
+
+	public void RestartGame ()
+	{
+		isPaused = false;
+		this.enemy = new Enemy ("Rat", 1);
+		this.player = new Player ();
+		PlayerHPSlider.value = player.HPSliderValue;
+		EnemyHPSlider.value = enemy.HPSliderValue;
+		roundCount = 1;
+		logText.text = "";
 	}
 
 	private void nextTurn ()
@@ -105,7 +120,6 @@ public class GameControllerScript : MonoBehaviour
 		ClickValue = 0;
 		roundCount++;
 	}
-
 
 	public void ClickButton (int iAttackType)
 	{
@@ -143,7 +157,15 @@ public class GameControllerScript : MonoBehaviour
 		PlayerHPSlider.value = player.HPSliderValue;
 		EnemyHPSlider.value = enemy.HPSliderValue;
 
+
 		//TODO;check for enemy/ player dead and popup battle over screen.
+		if (playerDead) {
+			isPaused = true;
+			gameOverScript.Show ("You Died!");
+		} else if (enemyDead) {
+			isPaused = true;
+			gameOverScript.Show ("You Win!");
+		}
 	}
 
 	//who wins the battle?
