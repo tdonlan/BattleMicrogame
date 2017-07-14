@@ -27,7 +27,7 @@ counter > attack > dodge
 	Win, Lose, Draw
 	Crit, Hit, Miss, Fail
 
--create data structure to hold enemy attack orderign - call in loop (attack type + timer value)
+-create data structure to hold enemy attack ordering - call in loop (attack type + timer value)
 
 -Record the attack type and outcome at top of screen (Attack + Win, Counter + Draw, etc)
 

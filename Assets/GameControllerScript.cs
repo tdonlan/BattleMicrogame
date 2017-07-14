@@ -7,23 +7,36 @@ using UnityEngine.UI;
 public enum AttackType
 {
 	Attack,
-	Dodge,
-	Counter
+	Counter,
+	Special
+}
+
+public enum Outcome
+{
+	Win,
+	Lose,
+	Draw
+}
+
+public class TurnData
+{
+	public float duration;
+	public AttackType enemyAttackType;
 }
 
 public class GameControllerScript : MonoBehaviour
 {
-
-
-
 	private System.Random r;
 
 	private int roundCount = 1;
+
+
 
 	public int SliderValue;
 	public int ClickValue;
 	public int TotalSliderValue = 100;
 
+	private TurnData currentTurnData;
 	private float turnTimer = 0;
 	private float totalTurnTimer = 2f;
 
@@ -31,16 +44,26 @@ public class GameControllerScript : MonoBehaviour
 	private float cooldownTimer = 0;
 	private float totalCooldownTimer = .5f;
 
+	//GameObjects
+	public Enemy enemy;
+	public Player player;
+
 	//UI components
 	public Slider slider;
 	public Button button;
 	public Text text;
 	public Text logText;
 
+	public Slider PlayerHPSlider;
+	public Slider EnemyHPSlider;
+
 	// Use this for initialization
 	void Start ()
 	{
 		r = new System.Random ();
+
+		this.enemy = new Enemy ("Rat", 1);
+		this.player = new Player ();
 	}
 
 	// Update is called once per frame
@@ -53,7 +76,8 @@ public class GameControllerScript : MonoBehaviour
 				LogValue ();
 				isCooldown = !isCooldown;
 
-				totalTurnTimer = getNewTimerValue ();
+				currentTurnData = enemy.getNextTurnData ();
+				totalTurnTimer = currentTurnData.duration;
 				cooldownTimer = 0;
 				turnTimer = 0;
 				ClickValue = 0;
@@ -79,7 +103,24 @@ public class GameControllerScript : MonoBehaviour
 		float clickTime = turnTimer + cooldownTimer;
 		ClickValue = Mathf.RoundToInt ((clickTime / totalTurnTimer) * 100);
 		var acc = getAccuracy ();
-		text.text = string.Format ("{0} - {1}\n{2} - {3}", (AttackType)iAttackType, getAccValue (acc), ClickValue, acc);
+		var outcome = getTurnOutcome ((AttackType)iAttackType, currentTurnData.enemyAttackType);
+		text.text = string.Format ("{0} - {1}\n{2} - {3}", outcome, getAccValue (acc), ClickValue, acc);
+	}
+
+	//who wins the battle?
+	private Outcome getTurnOutcome (AttackType playerAttackType, AttackType enemyAttackType)
+	{
+		if (playerAttackType == enemyAttackType) {
+			return Outcome.Draw;
+		} else if (enemyAttackType == AttackType.Attack && playerAttackType == AttackType.Special) {
+			return Outcome.Lose;
+		} else if (playerAttackType == AttackType.Attack && enemyAttackType == AttackType.Special) {
+			return Outcome.Win;
+		} else if ((int)playerAttackType > (int)enemyAttackType) {
+			return Outcome.Win;
+		}
+		return Outcome.Lose;
+	
 	}
 
 	private float getAccuracy ()
