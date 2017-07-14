@@ -33,7 +33,7 @@ public class Enemy
 		this.Level = level;
 		this.TotalHP = level * 50;
 		this.HP = this.TotalHP;
-		this.Damage = level * 20;
+		this.Damage = level * 10;
 
 		this.turnDataList = generateTurnDataList ();
 
@@ -67,5 +67,11 @@ public class Enemy
 			turnIndex = 0;
 		}
 		return turnDataList [turnIndex];
+	}
+
+	//helper for generating a decent timer duration range
+	private float getNewTimerValue ()
+	{
+		return .5f + ((float)r.NextDouble () * 2f);
 	}
 }

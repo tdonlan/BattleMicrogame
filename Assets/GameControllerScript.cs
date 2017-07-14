@@ -18,6 +18,14 @@ public enum Outcome
 	Draw
 }
 
+public enum Accuracy
+{
+	Crit,
+	Hit,
+	Miss,
+	Fail
+}
+
 public class TurnData
 {
 	public float duration;
@@ -30,8 +38,7 @@ public class GameControllerScript : MonoBehaviour
 
 	private int roundCount = 1;
 
-
-
+	private bool hasClicked = false;
 	public int SliderValue;
 	public int ClickValue;
 	public int TotalSliderValue = 100;
@@ -73,15 +80,7 @@ public class GameControllerScript : MonoBehaviour
 			slider.value = 0;
 			cooldownTimer += Time.deltaTime;
 			if (cooldownTimer >= totalCooldownTimer) {
-				LogValue ();
-				isCooldown = !isCooldown;
-
-				currentTurnData = enemy.getNextTurnData ();
-				totalTurnTimer = currentTurnData.duration;
-				cooldownTimer = 0;
-				turnTimer = 0;
-				ClickValue = 0;
-				roundCount++;
+				nextTurn ();
 			}
 		} else {
 			turnTimer += Time.deltaTime;
@@ -93,22 +92,36 @@ public class GameControllerScript : MonoBehaviour
 		}
 	}
 
-	private float getNewTimerValue ()
+	private void nextTurn ()
 	{
-		return .5f + ((float)r.NextDouble () * 2f);
+		LogValue ();
+		isCooldown = !isCooldown;
+		hasClicked = false;
+
+		currentTurnData = enemy.getNextTurnData ();
+		totalTurnTimer = currentTurnData.duration;
+		cooldownTimer = 0;
+		turnTimer = 0;
+		ClickValue = 0;
+		roundCount++;
 	}
+
 
 	public void ClickButton (int iAttackType)
 	{
-		float clickTime = turnTimer + cooldownTimer;
-		ClickValue = Mathf.RoundToInt ((clickTime / totalTurnTimer) * 100);
-		var acc = getAccuracy ();
-		var outcome = getTurnOutcome ((AttackType)iAttackType, currentTurnData.enemyAttackType);
-		text.text = string.Format ("{0} - {1}\n{2} - {3}", outcome, getAccValue (acc), ClickValue, acc);
-		ResolveBattle (outcome, acc);
+		if (!hasClicked) {
+			hasClicked = true;
+			float clickTime = turnTimer + cooldownTimer;
+			ClickValue = Mathf.RoundToInt ((clickTime / totalTurnTimer) * 100);
+			var acc = getAccuracy ();
+			var outcome = getTurnOutcome ((AttackType)iAttackType, currentTurnData.enemyAttackType);
+			text.text = string.Format ("{0} - {1}\n{2} - {3}", outcome, getAccValue (acc), ClickValue, acc);
+			ResolveBattle (outcome, getAccValue (acc));
+
+		}
 	}
 
-	private void ResolveBattle (Outcome outcome, float accuracy)
+	private void ResolveBattle (Outcome outcome, Accuracy acc)
 	{
 		//TODO: add multipliers based on accuracy.
 
@@ -116,16 +129,15 @@ public class GameControllerScript : MonoBehaviour
 		bool playerDead = false;
 		switch (outcome) {
 		case Outcome.Win:
-			enemyDead = enemy.Hit (player.Damage);
+			enemyDead = enemy.Hit (getModifiedDmg (player.Damage, acc));
 			break;
 		case Outcome.Draw:
-			enemyDead = enemy.Hit (Mathf.RoundToInt (player.Damage * .5f));
+			enemyDead = enemy.Hit (getModifiedDmg (Mathf.RoundToInt (player.Damage * .5f), acc));
 			playerDead = player.Hit (Mathf.RoundToInt (enemy.Damage * .5f));
 			break;
 		case Outcome.Lose:
-			playerDead = player.Hit (enemy.Damage);
+			playerDead = player.Hit (enemy.Damage); //todo: incorporate random / enemy skills into accuracy
 			break;
-
 		}
 
 		PlayerHPSlider.value = player.HPSliderValue;
@@ -159,18 +171,32 @@ public class GameControllerScript : MonoBehaviour
 		return acc;
 	}
 
-
-
-	private string getAccValue (float acc)
+	private Accuracy getAccValue (float acc)
 	{
 		if (acc >= .98f) {
-			return "CRIT!";
+			return Accuracy.Crit;
 		} else if (acc >= .85f) {
-			return "Hit";
+			return Accuracy.Hit;
 		} else if (acc > .5f) {
-			return "Miss";
+			return Accuracy.Miss;
 		} else {
-			return "Fail!";
+			return Accuracy.Fail;
+		}
+	}
+
+	private int getModifiedDmg (int dmg, Accuracy acc)
+	{
+		switch (acc) {
+		case Accuracy.Crit:
+			return Mathf.RoundToInt (dmg * 1.5f);
+		case Accuracy.Hit:
+			return dmg;
+		case Accuracy.Miss:
+			return 0;
+		case Accuracy.Fail:
+			return 0;
+		default:
+			return 0;
 		}
 	}
 

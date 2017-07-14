@@ -21,17 +21,17 @@ x-translate to crit/hit/miss values
 
 x-create three buttons - attack, dodge, counter
 
-counter > attack > dodge
+attack < counter < special
 
--create grid of outcomes 
+x-create grid of outcomes 
 	Win, Lose, Draw
 	Crit, Hit, Miss, Fail
 
--create data structure to hold enemy attack ordering - call in loop (attack type + timer value)
+x-create data structure to hold enemy attack ordering - call in loop (attack type + timer value)
 
 -Record the attack type and outcome at top of screen (Attack + Win, Counter + Draw, etc)
 
--should only be able to click button once per round.
+x-should only be able to click button once per round.
 
 
 
