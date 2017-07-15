@@ -48,7 +48,7 @@ public class GameControllerScript : MonoBehaviour
 	private float totalTurnTimer = 2f;
 
 	private bool isPaused = false;
-	private bool isCooldown = true;
+	private bool isCooldown = false;
 	private float cooldownTimer = 0;
 	private float totalCooldownTimer = .5f;
 
@@ -109,6 +109,11 @@ public class GameControllerScript : MonoBehaviour
 
 	private void nextTurn ()
 	{
+		if (!hasClicked) {
+			//log this?
+			ResolveBattle (Outcome.Lose, Accuracy.Fail);
+		}
+
 		LogValue ();
 		isCooldown = !isCooldown;
 		hasClicked = false;
@@ -131,7 +136,6 @@ public class GameControllerScript : MonoBehaviour
 			var outcome = getTurnOutcome ((AttackType)iAttackType, currentTurnData.enemyAttackType);
 			text.text = string.Format ("{0} - {1}\n{2} - {3}", outcome, getAccValue (acc), ClickValue, acc);
 			ResolveBattle (outcome, getAccValue (acc));
-
 		}
 	}
 
