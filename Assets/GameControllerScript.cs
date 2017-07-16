@@ -58,8 +58,7 @@ public class GameControllerScript : MonoBehaviour
 
 	//UI components
 	public Slider slider;
-	public Button button;
-	public Text text;
+	public Text turnText;
 	public Text logText;
 	public GameOverScript gameOverScript;
 
@@ -71,8 +70,24 @@ public class GameControllerScript : MonoBehaviour
 	{
 		r = new System.Random ();
 
+		RestartGame ();
+	}
+
+	public void RestartGame ()
+	{
+		turnTimer = 0;
+		cooldownTimer = 0;
+		hasClicked = false;
+		ClickValue = 0;
+		isCooldown = false;
+		isPaused = false;
 		this.enemy = new Enemy ("Rat", 1);
 		this.player = new Player ();
+		currentTurnData = enemy.getNextTurnData ();
+		PlayerHPSlider.value = player.HPSliderValue;
+		EnemyHPSlider.value = enemy.HPSliderValue;
+		roundCount = 1;
+		logText.text = "";
 	}
 
 	// Update is called once per frame
@@ -96,17 +111,6 @@ public class GameControllerScript : MonoBehaviour
 		}
 	}
 
-	public void RestartGame ()
-	{
-		isPaused = false;
-		this.enemy = new Enemy ("Rat", 1);
-		this.player = new Player ();
-		PlayerHPSlider.value = player.HPSliderValue;
-		EnemyHPSlider.value = enemy.HPSliderValue;
-		roundCount = 1;
-		logText.text = "";
-	}
-
 	private void nextTurn ()
 	{
 		if (!hasClicked) {
@@ -123,6 +127,7 @@ public class GameControllerScript : MonoBehaviour
 		cooldownTimer = 0;
 		turnTimer = 0;
 		ClickValue = 0;
+		turnText.text = "";
 		roundCount++;
 	}
 
@@ -134,15 +139,13 @@ public class GameControllerScript : MonoBehaviour
 			ClickValue = Mathf.RoundToInt ((clickTime / totalTurnTimer) * 100);
 			var acc = getAccuracy ();
 			var outcome = getTurnOutcome ((AttackType)iAttackType, currentTurnData.enemyAttackType);
-			text.text = string.Format ("{0} - {1}\n{2} - {3}", outcome, getAccValue (acc), ClickValue, acc);
+			turnText.text = string.Format ("{0} - {1}\n{2} - {3}", outcome, getAccValue (acc), ClickValue, acc);
 			ResolveBattle (outcome, getAccValue (acc));
 		}
 	}
 
 	private void ResolveBattle (Outcome outcome, Accuracy acc)
 	{
-		//TODO: add multipliers based on accuracy.
-
 		bool enemyDead = false;
 		bool playerDead = false;
 		switch (outcome) {

@@ -36,9 +36,9 @@ x-should only be able to click button once per round.
 2017-07-14
 
 x-BUG - if you dont click anything, no one wins the round (no effect), should default to enemy win
--BUG - whenyou click to restart after a battle, the last entry persists in the log
--clear the output text after each round
--better helpers to reset vars.
+x-BUG - whenyou click to restart after a battle, the last entry persists in the log
+x-clear the output text after each round
+x-better helpers to reset vars.
 -countdown till battle starts: 3...2...1... Fight!
 -show damage done on each side.
 
