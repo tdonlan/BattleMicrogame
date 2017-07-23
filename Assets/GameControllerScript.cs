@@ -60,6 +60,8 @@ public class GameControllerScript : MonoBehaviour
 	public Slider slider;
 	public Text turnText;
 	public Text logText;
+	public Text PlayerDmgText;
+	public Text EnemyDmgText;
 	public GameOverScript gameOverScript;
 
 	public Slider PlayerHPSlider;
@@ -86,6 +88,8 @@ public class GameControllerScript : MonoBehaviour
 		currentTurnData = enemy.getNextTurnData ();
 		PlayerHPSlider.value = player.HPSliderValue;
 		EnemyHPSlider.value = enemy.HPSliderValue;
+		EnemyDmgText.text = "";
+		PlayerDmgText.text = "";
 		roundCount = 1;
 		logText.text = "";
 	}
@@ -119,6 +123,8 @@ public class GameControllerScript : MonoBehaviour
 		}
 
 		LogValue ();
+		EnemyDmgText.text = "";
+		PlayerDmgText.text = "";
 		isCooldown = !isCooldown;
 		hasClicked = false;
 
@@ -150,14 +156,23 @@ public class GameControllerScript : MonoBehaviour
 		bool playerDead = false;
 		switch (outcome) {
 		case Outcome.Win:
-			enemyDead = enemy.Hit (getModifiedDmg (player.Damage, acc));
+			var dmg = getModifiedDmg (player.Damage, acc);
+			displayDmg (true, dmg);
+			enemyDead = enemy.Hit (dmg);
 			break;
 		case Outcome.Draw:
-			enemyDead = enemy.Hit (getModifiedDmg (Mathf.RoundToInt (player.Damage * .5f), acc));
-			playerDead = player.Hit (Mathf.RoundToInt (enemy.Damage * .5f));
+			var eDmg = getModifiedDmg (Mathf.RoundToInt (player.Damage * .5f), acc);
+			displayDmg (true, eDmg);
+			enemyDead = enemy.Hit (eDmg);
+
+			var pDmg = Mathf.RoundToInt (enemy.Damage * .5f);
+			displayDmg (false, pDmg);
+			playerDead = player.Hit (pDmg);
 			break;
 		case Outcome.Lose:
-			playerDead = player.Hit (enemy.Damage); //todo: incorporate random / enemy skills into accuracy
+			dmg = Mathf.RoundToInt (enemy.Damage);
+			displayDmg (false, dmg);
+			playerDead = player.Hit (dmg); //todo: incorporate random / enemy skills into accuracy
 			break;
 		}
 
@@ -233,5 +248,22 @@ public class GameControllerScript : MonoBehaviour
 	{
 		var acc = getAccuracy ();
 		logText.text += string.Format ("{0} - {1}\n", roundCount, acc);
+	}
+
+	private void displayDmg (bool isEnemy, int amt)
+	{
+		var dmgColor = Color.red;
+		if (amt < 0) {
+			dmgColor = Color.green;
+		}
+
+		if (isEnemy) {
+			EnemyDmgText.text = amt.ToString ();
+			EnemyDmgText.color = dmgColor;
+		} else {
+			PlayerDmgText.text = amt.ToString ();
+			PlayerDmgText.color = dmgColor;
+		}
+			
 	}
 }

@@ -43,3 +43,19 @@ x-better helpers to reset vars.
 -show damage done on each side.
 
 -should damage be more of a continuous function of accuracy?  plus some randomness?
+
+2017-07-18
+-usable items (healing potions, poisons, etc) that can be clicked in between regular attacks.
+
+-start / select enemy screen
+-player stats screen.
+
+-level up mechanics
+	-gain xp on win
+	-xp per level curve
+	-generate enemies per level.
+
+-run on iphone for testing:
+	https://unity3d.com/learn/tutorials/topics/mobile-touch/building-your-unity-game-ios-device-testing
+
+
