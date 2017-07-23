@@ -40,12 +40,12 @@ x-BUG - whenyou click to restart after a battle, the last entry persists in the 
 x-clear the output text after each round
 x-better helpers to reset vars.
 -countdown till battle starts: 3...2...1... Fight!
--show damage done on each side.
+x-show damage done on each side.
 
 -should damage be more of a continuous function of accuracy?  plus some randomness?
 
 2017-07-18
--usable items (healing potions, poisons, etc) that can be clicked in between regular attacks.
+x-usable items (healing potions, poisons, etc) that can be clicked in between regular attacks.
 
 -start / select enemy screen
 -player stats screen.

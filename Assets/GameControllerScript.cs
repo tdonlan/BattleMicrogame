@@ -39,6 +39,7 @@ public class GameControllerScript : MonoBehaviour
 	private int roundCount = 1;
 
 	private bool hasClicked = false;
+	private bool hasClickedItem = false;
 	public int SliderValue;
 	public int ClickValue;
 	public int TotalSliderValue = 100;
@@ -62,10 +63,13 @@ public class GameControllerScript : MonoBehaviour
 	public Text logText;
 	public Text PlayerDmgText;
 	public Text EnemyDmgText;
+
 	public GameOverScript gameOverScript;
 
 	public Slider PlayerHPSlider;
 	public Slider EnemyHPSlider;
+	public Text PlayerStatsText;
+	public Text EnemyStatsText;
 
 	// Use this for initialization
 	void Start ()
@@ -80,18 +84,19 @@ public class GameControllerScript : MonoBehaviour
 		turnTimer = 0;
 		cooldownTimer = 0;
 		hasClicked = false;
+		hasClickedItem = false;
 		ClickValue = 0;
 		isCooldown = false;
 		isPaused = false;
 		this.enemy = new Enemy ("Rat", 1);
 		this.player = new Player ();
 		currentTurnData = enemy.getNextTurnData ();
-		PlayerHPSlider.value = player.HPSliderValue;
-		EnemyHPSlider.value = enemy.HPSliderValue;
 		EnemyDmgText.text = "";
 		PlayerDmgText.text = "";
 		roundCount = 1;
 		logText.text = "";
+
+		UpdateStats ();
 	}
 
 	// Update is called once per frame
@@ -117,6 +122,11 @@ public class GameControllerScript : MonoBehaviour
 
 	private void nextTurn ()
 	{
+
+		player.UpdateEffects ();
+		enemy.UpdateEffects ();
+
+		//Player never clicked - auto lose
 		if (!hasClicked) {
 			//log this?
 			ResolveBattle (Outcome.Lose, Accuracy.Fail);
@@ -127,6 +137,7 @@ public class GameControllerScript : MonoBehaviour
 		PlayerDmgText.text = "";
 		isCooldown = !isCooldown;
 		hasClicked = false;
+		hasClickedItem = false;
 
 		currentTurnData = enemy.getNextTurnData ();
 		totalTurnTimer = currentTurnData.duration;
@@ -135,6 +146,8 @@ public class GameControllerScript : MonoBehaviour
 		ClickValue = 0;
 		turnText.text = "";
 		roundCount++;
+
+		UpdateStats ();
 	}
 
 	public void ClickButton (int iAttackType)
@@ -176,9 +189,7 @@ public class GameControllerScript : MonoBehaviour
 			break;
 		}
 
-		PlayerHPSlider.value = player.HPSliderValue;
-		EnemyHPSlider.value = enemy.HPSliderValue;
-
+		UpdateStats ();
 
 		//TODO;check for enemy/ player dead and popup battle over screen.
 		if (playerDead) {
@@ -265,5 +276,34 @@ public class GameControllerScript : MonoBehaviour
 			PlayerDmgText.color = dmgColor;
 		}
 			
+	}
+
+	public void UseItem (int index)
+	{
+		if (!hasClickedItem) {
+			if (player.itemList.Count > index) {
+				hasClickedItem = true;
+				var item = player.itemList [index];
+
+				//TODO: dont use item yet
+				item.UseItem (player, enemy);
+				logText.text += string.Format ("Used {0}\n", item.Name);
+			}
+		}
+
+		UpdateStats ();
+
+	
+
+	}
+
+	private void UpdateStats ()
+	{
+		PlayerStatsText.text = player.GetStats ();
+		EnemyStatsText.text = enemy.GetStats ();
+		PlayerHPSlider.value = player.HPSliderValue;
+		EnemyHPSlider.value = enemy.HPSliderValue;
+
+
 	}
 }

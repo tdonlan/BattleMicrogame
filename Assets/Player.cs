@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player
+public class Player : ITarget
 {
 
 	public string Name;
 	public int Level;
 	public int TotalHP;
 	public int HP;
+
+	public List<Item> itemList;
+
+	public List<ItemEffect> effectList = new List<ItemEffect> ();
 
 	public int HPSliderValue {
 		get {
@@ -19,6 +23,11 @@ public class Player
 
 	public int Damage;
 
+	public string GetStats ()
+	{
+		return string.Format ("HP: {0}/{1} Dmg: {2}", HP, TotalHP, Damage);
+	}
+
 	public Player ()
 	{
 		this.Name = "Player";
@@ -26,6 +35,27 @@ public class Player
 		this.HP = this.TotalHP;
 		this.Level = 1;
 		this.Damage = 20;
+		itemList = new List<Item> ();
+		itemList.Add (Item.getHealingPotion ());
+	
+		itemList.Add (Item.getRegenPotion ());
+		itemList.Add (Item.getGrenade ());
+		itemList.Add (Item.getPoison ());
+	
+	}
+
+	public void AddEffect (ItemEffect effect)
+	{
+		var newEffect = effect.GetCopy ();
+		newEffect.ApplyEffect (this);
+		if (newEffect.Duration > 0) {
+			this.effectList.Add (newEffect);
+		}
+	}
+
+	public void RemoveEffect (ItemEffect effect)
+	{
+		this.effectList.Remove (effect);	
 	}
 
 	public bool Hit (int damage)
@@ -43,6 +73,22 @@ public class Player
 		if (this.HP > this.TotalHP) {
 
 			this.HP = this.TotalHP;
+		}
+	}
+
+
+	public void Cure (int amount)
+	{
+		while (amount > 0 && effectList.Count > 0) {
+			amount--;
+			effectList.RemoveAt (0);
+		}
+	}
+
+	public void UpdateEffects ()
+	{
+		for (int i = effectList.Count - 1; i >= 0; i--) {
+			effectList [i].ApplyEffect (this);
 		}
 	}
 }
