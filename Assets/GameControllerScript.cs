@@ -84,6 +84,7 @@ public class GameControllerScript : MonoBehaviour
 
 	public void RestartGame ()
 	{
+		ClearItemButtons ();
 		turnTimer = 0;
 		cooldownTimer = 0;
 		hasClicked = false;
@@ -136,6 +137,10 @@ public class GameControllerScript : MonoBehaviour
 			//log this?
 			ResolveBattle (Outcome.Lose, Accuracy.Fail);
 		}
+
+		CheckHealth ();
+
+		//Reset for next turn
 
 		LogValue ();
 		EnemyDmgText.text = "";
@@ -196,13 +201,16 @@ public class GameControllerScript : MonoBehaviour
 
 		UpdateStats ();
 
-		//TODO;check for enemy/ player dead and popup battle over screen.
-		if (playerDead) {
-			isPaused = true;
-			gameOverScript.Show ("You Died!");
-		} else if (enemyDead) {
+	}
+
+	public void CheckHealth ()
+	{
+		if (enemy.HP <= 0) {
 			isPaused = true;
 			gameOverScript.Show ("You Win!");
+		} else if (player.HP <= 0) {
+			isPaused = true;
+			gameOverScript.Show ("You Died!");
 		}
 	}
 
@@ -309,6 +317,13 @@ public class GameControllerScript : MonoBehaviour
 	}
 
 
+	private void ClearItemButtons ()
+	{
+		foreach (Transform child in ItemButtonPanel.transform) {
+			GameObject.Destroy (child.gameObject);
+		}
+	}
+
 	private void LoadPlayerItemButtons ()
 	{
 		var count = 0;
@@ -337,6 +352,5 @@ public class GameControllerScript : MonoBehaviour
 
 		//add to panel.
 		itemButton.transform.SetParent (ItemButtonPanel.transform);
-
 	}
 }
