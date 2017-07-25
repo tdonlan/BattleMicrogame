@@ -71,6 +71,9 @@ public class GameControllerScript : MonoBehaviour
 	public Text PlayerStatsText;
 	public Text EnemyStatsText;
 
+	public GameObject ItemButtonPanel;
+	public GameObject ItemButtonPrefab;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -95,6 +98,8 @@ public class GameControllerScript : MonoBehaviour
 		PlayerDmgText.text = "";
 		roundCount = 1;
 		logText.text = "";
+
+		LoadPlayerItemButtons ();
 
 		UpdateStats ();
 	}
@@ -292,9 +297,7 @@ public class GameControllerScript : MonoBehaviour
 		}
 
 		UpdateStats ();
-
 	
-
 	}
 
 	private void UpdateStats ()
@@ -303,7 +306,37 @@ public class GameControllerScript : MonoBehaviour
 		EnemyStatsText.text = enemy.GetStats ();
 		PlayerHPSlider.value = player.HPSliderValue;
 		EnemyHPSlider.value = enemy.HPSliderValue;
+	}
 
+
+	private void LoadPlayerItemButtons ()
+	{
+		var count = 0;
+		foreach (var item in player.itemList) {
+			Debug.Log (string.Format ("Adding item {0} ", item.Name));
+			LoadItemButton (item.Name, count);
+			count++;
+		}
+	}
+
+	private void LoadItemButton (string name, int index)
+	{
+		//instantiate prefab
+		var itemButton = Instantiate (ItemButtonPrefab);
+
+
+		//update button text
+		var itemButtonText = itemButton.GetComponentInChildren<Text> ();
+		itemButtonText.text = name;
+
+		//update button on click
+		var itemButtonBtn = itemButton.GetComponent<Button> ();
+		itemButtonBtn.onClick.AddListener (delegate {
+			UseItem (index);
+		});
+
+		//add to panel.
+		itemButton.transform.SetParent (ItemButtonPanel.transform);
 
 	}
 }

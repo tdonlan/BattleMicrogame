@@ -46,6 +46,13 @@ x-show damage done on each side.
 
 2017-07-18
 x-usable items (healing potions, poisons, etc) that can be clicked in between regular attacks.
+	-buttons tied to actual items in inventory.  using items removes them.
+		-displays counts as part of button.
+
+-lifetap effect
+
+
+-various attacks (attack, counter, special) have effects attached.
 
 -start / select enemy screen
 -player stats screen.
