@@ -54,13 +54,15 @@ x-usable items (healing potions, poisons, etc) that can be clicked in between re
 
 -various attacks (attack, counter, special) have effects attached.
 
--start / select enemy screen
--player stats screen.
+x-start / select enemy screen
+x-player stats screen.
 
 -level up mechanics
 	-gain xp on win
 	-xp per level curve
 	-generate enemies per level.
+
+-items display damage / healing.
 
 -run on iphone for testing:
 	https://unity3d.com/learn/tutorials/topics/mobile-touch/building-your-unity-game-ios-device-testing
