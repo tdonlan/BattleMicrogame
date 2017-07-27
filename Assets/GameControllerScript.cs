@@ -34,6 +34,9 @@ public class TurnData
 
 public class GameControllerScript : MonoBehaviour
 {
+
+	public GameData gameData;
+
 	private System.Random r;
 
 	private int roundCount = 1;
@@ -77,6 +80,7 @@ public class GameControllerScript : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+		gameData = GameObject.FindObjectOfType<GameData> ();
 		r = new System.Random ();
 
 		RestartGame ();
@@ -175,27 +179,26 @@ public class GameControllerScript : MonoBehaviour
 
 	private void ResolveBattle (Outcome outcome, Accuracy acc)
 	{
-		bool enemyDead = false;
-		bool playerDead = false;
+		
 		switch (outcome) {
 		case Outcome.Win:
 			var dmg = getModifiedDmg (player.Damage, acc);
 			displayDmg (true, dmg);
-			enemyDead = enemy.Hit (dmg);
+			enemy.Hit (dmg);
 			break;
 		case Outcome.Draw:
 			var eDmg = getModifiedDmg (Mathf.RoundToInt (player.Damage * .5f), acc);
 			displayDmg (true, eDmg);
-			enemyDead = enemy.Hit (eDmg);
+			enemy.Hit (eDmg);
 
 			var pDmg = Mathf.RoundToInt (enemy.Damage * .5f);
 			displayDmg (false, pDmg);
-			playerDead = player.Hit (pDmg);
+			player.Hit (pDmg);
 			break;
 		case Outcome.Lose:
 			dmg = Mathf.RoundToInt (enemy.Damage);
 			displayDmg (false, dmg);
-			playerDead = player.Hit (dmg); //todo: incorporate random / enemy skills into accuracy
+			player.Hit (dmg);
 			break;
 		}
 
@@ -203,10 +206,12 @@ public class GameControllerScript : MonoBehaviour
 
 	}
 
+	//
 	public void CheckHealth ()
 	{
 		if (enemy.HP <= 0) {
 			isPaused = true;
+			gameData.KillCount++;
 			gameOverScript.Show ("You Win!");
 		} else if (player.HP <= 0) {
 			isPaused = true;

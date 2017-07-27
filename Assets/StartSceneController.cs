@@ -7,8 +7,6 @@ using UnityEngine.SceneManagement;
 public class StartSceneController : MonoBehaviour
 {
 
-
-
 	// Use this for initialization
 	void Start ()
 	{
