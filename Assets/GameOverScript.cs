@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameOverScript : MonoBehaviour
 {
@@ -34,6 +35,12 @@ public class GameOverScript : MonoBehaviour
 	{
 		rectTransform.localPosition = new Vector3 (0, -3000, 0);
 
+	}
+
+	public void QuitGame ()
+	{
+		Hide ();
+		SceneManager.LoadScene ("StartScene", LoadSceneMode.Single);
 	}
 
 	public void RestartGame ()
