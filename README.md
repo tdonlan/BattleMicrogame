@@ -56,6 +56,7 @@ x-usable items (healing potions, poisons, etc) that can be clicked in between re
 
 x-start / select enemy screen
 x-player stats screen.
+	-tied to player object
 
 -level up mechanics
 	-gain xp on win

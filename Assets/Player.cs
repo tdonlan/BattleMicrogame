@@ -44,6 +44,11 @@ public class Player : ITarget
 	
 	}
 
+	public override string ToString ()
+	{
+		return string.Format ("{0}\nLevel:{1}\nHP:{2}/{3}", this.Name, this.Level, this.HP, this.TotalHP);
+	}
+
 	public void AddEffect (ItemEffect effect)
 	{
 		var newEffect = effect.GetCopy ();

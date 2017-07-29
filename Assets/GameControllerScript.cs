@@ -58,7 +58,7 @@ public class GameControllerScript : MonoBehaviour
 
 	//GameObjects
 	public Enemy enemy;
-	public Player player;
+	//public Player player;
 
 	//UI components
 	public Slider slider;
@@ -97,7 +97,6 @@ public class GameControllerScript : MonoBehaviour
 		isCooldown = false;
 		isPaused = false;
 		this.enemy = new Enemy ("Rat", 1);
-		this.player = new Player ();
 		currentTurnData = enemy.getNextTurnData ();
 		EnemyDmgText.text = "";
 		PlayerDmgText.text = "";
@@ -133,7 +132,7 @@ public class GameControllerScript : MonoBehaviour
 	private void nextTurn ()
 	{
 
-		player.UpdateEffects ();
+		gameData.player.UpdateEffects ();
 		enemy.UpdateEffects ();
 
 		//Player never clicked - auto lose
@@ -182,23 +181,23 @@ public class GameControllerScript : MonoBehaviour
 		
 		switch (outcome) {
 		case Outcome.Win:
-			var dmg = getModifiedDmg (player.Damage, acc);
+			var dmg = getModifiedDmg (gameData.player.Damage, acc);
 			displayDmg (true, dmg);
 			enemy.Hit (dmg);
 			break;
 		case Outcome.Draw:
-			var eDmg = getModifiedDmg (Mathf.RoundToInt (player.Damage * .5f), acc);
+			var eDmg = getModifiedDmg (Mathf.RoundToInt (gameData.player.Damage * .5f), acc);
 			displayDmg (true, eDmg);
 			enemy.Hit (eDmg);
 
 			var pDmg = Mathf.RoundToInt (enemy.Damage * .5f);
 			displayDmg (false, pDmg);
-			player.Hit (pDmg);
+			gameData.player.Hit (pDmg);
 			break;
 		case Outcome.Lose:
 			dmg = Mathf.RoundToInt (enemy.Damage);
 			displayDmg (false, dmg);
-			player.Hit (dmg);
+			gameData.player.Hit (dmg);
 			break;
 		}
 
@@ -213,7 +212,7 @@ public class GameControllerScript : MonoBehaviour
 			isPaused = true;
 			gameData.KillCount++;
 			gameOverScript.Show ("You Win!");
-		} else if (player.HP <= 0) {
+		} else if (gameData.player.HP <= 0) {
 			isPaused = true;
 			gameOverScript.Show ("You Died!");
 		}
@@ -299,12 +298,12 @@ public class GameControllerScript : MonoBehaviour
 	public void UseItem (int index)
 	{
 		if (!hasClickedItem) {
-			if (player.itemList.Count > index) {
+			if (gameData.player.itemList.Count > index) {
 				hasClickedItem = true;
-				var item = player.itemList [index];
+				var item = gameData.player.itemList [index];
 
 				//TODO: dont use item yet
-				item.UseItem (player, enemy);
+				item.UseItem (gameData.player, enemy);
 				logText.text += string.Format ("Used {0}\n", item.Name);
 			}
 		}
@@ -315,9 +314,9 @@ public class GameControllerScript : MonoBehaviour
 
 	private void UpdateStats ()
 	{
-		PlayerStatsText.text = player.GetStats ();
+		PlayerStatsText.text = gameData.player.GetStats ();
 		EnemyStatsText.text = enemy.GetStats ();
-		PlayerHPSlider.value = player.HPSliderValue;
+		PlayerHPSlider.value = gameData.player.HPSliderValue;
 		EnemyHPSlider.value = enemy.HPSliderValue;
 	}
 
@@ -332,7 +331,7 @@ public class GameControllerScript : MonoBehaviour
 	private void LoadPlayerItemButtons ()
 	{
 		var count = 0;
-		foreach (var item in player.itemList) {
+		foreach (var item in gameData.player.itemList) {
 			Debug.Log (string.Format ("Adding item {0} ", item.Name));
 			LoadItemButton (item.Name, count);
 			count++;
