@@ -87,6 +87,8 @@ public class GameControllerScript : MonoBehaviour
 	void Start ()
 	{
 		gameData = GameObject.FindObjectOfType<GameData> ();
+		gameData.player.AttachGameController (this);
+
 		r = new System.Random ();
 
 		RestartGame ();
@@ -107,6 +109,8 @@ public class GameControllerScript : MonoBehaviour
 		startTimer = 3;
 
 		this.enemy = new Enemy ("Rat", 1);
+		this.enemy.AttachGameController (this);
+
 		currentTurnData = enemy.getNextTurnData ();
 		EnemyDmgText.text = "";
 		PlayerDmgText.text = "";
@@ -200,21 +204,21 @@ public class GameControllerScript : MonoBehaviour
 		switch (outcome) {
 		case Outcome.Win:
 			var dmg = getModifiedDmg (gameData.player.Damage, acc);
-			displayDmg (true, dmg);
+
 			enemy.Hit (dmg);
 			break;
 		case Outcome.Draw:
 			var eDmg = getModifiedDmg (Mathf.RoundToInt (gameData.player.Damage * .5f), acc);
-			displayDmg (true, eDmg);
+
 			enemy.Hit (eDmg);
 
 			var pDmg = Mathf.RoundToInt (enemy.Damage * .5f);
-			displayDmg (false, pDmg);
+	
 			gameData.player.Hit (pDmg);
 			break;
 		case Outcome.Lose:
 			dmg = Mathf.RoundToInt (enemy.Damage);
-			displayDmg (false, dmg);
+		
 			gameData.player.Hit (dmg);
 			break;
 		}
@@ -296,10 +300,11 @@ public class GameControllerScript : MonoBehaviour
 		logText.text += string.Format ("{0} - {1}\n", roundCount, acc);
 	}
 
-	private void displayDmg (bool isEnemy, int amt)
+	public void DisplayDmg (bool isEnemy, int amt)
 	{
 		var dmgColor = Color.red;
 		if (amt < 0) {
+			amt *= -1;
 			dmgColor = Color.green;
 		}
 
@@ -310,24 +315,24 @@ public class GameControllerScript : MonoBehaviour
 			PlayerDmgText.text = amt.ToString ();
 			PlayerDmgText.color = dmgColor;
 		}
-			
 	}
 
 	public void UseItem (int index)
 	{
-		if (!hasClickedItem) {
-			if (gameData.player.itemList.Count > index) {
-				hasClickedItem = true;
-				var item = gameData.player.itemList [index];
+		if (!isPaused) {
+			if (!hasClickedItem) {
+				if (gameData.player.itemList.Count > index) {
+					hasClickedItem = true;
+					var item = gameData.player.itemList [index];
 
-				//TODO: dont use item yet
-				item.UseItem (gameData.player, enemy);
-				logText.text += string.Format ("Used {0}\n", item.Name);
+					//TODO: dont use item yet
+					item.UseItem (gameData.player, enemy);
+					logText.text += string.Format ("Used {0}\n", item.Name);
+				}
 			}
-		}
 
-		UpdateStats ();
-	
+			UpdateStats ();
+		}
 	}
 
 	private void UpdateStats ()

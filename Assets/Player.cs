@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : ITarget
 {
+	private GameControllerScript gameController;
+
 	public string Name;
 	public int Level;
 	public int TotalHP;
@@ -42,6 +44,11 @@ public class Player : ITarget
 	
 	}
 
+	public void AttachGameController (GameControllerScript gameController)
+	{
+		this.gameController = gameController;
+	}
+
 	public override string ToString ()
 	{
 		return string.Format ("{0}\nLevel:{1}\nHP:{2}/{3}", this.Name, this.Level, this.HP, this.TotalHP);
@@ -63,6 +70,8 @@ public class Player : ITarget
 
 	public bool Hit (int damage)
 	{
+		gameController.DisplayDmg (false, damage);
+
 		this.HP -= damage;
 		if (this.HP <= 0) {
 			return true;
@@ -72,13 +81,13 @@ public class Player : ITarget
 
 	public void Heal (int amt)
 	{
+		gameController.DisplayDmg (false, amt * -1);
+
 		this.HP += amt;
 		if (this.HP > this.TotalHP) {
-
 			this.HP = this.TotalHP;
 		}
 	}
-
 
 	public void Cure (int amount)
 	{

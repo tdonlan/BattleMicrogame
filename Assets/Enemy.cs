@@ -5,6 +5,8 @@ using UnityEngine;
 public class Enemy : ITarget
 {
 
+	private GameControllerScript gameController;
+
 	private System.Random r;
 
 	public string Name;
@@ -45,6 +47,11 @@ public class Enemy : ITarget
 
 	}
 
+	public void AttachGameController (GameControllerScript gameController)
+	{
+		this.gameController = gameController;
+	}
+
 	private List<TurnData> generateTurnDataList ()
 	{
 		//difficulty of turn data should be a function of enemy level, but for now just hardcode to something easy.
@@ -73,6 +80,7 @@ public class Enemy : ITarget
 
 	public bool Hit (int damage)
 	{
+		gameController.DisplayDmg (true, damage);
 		this.HP -= damage;
 		if (this.HP <= 0) {
 			return true;
@@ -82,6 +90,8 @@ public class Enemy : ITarget
 
 	public void Heal (int amt)
 	{
+		gameController.DisplayDmg (true, amt * -1);
+
 		this.HP += amt;
 		if (this.HP > this.TotalHP) {
 
