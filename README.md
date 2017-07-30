@@ -39,7 +39,7 @@ x-BUG - if you dont click anything, no one wins the round (no effect), should de
 x-BUG - whenyou click to restart after a battle, the last entry persists in the log
 x-clear the output text after each round
 x-better helpers to reset vars.
--countdown till battle starts: 3...2...1... Fight!
+x-countdown till battle starts: 3...2...1... Fight!
 x-show damage done on each side.
 
 -should damage be more of a continuous function of accuracy?  plus some randomness?
@@ -56,7 +56,7 @@ x-usable items (healing potions, poisons, etc) that can be clicked in between re
 
 x-start / select enemy screen
 x-player stats screen.
-	-tied to player object
+	x-tied to player object
 
 -level up mechanics
 	-gain xp on win

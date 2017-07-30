@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Player : ITarget
 {
-
 	public string Name;
 	public int Level;
 	public int TotalHP;
@@ -19,7 +18,6 @@ public class Player : ITarget
 			return Mathf.RoundToInt (((float)HP / (float)TotalHP) * 100);
 		}
 	}
-
 
 	public int Damage;
 

@@ -32,7 +32,6 @@ public class ItemEffect
 	public void ApplyEffect (ITarget target)
 	{
 		if (this.Duration > 0) {
-			
 			switch (effectType) {
 			case EffectType.HealSelf:
 				target.Heal (Amount);

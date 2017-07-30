@@ -28,8 +28,6 @@ public class CharacterSceneController : MonoBehaviour
 		StatsText.text = string.Format ("{0}\n\nKillCount: {1}", this.gameData.player.ToString (), gameData.KillCount);
 	}
 
-
-
 	public void BackButton ()
 	{
 		SceneManager.LoadScene ("StartScene", LoadSceneMode.Single);

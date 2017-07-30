@@ -51,6 +51,11 @@ public class GameControllerScript : MonoBehaviour
 	private float turnTimer = 0;
 	private float totalTurnTimer = 2f;
 
+	private bool isStart = true;
+	private float startTimer;
+	private float startTime;
+
+
 	private bool isPaused = false;
 	private bool isCooldown = false;
 	private float cooldownTimer = 0;
@@ -66,6 +71,7 @@ public class GameControllerScript : MonoBehaviour
 	public Text logText;
 	public Text PlayerDmgText;
 	public Text EnemyDmgText;
+	public Text StartText;
 
 	public GameOverScript gameOverScript;
 
@@ -95,7 +101,11 @@ public class GameControllerScript : MonoBehaviour
 		hasClickedItem = false;
 		ClickValue = 0;
 		isCooldown = false;
-		isPaused = false;
+		isPaused = true;
+
+		isStart = true;
+		startTimer = 3;
+
 		this.enemy = new Enemy ("Rat", 1);
 		currentTurnData = enemy.getNextTurnData ();
 		EnemyDmgText.text = "";
@@ -111,7 +121,15 @@ public class GameControllerScript : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if (!isPaused) {
+		if (isStart) {
+			startTimer -= Time.deltaTime;
+			StartText.text = string.Format ("{0}", Math.Ceiling (startTimer));
+			if (startTimer <= 0) {
+				isStart = false;
+				isPaused = false;
+				StartText.text = "";
+			}
+		} else if (!isPaused) {
 			if (isCooldown) {
 				slider.value = 0;
 				cooldownTimer += Time.deltaTime;
