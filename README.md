@@ -63,9 +63,14 @@ x-player stats screen.
 	-xp per level curve
 	-generate enemies per level.
 
--items display damage / healing.
+x-items display damage / healing.
 
 -run on iphone for testing:
 	https://unity3d.com/learn/tutorials/topics/mobile-touch/building-your-unity-game-ios-device-testing
+
+
+-07-30-2017
+	-procedurally generate enemies based on current player level - easy, medium, hard challenges.
+
 
 

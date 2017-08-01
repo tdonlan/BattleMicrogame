@@ -8,11 +8,15 @@ public class Enemy : ITarget
 	private GameControllerScript gameController;
 
 	private System.Random r;
+	public const int MaxLevel = 50;
+	//TODO: store this a constant somewhere
+
 
 	public string Name;
 	public int Level;
 	public int HP;
 	public int TotalHP;
+	public int XP;
 
 	public List<ItemEffect> effectList = new List<ItemEffect> ();
 
@@ -42,9 +46,15 @@ public class Enemy : ITarget
 		this.TotalHP = level * 50;
 		this.HP = this.TotalHP;
 		this.Damage = level * 10;
+		this.XP = level * 50;
 
 		this.turnDataList = generateTurnDataList ();
 
+	}
+
+	public override string ToString ()
+	{
+		return string.Format ("{0}\n Level {1}\n HP {2}/{3} \nXP {4}", Name, Level, HP, TotalHP, XP);
 	}
 
 	public void AttachGameController (GameControllerScript gameController)
@@ -128,4 +138,34 @@ public class Enemy : ITarget
 			effectList [i].ApplyEffect (this);
 		}
 	}
+
+	//------- Enemy Factory
+
+	//variance = -1 to 1.  will scale the difficulty of the enemy
+	public static Enemy GenerateEnemy (int level, float variance)
+	{
+		//vary level
+		var lvlVariance = Mathf.RoundToInt ((float)Enemy.MaxLevel * .1f);
+		level += level * lvlVariance;
+		string name = getName (level);
+		return new Enemy (name, level);
+	}
+
+	private static string getName (int level)
+	{
+		List<string> nameList = new List<string> () {
+			"Rat", "Spider", "Snake", "Imp", "Kobold", "Goblin", "Brigand", "Orc", "Zombie", "Orc Warlord", "Dire Wolf", "Werewolf", "Gryphon", "Drake", "Wyvern",
+			"Wraith", "Skeleton Warrior", "Ogre", "Giant", "Vampire", "Dragon", "Lich"
+		};
+
+		var lvlRatio = (float)level / (float)Enemy.MaxLevel;
+
+		var index = Mathf.RoundToInt (nameList.Count * lvlRatio);
+		index = Mathf.Clamp (index, 0, nameList.Count - 1);
+		return nameList [index];
+
+	}
+
+
+
 }

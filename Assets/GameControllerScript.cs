@@ -108,6 +108,9 @@ public class GameControllerScript : MonoBehaviour
 		isStart = true;
 		startTimer = 3;
 
+		//fully heal player for now
+		this.gameData.player.HP = this.gameData.player.TotalHP;
+
 		this.enemy = new Enemy ("Rat", 1);
 		this.enemy.AttachGameController (this);
 
@@ -232,12 +235,24 @@ public class GameControllerScript : MonoBehaviour
 	{
 		if (enemy.HP <= 0) {
 			isPaused = true;
-			gameData.KillCount++;
-			gameOverScript.Show ("You Win!");
+			Win ();
 		} else if (gameData.player.HP <= 0) {
 			isPaused = true;
-			gameOverScript.Show ("You Died!");
+			Lose ();
 		}
+	}
+
+	public void Win ()
+	{
+		gameData.KillCount++;
+		gameData.player.GetXP (enemy.XP);
+		gameOverScript.Show ("You Win!");
+	}
+
+	public void Lose ()
+	{
+		gameOverScript.Show ("You Died!");
+		//remove some money / xp?
 	}
 
 	//who wins the battle?

@@ -25,7 +25,19 @@ public class CharacterSceneController : MonoBehaviour
 
 	private void SetStatsText ()
 	{
-		StatsText.text = string.Format ("{0}\n\nKillCount: {1}", this.gameData.player.ToString (), gameData.KillCount);
+		StatsText.text = string.Format ("{0}\n\nKillCount: {1}\n\n", this.gameData.player.ToString (), gameData.KillCount);
+
+		StatsText.text += getEnemyStatsText ();
+	}
+
+	//for testing reading from gameData
+	private string getEnemyStatsText ()
+	{
+		string retval = "Enemies:\n";
+		foreach (var e in gameData.enemyList) {
+			retval += e.ToString () + "\n";
+		}
+		return retval;
 	}
 
 	public void BackButton ()

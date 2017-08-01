@@ -7,6 +7,10 @@ public class Player : ITarget
 	private GameControllerScript gameController;
 
 	public string Name;
+
+	public int XP;
+
+	public int MaxLevel = 50;
 	public int Level;
 	public int TotalHP;
 	public int HP;
@@ -14,6 +18,8 @@ public class Player : ITarget
 	public List<Item> itemList;
 
 	public List<ItemEffect> effectList = new List<ItemEffect> ();
+
+	private List<int> XPCurve;
 
 	public int HPSliderValue {
 		get {
@@ -23,18 +29,17 @@ public class Player : ITarget
 
 	public int Damage;
 
-	public string GetStats ()
-	{
-		return string.Format ("HP: {0}/{1} Dmg: {2}", HP, TotalHP, Damage);
-	}
-
 	public Player ()
 	{
 		this.Name = "Player";
 		this.TotalHP = 100;
 		this.HP = this.TotalHP;
 		this.Level = 1;
+		this.XP = 0;
 		this.Damage = 20;
+
+		XPCurve = getXPCurve ();
+
 		itemList = new List<Item> ();
 		itemList.Add (Item.getHealingPotion ());
 	
@@ -49,9 +54,14 @@ public class Player : ITarget
 		this.gameController = gameController;
 	}
 
+	public string GetStats ()
+	{
+		return string.Format ("Level: {3}\nXP: {4}/{5}\nHP: {0}/{1}\nDmg: {2}", HP, TotalHP, Damage, Level, XP, getXPNextLevel ());
+	}
+
 	public override string ToString ()
 	{
-		return string.Format ("{0}\nLevel:{1}\nHP:{2}/{3}", this.Name, this.Level, this.HP, this.TotalHP);
+		return string.Format ("{0}\n{1}", this.Name, GetStats ());
 	}
 
 	public void AddEffect (ItemEffect effect)
@@ -103,4 +113,38 @@ public class Player : ITarget
 			effectList [i].ApplyEffect (this);
 		}
 	}
+
+	//-------- XP Calculations
+
+
+	private List<int> getXPCurve ()
+	{
+		List<int> xpCurve = new List<int> ();
+		xpCurve.Add (0); //level 0
+		xpCurve.Add (0); //level 1
+
+		int xpNeeded = 500;
+		for (int i = 2; i <= this.MaxLevel; i++) {
+			xpCurve.Add (xpNeeded);
+			xpNeeded += Mathf.RoundToInt ((float)xpNeeded * 1.1f);
+		}
+		return xpCurve;
+	}
+
+	public void GetXP (int amount)
+	{
+		this.XP += amount;
+		while (this.Level <= this.MaxLevel && this.XP >= XPCurve [this.Level + 1]) {
+			this.Level++;
+		}
+	}
+
+	private int getXPNextLevel ()
+	{
+		if (this.Level <= this.MaxLevel) {
+			return XPCurve [Level + 1];
+		}
+		return XP;
+	}
+		
 }
