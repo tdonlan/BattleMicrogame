@@ -50,4 +50,9 @@ public class StartSceneController : MonoBehaviour
 	{
 		SceneManager.LoadScene ("CharacterScene", LoadSceneMode.Single);
 	}
+
+	public void ShowTestScreen ()
+	{
+		SceneManager.LoadScene ("TestScene", LoadSceneMode.Single);
+	}
 }

@@ -59,8 +59,8 @@ x-player stats screen.
 	x-tied to player object
 
 -level up mechanics
-	-gain xp on win
-	-xp per level curve
+	x-gain xp on win
+	x-xp per level curve
 	-generate enemies per level.
 
 x-items display damage / healing.
@@ -71,6 +71,12 @@ x-items display damage / healing.
 
 -07-30-2017
 	-procedurally generate enemies based on current player level - easy, medium, hard challenges.
+
+	x-test unity scene
+
+	-hook up unit tests framework?
+
+
 
 
 

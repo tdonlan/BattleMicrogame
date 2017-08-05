@@ -145,8 +145,8 @@ public class Enemy : ITarget
 	public static Enemy GenerateEnemy (int level, float variance)
 	{
 		//vary level
-		var lvlVariance = Mathf.RoundToInt ((float)Enemy.MaxLevel * .1f);
-		level += level * lvlVariance;
+		//var lvlVariance = Mathf.RoundToInt ((float)Enemy.MaxLevel * .1f);
+		//level += Mathf.RoundToInt (level * lvlVariance);
 		string name = getName (level);
 		return new Enemy (name, level);
 	}
@@ -159,13 +159,11 @@ public class Enemy : ITarget
 		};
 
 		var lvlRatio = (float)level / (float)Enemy.MaxLevel;
-
-		var index = Mathf.RoundToInt (nameList.Count * lvlRatio);
+		var index = Mathf.RoundToInt ((float)nameList.Count * lvlRatio);
+		index = Mathf.RoundToInt (Random.Range (index - 3, index + 3));
 		index = Mathf.Clamp (index, 0, nameList.Count - 1);
 		return nameList [index];
 
 	}
-
-
 
 }
