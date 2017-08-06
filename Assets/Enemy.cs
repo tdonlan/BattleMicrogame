@@ -31,10 +31,6 @@ public class Enemy : ITarget
 	public int turnIndex = 0;
 	public List<TurnData> turnDataList;
 
-	public string GetStats ()
-	{
-		return string.Format ("HP: {0}/{1} Dmg: {2}", HP, TotalHP, Damage);
-	}
 
 	public Enemy (string name, int level)
 	{
@@ -52,9 +48,20 @@ public class Enemy : ITarget
 
 	}
 
+	//For display stats in game
+	public string GetStats ()
+	{
+		return string.Format ("HP: {0}/{1} Dmg: {2}", HP, TotalHP, Damage);
+	}
+
+	//for displaying full object info for testing
 	public override string ToString ()
 	{
-		return string.Format ("{0}\n Level {1}\n HP {2}/{3} \nXP {4}", Name, Level, HP, TotalHP, XP);
+		var turnsStr = "";
+		foreach (var t in turnDataList) {
+			turnsStr += t.ToString ();
+		}
+		return string.Format ("{0}\n Level {1}\n HP {2}/{3} Dmg: {5} \nXP {4}\nTurns: {6}", Name, Level, HP, TotalHP, XP, Damage, turnsStr);
 	}
 
 	public void AttachGameController (GameControllerScript gameController)
@@ -144,11 +151,13 @@ public class Enemy : ITarget
 	//variance = -1 to 1.  will scale the difficulty of the enemy
 	public static Enemy GenerateEnemy (int level, float variance)
 	{
-		//vary level
-		//var lvlVariance = Mathf.RoundToInt ((float)Enemy.MaxLevel * .1f);
-		//level += Mathf.RoundToInt (level * lvlVariance);
+		level = Core.vary (level, variance);
 		string name = getName (level);
-		return new Enemy (name, level);
+		var e = new Enemy (name, level);
+		e.TotalHP = Core.vary (e.TotalHP, variance);
+		e.HP = e.TotalHP;
+		e.Damage = Core.vary (e.Damage, variance);
+		return e;
 	}
 
 	private static string getName (int level)
@@ -166,4 +175,10 @@ public class Enemy : ITarget
 
 	}
 
+
+	private static int vary (int val, float variation, System.Random r)
+	{
+		var rVal = r.NextDouble ();
+		return Mathf.RoundToInt ((float)val + ((float)val * variation * (float)rVal));
+	}
 }

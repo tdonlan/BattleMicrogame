@@ -24,7 +24,7 @@ public class TestSceneController : MonoBehaviour
 
 	public void GenerateEnemy ()
 	{
-		var enemy = Enemy.GenerateEnemy (3, 0);
+		var enemy = Enemy.GenerateEnemy (3, Random.Range (-.5f, .5f));
 
 		var enemyStr = enemy.ToString ();
 		testText.text = enemyStr;

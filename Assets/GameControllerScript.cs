@@ -30,6 +30,12 @@ public class TurnData
 {
 	public float duration;
 	public AttackType enemyAttackType;
+
+	public override string ToString ()
+	{
+		//return duration.ToString ();// enemyAttackType.ToString ();
+		return string.Format ("{0} {1}", enemyAttackType.ToString (), duration.ToString ());
+	}
 }
 
 public class GameControllerScript : MonoBehaviour
