@@ -34,10 +34,8 @@ public class StartSceneController : MonoBehaviour
 		if (gameData.enemyList != null) {
 			foreach (var e in gameData.enemyList) {
 				EnemyStatsText.text += e.ToString () + "\n";
-
 			}
 		}
-
 	}
 
 	public void StartBattle ()

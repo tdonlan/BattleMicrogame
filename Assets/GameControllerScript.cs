@@ -87,6 +87,9 @@ public class GameControllerScript : MonoBehaviour
 	public GameObject ItemButtonPanel;
 	public GameObject ItemButtonPrefab;
 
+	public GameObject TurnInfoPanel;
+	public GameObject TurnInfoPrefab;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -99,6 +102,7 @@ public class GameControllerScript : MonoBehaviour
 	public void RestartGame ()
 	{
 		ClearItemButtons ();
+		ClearTurnInfo ();
 		turnTimer = 0;
 		cooldownTimer = 0;
 		hasClicked = false;
@@ -205,28 +209,26 @@ public class GameControllerScript : MonoBehaviour
 
 	private void ResolveBattle (Outcome outcome, Accuracy acc)
 	{
-		
+
 		switch (outcome) {
 		case Outcome.Win:
 			var dmg = getModifiedDmg (gameData.player.Damage, acc);
-
 			enemy.Hit (dmg);
 			break;
 		case Outcome.Draw:
 			var eDmg = getModifiedDmg (Mathf.RoundToInt (gameData.player.Damage * .5f), acc);
-
 			enemy.Hit (eDmg);
-
 			var pDmg = Mathf.RoundToInt (enemy.Damage * .5f);
-	
 			gameData.player.Hit (pDmg);
 			break;
 		case Outcome.Lose:
 			dmg = Mathf.RoundToInt (enemy.Damage);
-		
 			gameData.player.Hit (dmg);
 			break;
 		}
+
+
+		LoadTurnInfo (currentTurnData.enemyAttackType, outcome);
 
 		UpdateStats ();
 
@@ -368,6 +370,13 @@ public class GameControllerScript : MonoBehaviour
 		}
 	}
 
+	private void ClearTurnInfo ()
+	{
+		foreach (Transform child in TurnInfoPanel.transform) {
+			GameObject.Destroy (child.gameObject);
+		}
+	}
+
 	private void LoadPlayerItemButtons ()
 	{
 		var count = 0;
@@ -396,5 +405,45 @@ public class GameControllerScript : MonoBehaviour
 
 		//add to panel.
 		itemButton.transform.SetParent (ItemButtonPanel.transform);
+	}
+
+	private void LoadTurnInfo (AttackType enemyAttack, Outcome outcome)
+	{
+		//remove front of list, if too many.
+		if (TurnInfoPanel.transform.childCount > 5) {
+			GameObject.Destroy (TurnInfoPanel.transform.GetChild (0).gameObject);
+		}
+
+		var turnInfo = Instantiate (TurnInfoPrefab);
+		var tiImage = turnInfo.GetComponent<Image> ();
+
+
+		var tiColor = Color.grey;
+		switch (outcome) {
+		case Outcome.Win:
+			tiColor = Color.green;
+			break;
+		case Outcome.Draw:
+			tiColor = Color.yellow;
+			break;
+		case Outcome.Lose:
+			tiColor = Color.red;
+			break;
+		default:
+			break;
+		}
+		tiImage.color = tiColor;
+
+		var texts = turnInfo.GetComponentsInChildren<Text> ();
+		foreach (var t in texts) {
+			if (t.gameObject.name == "AttackText") {
+				t.text = enemyAttack.ToString ();
+			}
+			if (t.gameObject.name == "OutcomeText") {
+				t.text = outcome.ToString ();
+			}
+		}
+			
+		turnInfo.transform.parent = TurnInfoPanel.transform;
 	}
 }
