@@ -28,13 +28,11 @@ public class GameOverScript : MonoBehaviour
 	{
 		gameOverText.text = text;
 		rectTransform.localPosition = showPosition;
-
 	}
 
 	public void Hide ()
 	{
 		rectTransform.localPosition = new Vector3 (0, -3000, 0);
-
 	}
 
 	public void QuitGame ()

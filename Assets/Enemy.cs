@@ -64,21 +64,22 @@ public class Enemy : ITarget
 		return string.Format ("{0}\n Level {1}\n HP {2}/{3} Dmg: {5} \nXP {4}\nTurns: {6}", Name, Level, HP, TotalHP, XP, Damage, turnsStr);
 	}
 
-	public void AttachGameController (GameControllerScript gameController)
-	{
-		this.gameController = gameController;
-	}
-
 	private List<TurnData> generateTurnDataList ()
 	{
 		//difficulty of turn data should be a function of enemy level, but for now just hardcode to something easy.
 		List<TurnData> turnDataList = new List<TurnData> ();
-		turnDataList.Add (new TurnData () {
-			duration = 1.5f,
-			enemyAttackType = AttackType.Attack
-		});
-
+		for (int i = 0; i <= Core.r.Next (3); i++) {
+			turnDataList.Add (new TurnData () {
+				duration = UnityEngine.Random.Range (.5f, 2f),
+				enemyAttackType = (AttackType)Core.r.Next (3)
+			});
+		}
 		return turnDataList;
+	}
+
+	public void AttachGameController (GameControllerScript gameController)
+	{
+		this.gameController = gameController;
 	}
 
 	public void AddEffect (ItemEffect effect)
@@ -181,4 +182,7 @@ public class Enemy : ITarget
 		var rVal = r.NextDouble ();
 		return Mathf.RoundToInt ((float)val + ((float)val * variation * (float)rVal));
 	}
+
+
+
 }

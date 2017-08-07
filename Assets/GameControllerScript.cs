@@ -43,8 +43,6 @@ public class GameControllerScript : MonoBehaviour
 
 	public GameData gameData;
 
-	private System.Random r;
-
 	private int roundCount = 1;
 
 	private bool hasClicked = false;
@@ -95,8 +93,6 @@ public class GameControllerScript : MonoBehaviour
 		gameData = GameObject.FindObjectOfType<GameData> ();
 		gameData.player.AttachGameController (this);
 
-		r = new System.Random ();
-
 		RestartGame ();
 	}
 
@@ -117,7 +113,7 @@ public class GameControllerScript : MonoBehaviour
 		//fully heal player for now
 		this.gameData.player.HP = this.gameData.player.TotalHP;
 
-		this.enemy = new Enemy ("Rat", 1);
+		this.enemy = Enemy.GenerateEnemy (gameData.player.Level, UnityEngine.Random.Range (-.5f, .5f));
 		this.enemy.AttachGameController (this);
 
 		currentTurnData = enemy.getNextTurnData ();
