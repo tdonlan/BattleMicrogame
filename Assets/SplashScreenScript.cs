@@ -23,7 +23,6 @@ public class SplashScreenScript : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		displayTime = 2;
 		rectTransform.localPosition = showPosition;
 	}
 	
@@ -41,12 +40,12 @@ public class SplashScreenScript : MonoBehaviour
 
 	public void Show ()
 	{
-		displayTime = 0;
+		displayTimer = 0;
 		Debug.Log ("Showing splash screen");
 		PlayerText.text = gameControllerScript.gameData.player.Name;
 		EnemyText.text = gameControllerScript.enemy.Name;
 		isHiding = false;
-		//rectTransform.localPosition = showPosition;
+		rectTransform.localPosition = showPosition;
 	}
 
 	public void Hide ()
