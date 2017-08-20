@@ -15,7 +15,7 @@ public enum Outcome
 {
 	Win,
 	Lose,
-	Draw
+	Draw,
 }
 
 public enum Accuracy
@@ -88,6 +88,7 @@ public class GameControllerScript : MonoBehaviour
 
 	public GameObject TurnInfoPanel;
 	public GameObject TurnInfoPrefab;
+	public List<GameObject> TurnInfoList;
 
 	// Use this for initialization
 	void Start ()
@@ -128,6 +129,7 @@ public class GameControllerScript : MonoBehaviour
 
 		UpdateStats ();
 
+		InitTurnInfoPanel ();
 		splashScreenScript.Show ();
 	}
 
@@ -182,7 +184,10 @@ public class GameControllerScript : MonoBehaviour
 		hasClicked = false;
 		hasClickedItem = false;
 
+
 		currentTurnData = enemy.getNextTurnData ();
+		HighlightCurrentTurnInfo ();
+
 		totalTurnTimer = currentTurnData.duration;
 		cooldownTimer = 0;
 		turnTimer = 0;
@@ -225,9 +230,9 @@ public class GameControllerScript : MonoBehaviour
 			gameData.player.Hit (dmg);
 			break;
 		}
-
-
-		LoadTurnInfo (currentTurnData.enemyAttackType, outcome);
+			
+		SetCurrentTurnInfo (currentTurnData.enemyAttackType, outcome);
+		//LoadTurnInfo (currentTurnData.enemyAttackType, outcome);
 
 		UpdateStats ();
 
@@ -406,6 +411,86 @@ public class GameControllerScript : MonoBehaviour
 		itemButton.transform.SetParent (ItemButtonPanel.transform);
 	}
 
+	//------------TURN INFO----------
+
+	private void InitTurnInfoPanel ()
+	{
+		TurnInfoList = new List<GameObject> ();
+		foreach (var ti in enemy.turnDataList) {
+			TurnInfoList.Add (InitTurnInfo ());
+		}
+	}
+
+	private GameObject InitTurnInfo ()
+	{
+		var turnInfo = Instantiate (TurnInfoPrefab);
+		var tiImage = turnInfo.GetComponent<Image> ();
+
+		var tiColor = Color.grey;
+		tiImage.color = tiColor;
+
+		var texts = turnInfo.GetComponentsInChildren<Text> ();
+		foreach (var t in texts) {
+			if (t.gameObject.name == "AttackText") {
+				t.text = "?";
+			}
+			if (t.gameObject.name == "OutcomeText") {
+				t.text = "";
+			}
+		}
+
+		turnInfo.transform.parent = TurnInfoPanel.transform;
+		return turnInfo;
+	}
+
+	private void HighlightCurrentTurnInfo ()
+	{
+		/*
+		Image highlightPanelImage;
+		foreach (var ti in TurnInfoList) {
+			highlightPanelImage = ti.GetComponentInChildren<RectTransform> ().GetComponent<Image> ();
+			highlightPanelImage.enabled = false;
+		}
+
+		highlightPanelImage = TurnInfoList [enemy.turnIndex].GetComponentInChildren<RectTransform> ().GetComponent<Image> ();
+		highlightPanelImage.enabled = true;
+		*/
+	}
+
+	private void SetCurrentTurnInfo (AttackType enemyAttack, Outcome outcome)
+	{
+		var turnInfo = TurnInfoList [enemy.turnIndex];
+
+		var tiImage = turnInfo.GetComponent<Image> ();
+	
+		var tiColor = Color.grey;
+		switch (outcome) {
+		case Outcome.Win:
+			tiColor = Color.green;
+			break;
+		case Outcome.Draw:
+			tiColor = Color.yellow;
+			break;
+		case Outcome.Lose:
+			tiColor = Color.red;
+			break;
+		default:
+			break;
+		}
+		tiImage.color = tiColor;
+
+		var texts = turnInfo.GetComponentsInChildren<Text> ();
+		foreach (var t in texts) {
+			if (t.gameObject.name == "AttackText") {
+				t.text = enemyAttack.ToString ();
+			}
+			if (t.gameObject.name == "OutcomeText") {
+				t.text = outcome.ToString ();
+			}
+		}
+	}
+
+	//DEPRECATED
 	private void LoadTurnInfo (AttackType enemyAttack, Outcome outcome)
 	{
 		//remove front of list, if too many.

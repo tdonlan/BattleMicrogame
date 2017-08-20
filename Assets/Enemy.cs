@@ -68,12 +68,14 @@ public class Enemy : ITarget
 	{
 		//difficulty of turn data should be a function of enemy level, but for now just hardcode to something easy.
 		List<TurnData> turnDataList = new List<TurnData> ();
-		for (int i = 0; i <= Core.r.Next (3); i++) {
+		for (int i = 1; i <= 4; i++) {
+			//for (int i = 0; i <= Core.r.Next (3); i++) {
 			turnDataList.Add (new TurnData () {
 				duration = UnityEngine.Random.Range (.5f, 2f),
 				enemyAttackType = (AttackType)Core.r.Next (3)
 			});
 		}
+		turnIndex = turnDataList.Count - 1;
 		return turnDataList;
 	}
 
