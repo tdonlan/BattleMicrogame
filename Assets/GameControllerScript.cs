@@ -55,12 +55,11 @@ public class GameControllerScript : MonoBehaviour
 	private float turnTimer = 0;
 	private float totalTurnTimer = 2f;
 
-	private bool isStart = true;
+	public bool isStart = false;
 	private float startTimer;
 	private float startTime;
 
-
-	private bool isPaused = false;
+	public bool isPaused = true;
 	private bool isCooldown = false;
 	private float cooldownTimer = 0;
 	private float totalCooldownTimer = .5f;
@@ -78,6 +77,7 @@ public class GameControllerScript : MonoBehaviour
 	public Text StartText;
 
 	public GameOverScript gameOverScript;
+	public SplashScreenScript splashScreenScript;
 
 	public Slider PlayerHPSlider;
 	public Slider EnemyHPSlider;
@@ -110,8 +110,7 @@ public class GameControllerScript : MonoBehaviour
 		ClickValue = 0;
 		isCooldown = false;
 		isPaused = true;
-
-		isStart = true;
+		isStart = false;
 		startTimer = 3;
 
 		//fully heal player for now
@@ -129,6 +128,8 @@ public class GameControllerScript : MonoBehaviour
 		LoadPlayerItemButtons ();
 
 		UpdateStats ();
+
+		splashScreenScript.Show ();
 	}
 
 	// Update is called once per frame
@@ -162,7 +163,6 @@ public class GameControllerScript : MonoBehaviour
 
 	private void nextTurn ()
 	{
-
 		gameData.player.UpdateEffects ();
 		enemy.UpdateEffects ();
 

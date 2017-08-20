@@ -70,11 +70,15 @@ x-items display damage / healing.
 
 
 -07-30-2017
-	-procedurally generate enemies based on current player level - easy, medium, hard challenges.
+	x-procedurally generate enemies based on current player level - easy, medium, hard challenges.
 
 	x-test unity scene
 
 	-hook up unit tests framework?
+
+-08-20-2017
+	-splash screen (Player vs Goblin etc.)
+	-top of battle screen - have ? boxes that get filled as the turns progress.  just loop a cursor around the current one.
 
 
 
