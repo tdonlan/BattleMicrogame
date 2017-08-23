@@ -78,7 +78,7 @@ x-items display damage / healing.
 
 -08-20-2017
 	x-splash screen (Player vs Goblin etc.)
-	-top of battle screen - have ? boxes that get filled as the turns progress.  just loop a cursor around the current one.
+	x-top of battle screen - have ? boxes that get filled as the turns progress.  just loop a cursor around the current one.
 		-when we start the battle, instantiate all of these as ?
 		-once the turn completes, update the icon
 		-put a cursor on the current turn icon.

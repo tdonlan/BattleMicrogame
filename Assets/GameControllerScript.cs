@@ -445,16 +445,18 @@ public class GameControllerScript : MonoBehaviour
 
 	private void HighlightCurrentTurnInfo ()
 	{
-		/*
-		Image highlightPanelImage;
 		foreach (var ti in TurnInfoList) {
-			highlightPanelImage = ti.GetComponentInChildren<RectTransform> ().GetComponent<Image> ();
-			highlightPanelImage.enabled = false;
+			var tiImages = ti.GetComponentsInChildren<Image> ();
+			foreach (Image t in tiImages) {
+				if (t.gameObject.name == "HighlightPanel") {
+					if (ti.Equals (TurnInfoList [enemy.turnIndex])) {
+						t.enabled = true;
+					} else {
+						t.enabled = false;
+					}
+				}
+			}
 		}
-
-		highlightPanelImage = TurnInfoList [enemy.turnIndex].GetComponentInChildren<RectTransform> ().GetComponent<Image> ();
-		highlightPanelImage.enabled = true;
-		*/
 	}
 
 	private void SetCurrentTurnInfo (AttackType enemyAttack, Outcome outcome)
@@ -488,6 +490,8 @@ public class GameControllerScript : MonoBehaviour
 				t.text = outcome.ToString ();
 			}
 		}
+
+		HighlightCurrentTurnInfo ();
 	}
 
 	//DEPRECATED
