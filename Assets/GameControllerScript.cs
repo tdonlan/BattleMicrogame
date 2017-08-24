@@ -232,7 +232,6 @@ public class GameControllerScript : MonoBehaviour
 		}
 			
 		SetCurrentTurnInfo (currentTurnData.enemyAttackType, outcome);
-		//LoadTurnInfo (currentTurnData.enemyAttackType, outcome);
 
 		UpdateStats ();
 
@@ -419,6 +418,7 @@ public class GameControllerScript : MonoBehaviour
 		foreach (var ti in enemy.turnDataList) {
 			TurnInfoList.Add (InitTurnInfo ());
 		}
+		HighlightCurrentTurnInfo ();
 	}
 
 	private GameObject InitTurnInfo ()
@@ -440,6 +440,7 @@ public class GameControllerScript : MonoBehaviour
 		}
 
 		turnInfo.transform.parent = TurnInfoPanel.transform;
+
 		return turnInfo;
 	}
 
@@ -490,8 +491,6 @@ public class GameControllerScript : MonoBehaviour
 				t.text = outcome.ToString ();
 			}
 		}
-
-		HighlightCurrentTurnInfo ();
 	}
 
 	//DEPRECATED
