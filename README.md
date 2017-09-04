@@ -65,7 +65,7 @@ x-player stats screen.
 
 x-items display damage / healing.
 
--run on iphone for testing:
+x-run on iphone for testing:
 	https://unity3d.com/learn/tutorials/topics/mobile-touch/building-your-unity-game-ios-device-testing
 
 
