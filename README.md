@@ -84,6 +84,15 @@ x-run on iphone for testing:
 		-put a cursor on the current turn icon.
 
 
+09-03-2017
+	-more varied enemies (difficulty per level + boss)
+	-better turn icon indicator
+	-gain xp / level up
+	-win battle splash screen (xp, loot gained)
+	-save stats on iphone (with reset option)
+	-testing - level up button - to test enemy generation
+	
+
 
 
 

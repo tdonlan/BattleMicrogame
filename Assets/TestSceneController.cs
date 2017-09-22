@@ -22,9 +22,14 @@ public class TestSceneController : MonoBehaviour
 		
 	}
 
+	public void LevelUp ()
+	{
+		gameData.player.Level++;
+	}
+
 	public void GenerateEnemy ()
 	{
-		var enemy = Enemy.GenerateEnemy (1, Random.Range (-.5f, .5f));
+		var enemy = EnemyFactory.GenerateEnemy (1, Random.Range (.75f, 1));
 
 		var enemyStr = enemy.ToString ();
 		testText.text = enemyStr;

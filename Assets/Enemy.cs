@@ -149,42 +149,6 @@ public class Enemy : ITarget
 		}
 	}
 
-	//------- Enemy Factory
 
-	//variance = -1 to 1.  will scale the difficulty of the enemy
-	public static Enemy GenerateEnemy (int level, float variance)
-	{
-		level = Core.vary (level, variance);
-		string name = getName (level);
-		var e = new Enemy (name, level);
-		e.TotalHP = Core.vary (e.TotalHP, variance);
-		e.HP = e.TotalHP;
-		e.Damage = Core.vary (e.Damage, variance);
-		return e;
-	}
-
-	private static string getName (int level)
-	{
-		List<string> nameList = new List<string> () {
-			"Rat", "Spider", "Snake", "Imp", "Kobold", "Goblin", "Brigand", "Orc", "Zombie", "Orc Warlord", "Dire Wolf", "Werewolf", "Gryphon", "Drake", "Wyvern",
-			"Wraith", "Skeleton Warrior", "Ogre", "Giant", "Vampire", "Dragon", "Lich"
-		};
-
-		var lvlRatio = (float)level / (float)Enemy.MaxLevel;
-		var index = Mathf.RoundToInt ((float)nameList.Count * lvlRatio);
-		index = Mathf.RoundToInt (Random.Range (index - 3, index + 3));
-		index = Mathf.Clamp (index, 0, nameList.Count - 1);
-		return nameList [index];
-
-	}
-
-
-	private static int vary (int val, float variation, System.Random r)
-	{
-		var rVal = r.NextDouble ();
-		return Mathf.RoundToInt ((float)val + ((float)val * variation * (float)rVal));
-	}
-
-
-
+		
 }

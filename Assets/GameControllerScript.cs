@@ -116,7 +116,7 @@ public class GameControllerScript : MonoBehaviour
 		//fully heal player for now
 		this.gameData.player.HP = this.gameData.player.TotalHP;
 
-		this.enemy = Enemy.GenerateEnemy (gameData.player.Level, UnityEngine.Random.Range (-.5f, .5f));
+		this.enemy = EnemyFactory.GenerateEnemy (gameData.player.Level, UnityEngine.Random.Range (-.5f, .5f));
 		this.enemy.AttachGameController (this);
 
 		currentTurnData = enemy.getNextTurnData ();

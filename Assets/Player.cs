@@ -123,7 +123,7 @@ public class Player : ITarget
 		xpCurve.Add (0); //level 0
 		xpCurve.Add (0); //level 1
 
-		int xpNeeded = 500;
+		int xpNeeded = 250;
 		for (int i = 2; i <= this.MaxLevel; i++) {
 			xpCurve.Add (xpNeeded);
 			xpNeeded += Mathf.RoundToInt ((float)xpNeeded * 1.1f);
@@ -146,5 +146,5 @@ public class Player : ITarget
 		}
 		return XP;
 	}
-		
+
 }
