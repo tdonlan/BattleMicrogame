@@ -11,6 +11,10 @@ public class Player : ITarget
 	public int XP;
 
 	public int MaxLevel = 50;
+
+
+
+
 	public int Level;
 	public int TotalHP;
 	public int HP;
@@ -19,7 +23,57 @@ public class Player : ITarget
 
 	public List<ItemEffect> effectList = new List<ItemEffect> ();
 
-	private List<int> XPCurve;
+	private List<int> XPCurve = new List<int> () {0,
+		1000,
+		2569,
+		4922,
+		8059,
+		11980,
+		16686,
+		22176,
+		28451,
+		35510,
+		43353,
+		51980,
+		61392,
+		71588,
+		82569,
+		94333,
+		106882,
+		120216,
+		134333,
+		149235,
+		164922,
+		181392,
+		198647,
+		216686,
+		235510,
+		255118,
+		275510,
+		296686,
+		318647,
+		341392,
+		364922,
+		389235,
+		414333,
+		440216,
+		466882,
+		494333,
+		522569,
+		551588,
+		581392,
+		611980,
+		643353,
+		675510,
+		708451,
+		742176,
+		776686,
+		811980,
+		848059,
+		884922,
+		922569,
+		1000000
+	};
 
 	public int HPSliderValue {
 		get {
@@ -36,9 +90,7 @@ public class Player : ITarget
 		this.HP = this.TotalHP;
 		this.Level = 1;
 		this.XP = 0;
-		this.Damage = 20;
-
-		XPCurve = getXPCurve ();
+		this.Damage = 20; //based on weapon
 
 		itemList = new List<Item> ();
 		itemList.Add (Item.getHealingPotion ());
@@ -117,16 +169,25 @@ public class Player : ITarget
 	//-------- XP Calculations
 
 
+	//Not used
 	private List<int> getXPCurve ()
 	{
 		List<int> xpCurve = new List<int> ();
 		xpCurve.Add (0); //level 0
 		xpCurve.Add (0); //level 1
 
-		int xpNeeded = 250;
-		for (int i = 2; i <= this.MaxLevel; i++) {
+		int xpNeeded = 100;
+		for (int i = 2; i < this.MaxLevel / 4; i++) {
 			xpCurve.Add (xpNeeded);
-			xpNeeded += Mathf.RoundToInt ((float)xpNeeded * 1.1f);
+			xpNeeded += Mathf.RoundToInt ((float)xpNeeded * 1.01f);
+		}
+		for (int i = this.MaxLevel / 4; i < this.MaxLevel / 2; i++) {
+			xpCurve.Add (xpNeeded);
+			xpNeeded += Mathf.RoundToInt ((float)xpNeeded * .5f);
+		}
+		for (int i = this.MaxLevel / 2; i <= this.MaxLevel; i++) {
+			xpCurve.Add (xpNeeded);
+			xpNeeded += Mathf.RoundToInt ((float)xpNeeded * .1f);
 		}
 		return xpCurve;
 	}
@@ -135,7 +196,7 @@ public class Player : ITarget
 	{
 		this.XP += amount;
 		while (this.Level <= this.MaxLevel && this.XP >= XPCurve [this.Level + 1]) {
-			this.Level++;
+			this.LevelUp ();
 		}
 	}
 
@@ -145,6 +206,16 @@ public class Player : ITarget
 			return XPCurve [Level + 1];
 		}
 		return XP;
+	}
+
+	public void LevelUp ()
+	{
+		if (this.Level < this.MaxLevel) {
+			this.Level++;
+			this.TotalHP = this.Level * 50;
+			this.HP = this.TotalHP;
+			this.Damage = this.Level * 10;
+		}
 	}
 
 }

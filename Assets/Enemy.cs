@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class Enemy : ITarget
 {
-
 	private GameControllerScript gameController;
 
 	private System.Random r;
 	public const int MaxLevel = 50;
-	//TODO: store this a constant somewhere
+	public const int MaxHp = 9999;
+	public const int MinHp = 5;
+	public const int MinDmg = 1;
+	public const int MaxDmg = 9999;
+
+	public const int BaseXP = 100;
+	public const int BaseHP = 50;
+	public const int BaseDamage = 10;
 
 
 	public string Name;
@@ -34,18 +40,14 @@ public class Enemy : ITarget
 
 	public Enemy (string name, int level)
 	{
-
 		this.r = new System.Random ();
 
 		this.Name = name;
 		this.Level = level;
-		this.TotalHP = level * 50;
+		this.TotalHP = level * Enemy.BaseHP;
 		this.HP = this.TotalHP;
-		this.Damage = level * 10;
-		this.XP = level * 50;
-
-		this.turnDataList = generateTurnDataList ();
-
+		this.Damage = level * Enemy.BaseDamage;
+		this.XP = level * Enemy.BaseXP;
 	}
 
 	//For display stats in game
@@ -59,24 +61,9 @@ public class Enemy : ITarget
 	{
 		var turnsStr = "";
 		foreach (var t in turnDataList) {
-			turnsStr += t.ToString ();
+			turnsStr += t.ToString () + ", ";
 		}
 		return string.Format ("{0}\n Level {1}\n HP {2}/{3} Dmg: {5} \nXP {4}\nTurns: {6}", Name, Level, HP, TotalHP, XP, Damage, turnsStr);
-	}
-
-	private List<TurnData> generateTurnDataList ()
-	{
-		//difficulty of turn data should be a function of enemy level, but for now just hardcode to something easy.
-		List<TurnData> turnDataList = new List<TurnData> ();
-		for (int i = 1; i <= 4; i++) {
-			//for (int i = 0; i <= Core.r.Next (3); i++) {
-			turnDataList.Add (new TurnData () {
-				duration = UnityEngine.Random.Range (.5f, 2f),
-				enemyAttackType = (AttackType)Core.r.Next (3)
-			});
-		}
-		turnIndex = turnDataList.Count - 1;
-		return turnDataList;
 	}
 
 	public void AttachGameController (GameControllerScript gameController)
@@ -148,7 +135,4 @@ public class Enemy : ITarget
 			effectList [i].ApplyEffect (this);
 		}
 	}
-
-
-		
 }

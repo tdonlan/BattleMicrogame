@@ -34,25 +34,24 @@ public class EnemyFactory
 
 	//random - tie into abilities
 	static List<string> suffixList = new List<string> () {
-		"the forest",
-		"frost",
-		"the desert",
-		"the ocean",
-		"the wasteland",
-		"poison",
-		"the arcane",
-		"the ancients",
-		"hell",
-		"dungeon",
-		"despair",
+		"the Forest",
+		"Frost",
+		"the Desert",
+		"the Ocean",
+		"the Wasteland",
+		"Poison",
+		"the Arcane",
+		"the Ancients",
+		"Hell",
+		"Dungeon",
+		"Despair",
 	};
 
 	static List<string> typeList = new List<string> () {
 		"Rat", "Spider", "Snake", "Imp", "Kobold", "Goblin", "Brigand", "Orc", "Zombie", "Orc Warlord", "Dire Wolf", "Werewolf", "Gryphon", "Drake", "Wyvern",
 		"Wraith", "Skeleton Warrior", "Ogre", "Giant", "Vampire", "Dragon", "Lich"
 	};
-
-
+		
 	static List<string> namePartList = new List<string> () {
 		"ab",
 		"hal",
@@ -68,39 +67,40 @@ public class EnemyFactory
 		"mov",
 		"lop",
 		"tar",
-		"hem"
+		"hem",
+		"gar",
+		"chu",
+		"stu"
 	};
-
-
-	//------- Enemy Factory
 
 	//variance = -1 to 1.  will scale the difficulty of the enemy
 	public static Enemy GenerateEnemy (int level, float variance)
 	{
-		level = Core.vary (level, variance);
+		Debug.Log (variance);
+
+		level = Mathf.Clamp (Core.vary (level, variance), 1, Enemy.MaxLevel);
 		string name = getName (level, variance);
 		var e = new Enemy (name, level);
-		e.TotalHP = Core.vary (e.TotalHP, variance);
+		e.TotalHP = Mathf.Clamp (Core.vary (e.TotalHP, variance), Enemy.MinHp, Enemy.MaxHp);
 		e.HP = e.TotalHP;
-		e.Damage = Core.vary (e.Damage, variance);
-		e.XP = e.XP + Mathf.RoundToInt (e.XP * variance);
+		e.Damage = Mathf.Clamp (Core.vary (e.Damage, variance), Enemy.MinDmg, Enemy.MaxDmg);
+		e.XP = Mathf.Clamp (e.XP + Mathf.RoundToInt (e.XP * variance), 10, 9999999);
+		e.turnDataList = generateTurnDataList (level, variance);
 		return e;
 	}
 
 	private static string getName (int level, float variance)
 	{
-		return string.Format ("{0} {1} {2} {3}", getProperName (variance), getNamePrefix (variance), getType (level), getSuffix (variance));
-	
+		return string.Format ("{0}{1} {2}{3}", getProperName (variance), getNamePrefix (variance), getType (level), getSuffix (variance));
 	}
 
 	private static string getType (int level)
 	{
 		var lvlRatio = (float)level / (float)Enemy.MaxLevel;
 		var index = Mathf.RoundToInt ((float)typeList.Count * lvlRatio);
-		index = Mathf.RoundToInt (UnityEngine.Random.Range (index - 3, index + 3));
+		index = Mathf.RoundToInt (UnityEngine.Random.Range (index - 5, index + 5));
 		index = Mathf.Clamp (index, 0, typeList.Count - 1);
 		return typeList [index];
-
 	}
 
 	private static string getProperName (float variance)
@@ -119,7 +119,6 @@ public class EnemyFactory
 
 	private static string getNamePrefix (float variance)
 	{
-
 		//only outliers get prefixes
 		if (Math.Abs (variance) > .5) {
 			var ratio = ((variance + 1) * .5);
@@ -131,7 +130,6 @@ public class EnemyFactory
 		return "";
 	}
 
-
 	private static string getSuffix (float variance)
 	{
 		//only strong enemies get suffixes
@@ -142,14 +140,19 @@ public class EnemyFactory
 
 	}
 
-
-	private static int vary (int val, float variation, System.Random r)
+	private static List<TurnData> generateTurnDataList (int level, float variance)
 	{
-		var rVal = r.NextDouble ();
-		return Mathf.RoundToInt ((float)val + ((float)val * variation * (float)rVal));
+		List<TurnData> turnDataList = new List<TurnData> ();
+
+		var ratio = (float)level / (float)Enemy.MaxLevel;
+
+		var numTurns = Mathf.Clamp (Core.vary (Mathf.RoundToInt (ratio * 6) + 1, variance), 1, 6);
+		for (int i = 1; i <= numTurns; i++) {
+			turnDataList.Add (new TurnData () {
+				duration = UnityEngine.Random.Range (.5f, 2f),
+				enemyAttackType = (AttackType)Core.r.Next (3)
+			});
+		}
+		return turnDataList;
 	}
-
-
 }
-
-

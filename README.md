@@ -85,7 +85,7 @@ x-run on iphone for testing:
 
 
 09-03-2017
-	-more varied enemies (difficulty per level + boss)
+	x-more varied enemies (difficulty per level + boss)
 	-better turn icon indicator
 	-gain xp / level up
 	-win battle splash screen (xp, loot gained)

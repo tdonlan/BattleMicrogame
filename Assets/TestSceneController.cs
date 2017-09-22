@@ -10,7 +10,8 @@ public class TestSceneController : MonoBehaviour
 	public GameData gameData;
 
 	public Text testText;
-	// Use this for initialization
+	public Text playerText;
+
 	void Start ()
 	{
 		gameData = GameObject.FindObjectOfType<GameData> ();
@@ -24,12 +25,13 @@ public class TestSceneController : MonoBehaviour
 
 	public void LevelUp ()
 	{
-		gameData.player.Level++;
+		gameData.player.LevelUp ();
+		playerText.text = gameData.player.GetStats ();
 	}
 
 	public void GenerateEnemy ()
 	{
-		var enemy = EnemyFactory.GenerateEnemy (1, Random.Range (.75f, 1));
+		var enemy = EnemyFactory.GenerateEnemy (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f));
 
 		var enemyStr = enemy.ToString ();
 		testText.text = enemyStr;
