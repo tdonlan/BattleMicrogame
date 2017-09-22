@@ -16,6 +16,7 @@ public class Enemy : ITarget
 	public const int BaseXP = 100;
 	public const int BaseHP = 50;
 	public const int BaseDamage = 10;
+	public const int BaseGold = 10;
 
 
 	public string Name;
@@ -23,6 +24,9 @@ public class Enemy : ITarget
 	public int HP;
 	public int TotalHP;
 	public int XP;
+
+	public int Gold;
+	public List<Item> ItemList = new List<Item> ();
 
 	public List<ItemEffect> effectList = new List<ItemEffect> ();
 
@@ -48,6 +52,7 @@ public class Enemy : ITarget
 		this.HP = this.TotalHP;
 		this.Damage = level * Enemy.BaseDamage;
 		this.XP = level * Enemy.BaseXP;
+		this.Gold = level * Enemy.BaseGold;
 	}
 
 	//For display stats in game
@@ -63,7 +68,11 @@ public class Enemy : ITarget
 		foreach (var t in turnDataList) {
 			turnsStr += t.ToString () + ", ";
 		}
-		return string.Format ("{0}\n Level {1}\n HP {2}/{3} Dmg: {5} \nXP {4}\nTurns: {6}", Name, Level, HP, TotalHP, XP, Damage, turnsStr);
+		var itemStr = "";
+		foreach (var i in ItemList) {
+			turnsStr += i.ToString () + ", ";
+		}
+		return string.Format ("{0}\n Level {1}\n HP {2}/{3} Dmg: {5} \nXP: {4} Gold: {7}\n Items:{8}\n \nTurns: {6}", Name, Level, HP, TotalHP, XP, Damage, turnsStr, Gold, itemStr);
 	}
 
 	public void AttachGameController (GameControllerScript gameController)

@@ -19,6 +19,8 @@ public class Player : ITarget
 	public int TotalHP;
 	public int HP;
 
+
+	public int Gold = 0;
 	public List<Item> itemList;
 
 	public List<ItemEffect> effectList = new List<ItemEffect> ();

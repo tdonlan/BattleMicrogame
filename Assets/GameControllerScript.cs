@@ -116,7 +116,7 @@ public class GameControllerScript : MonoBehaviour
 		//fully heal player for now
 		this.gameData.player.HP = this.gameData.player.TotalHP;
 
-		this.enemy = EnemyFactory.GenerateEnemy (gameData.player.Level, UnityEngine.Random.Range (-.5f, .5f));
+		this.enemy = EnemyFactory.GenerateEnemy (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f));
 		this.enemy.AttachGameController (this);
 
 		currentTurnData = enemy.getNextTurnData ();
@@ -253,7 +253,8 @@ public class GameControllerScript : MonoBehaviour
 	{
 		gameData.KillCount++;
 		gameData.player.GetXP (enemy.XP);
-		gameOverScript.Show ("You Win!");
+		gameData.player.Gold += enemy.Gold;
+		gameOverScript.Show (string.Format ("You Win! \n XP: {0}\nGold:{1}", enemy.XP, enemy.Gold));
 	}
 
 	public void Lose ()

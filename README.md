@@ -92,6 +92,11 @@ x-run on iphone for testing:
 	-save stats on iphone (with reset option)
 	-testing - level up button - to test enemy generation
 	
+	-random items
+		-loot
+		-weapons - give varying dmg + effets for each of the attack types (attack, counter, special)
+	-inventory / store screen.
+
 
 
 
