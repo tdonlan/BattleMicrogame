@@ -13,9 +13,9 @@ public class Enemy : ITarget
 	public const int MinDmg = 1;
 	public const int MaxDmg = 9999;
 
-	public const int BaseXP = 100;
+	public const int BaseXP = 200;
 	public const int BaseHP = 50;
-	public const int BaseDamage = 10;
+	public const int BaseDamage = 20;
 	public const int BaseGold = 10;
 
 

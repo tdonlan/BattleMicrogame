@@ -80,7 +80,9 @@ public class GameControllerScript : MonoBehaviour
 
 	public Slider PlayerHPSlider;
 	public Slider EnemyHPSlider;
+
 	public Text PlayerStatsText;
+	public Text EnemyNameText;
 	public Text EnemyStatsText;
 
 	public GameObject ItemButtonPanel;
@@ -114,7 +116,7 @@ public class GameControllerScript : MonoBehaviour
 		startTimer = 3;
 
 		//fully heal player for now
-		this.gameData.player.HP = this.gameData.player.TotalHP;
+		//this.gameData.player.HP = this.gameData.player.TotalHP;
 
 		this.enemy = EnemyFactory.GenerateEnemy (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f));
 		this.enemy.AttachGameController (this);
@@ -183,7 +185,6 @@ public class GameControllerScript : MonoBehaviour
 		isCooldown = !isCooldown;
 		hasClicked = false;
 		hasClickedItem = false;
-
 
 		currentTurnData = enemy.getNextTurnData ();
 		HighlightCurrentTurnInfo ();
@@ -260,6 +261,7 @@ public class GameControllerScript : MonoBehaviour
 	public void Lose ()
 	{
 		gameOverScript.Show ("You Died!");
+		gameData.player.HP = gameData.player.TotalHP;
 		//remove some money / xp?
 	}
 
@@ -361,11 +363,11 @@ public class GameControllerScript : MonoBehaviour
 	private void UpdateStats ()
 	{
 		PlayerStatsText.text = gameData.player.GetStats ();
+		EnemyNameText.text = enemy.Name;
 		EnemyStatsText.text = enemy.GetStats ();
 		PlayerHPSlider.value = gameData.player.HPSliderValue;
 		EnemyHPSlider.value = enemy.HPSliderValue;
 	}
-
 
 	private void ClearItemButtons ()
 	{

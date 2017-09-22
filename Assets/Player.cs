@@ -13,8 +13,6 @@ public class Player : ITarget
 	public int MaxLevel = 50;
 
 
-
-
 	public int Level;
 	public int TotalHP;
 	public int HP;
@@ -25,7 +23,9 @@ public class Player : ITarget
 
 	public List<ItemEffect> effectList = new List<ItemEffect> ();
 
-	private List<int> XPCurve = new List<int> () {0,
+	private List<int> XPCurve = new List<int> () {
+		0, 
+		0,
 		1000,
 		2569,
 		4922,
