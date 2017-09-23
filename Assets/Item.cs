@@ -120,9 +120,6 @@ public class Item
 		var iEffect = new ItemEffect (EffectType.DamageEnemy, 5, 5);
 		return new Item ("Poison", iEffect);
 	}
-
-
-
-
+		
 }
 

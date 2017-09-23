@@ -35,9 +35,9 @@ public class GameData : MonoBehaviour
 
 	private void PopulateEnemyList (int level)
 	{
-		enemyList.Add (Enemy.GenerateEnemy (level, -.5f));
-		enemyList.Add (Enemy.GenerateEnemy (level, 0));
-		enemyList.Add (Enemy.GenerateEnemy (level, .5f));
+		enemyList.Add (EnemyFactory.GenerateEnemy (level, -.5f));
+		enemyList.Add (EnemyFactory.GenerateEnemy (level, 0));
+		enemyList.Add (EnemyFactory.GenerateEnemy (level, .5f));
 	}
 
 	//remove given enemy from list, populate a new one of same difficulty
@@ -48,16 +48,16 @@ public class GameData : MonoBehaviour
 
 		switch (index) {
 		case 0: //easy
-			enemyList.Insert (index, Enemy.GenerateEnemy (player.Level, -.5f));
+			enemyList.Insert (index, EnemyFactory.GenerateEnemy (player.Level, -.5f));
 			break;
 		case 1:
-			enemyList.Insert (index, Enemy.GenerateEnemy (player.Level, 0));
+			enemyList.Insert (index, EnemyFactory.GenerateEnemy (player.Level, 0));
 			break;
 		case 2:
-			enemyList.Insert (index, Enemy.GenerateEnemy (player.Level, .5f));
+			enemyList.Insert (index, EnemyFactory.GenerateEnemy (player.Level, .5f));
 			break;
 		default:
-			enemyList.Insert (index, Enemy.GenerateEnemy (player.Level, 0));
+			enemyList.Insert (index, EnemyFactory.GenerateEnemy (player.Level, 0));
 			break;
 		}
 	}

@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class Enemy : ITarget
 {
-
 	private GameControllerScript gameController;
 
 	private System.Random r;
 	public const int MaxLevel = 50;
-	//TODO: store this a constant somewhere
+	public const int MaxHp = 9999;
+	public const int MinHp = 5;
+	public const int MinDmg = 1;
+	public const int MaxDmg = 9999;
+
+	public const int BaseXP = 200;
+	public const int BaseHP = 50;
+	public const int BaseDamage = 20;
+	public const int BaseGold = 10;
 
 
 	public string Name;
@@ -17,6 +24,9 @@ public class Enemy : ITarget
 	public int HP;
 	public int TotalHP;
 	public int XP;
+
+	public int Gold;
+	public List<Item> ItemList = new List<Item> ();
 
 	public List<ItemEffect> effectList = new List<ItemEffect> ();
 
@@ -34,18 +44,15 @@ public class Enemy : ITarget
 
 	public Enemy (string name, int level)
 	{
-
 		this.r = new System.Random ();
 
 		this.Name = name;
 		this.Level = level;
-		this.TotalHP = level * 50;
+		this.TotalHP = level * Enemy.BaseHP;
 		this.HP = this.TotalHP;
-		this.Damage = level * 10;
-		this.XP = level * 50;
-
-		this.turnDataList = generateTurnDataList ();
-
+		this.Damage = level * Enemy.BaseDamage;
+		this.XP = level * Enemy.BaseXP;
+		this.Gold = level * Enemy.BaseGold;
 	}
 
 	//For display stats in game
@@ -59,24 +66,13 @@ public class Enemy : ITarget
 	{
 		var turnsStr = "";
 		foreach (var t in turnDataList) {
-			turnsStr += t.ToString ();
+			turnsStr += t.ToString () + ", ";
 		}
-		return string.Format ("{0}\n Level {1}\n HP {2}/{3} Dmg: {5} \nXP {4}\nTurns: {6}", Name, Level, HP, TotalHP, XP, Damage, turnsStr);
-	}
-
-	private List<TurnData> generateTurnDataList ()
-	{
-		//difficulty of turn data should be a function of enemy level, but for now just hardcode to something easy.
-		List<TurnData> turnDataList = new List<TurnData> ();
-		for (int i = 1; i <= 4; i++) {
-			//for (int i = 0; i <= Core.r.Next (3); i++) {
-			turnDataList.Add (new TurnData () {
-				duration = UnityEngine.Random.Range (.5f, 2f),
-				enemyAttackType = (AttackType)Core.r.Next (3)
-			});
+		var itemStr = "";
+		foreach (var i in ItemList) {
+			turnsStr += i.ToString () + ", ";
 		}
-		turnIndex = turnDataList.Count - 1;
-		return turnDataList;
+		return string.Format ("{0}\n Level {1}\n HP {2}/{3} Dmg: {5} \nXP: {4} Gold: {7}\n Items:{8}\n \nTurns: {6}", Name, Level, HP, TotalHP, XP, Damage, turnsStr, Gold, itemStr);
 	}
 
 	public void AttachGameController (GameControllerScript gameController)
@@ -148,43 +144,4 @@ public class Enemy : ITarget
 			effectList [i].ApplyEffect (this);
 		}
 	}
-
-	//------- Enemy Factory
-
-	//variance = -1 to 1.  will scale the difficulty of the enemy
-	public static Enemy GenerateEnemy (int level, float variance)
-	{
-		level = Core.vary (level, variance);
-		string name = getName (level);
-		var e = new Enemy (name, level);
-		e.TotalHP = Core.vary (e.TotalHP, variance);
-		e.HP = e.TotalHP;
-		e.Damage = Core.vary (e.Damage, variance);
-		return e;
-	}
-
-	private static string getName (int level)
-	{
-		List<string> nameList = new List<string> () {
-			"Rat", "Spider", "Snake", "Imp", "Kobold", "Goblin", "Brigand", "Orc", "Zombie", "Orc Warlord", "Dire Wolf", "Werewolf", "Gryphon", "Drake", "Wyvern",
-			"Wraith", "Skeleton Warrior", "Ogre", "Giant", "Vampire", "Dragon", "Lich"
-		};
-
-		var lvlRatio = (float)level / (float)Enemy.MaxLevel;
-		var index = Mathf.RoundToInt ((float)nameList.Count * lvlRatio);
-		index = Mathf.RoundToInt (Random.Range (index - 3, index + 3));
-		index = Mathf.Clamp (index, 0, nameList.Count - 1);
-		return nameList [index];
-
-	}
-
-
-	private static int vary (int val, float variation, System.Random r)
-	{
-		var rVal = r.NextDouble ();
-		return Mathf.RoundToInt ((float)val + ((float)val * variation * (float)rVal));
-	}
-
-
-
 }
