@@ -110,7 +110,7 @@ public class Player : ITarget
 
 	public string GetStats ()
 	{
-		return string.Format ("Level: {3}\nXP: {4}/{5}\nHP: {0}/{1}\nDmg: {2}", HP, TotalHP, Damage, Level, XP, getXPNextLevel ());
+		return string.Format ("Level: {3}\nXP: {4}/{5}\nHP: {0}/{1}\nDmg: {2}\n Gold: {6}", HP, TotalHP, Damage, Level, XP, getXPNextLevel (), Gold);
 	}
 
 	public override string ToString ()

@@ -148,7 +148,7 @@ public class EnemyFactory
 
 		var ratio = (float)level / (float)Enemy.MaxLevel;
 
-		var numTurns = Mathf.Clamp (Core.vary (Mathf.RoundToInt (ratio * 6) + 1, variance), 1, 6);
+		var numTurns = Mathf.Clamp (Core.vary (Mathf.RoundToInt (ratio * 4) + 1, variance), 1, 6);
 		for (int i = 1; i <= numTurns; i++) {
 			turnDataList.Add (new TurnData () {
 				duration = UnityEngine.Random.Range (.5f, 2f),

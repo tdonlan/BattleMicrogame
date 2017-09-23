@@ -58,7 +58,7 @@ public class Enemy : ITarget
 	//For display stats in game
 	public string GetStats ()
 	{
-		return string.Format ("HP: {0}/{1} Dmg: {2}", HP, TotalHP, Damage);
+		return string.Format ("Level: {3} \nHP: {0}/{1} \nDmg: {2}", HP, TotalHP, Damage, Level);
 	}
 
 	//for displaying full object info for testing
