@@ -23,6 +23,11 @@ public class ItemEffect
 		this.Duration = duration;
 	}
 
+	public override string ToString ()
+	{
+		return string.Format ("{0}:{1}/{2}trns", effectType.ToString (), Amount, Duration);
+	}
+
 	//clone the effect
 	public ItemEffect GetCopy ()
 	{
@@ -57,6 +62,8 @@ public class ItemEffect
 public class Item
 {
 	public string Name;
+	public int Price;
+	public int Level;
 	public List<ItemEffect> itemEffectList;
 
 	public Item (string name, ItemEffect itemEffect)
@@ -69,6 +76,15 @@ public class Item
 	{
 		this.Name = name;
 		this.itemEffectList = itemEffectList;
+	}
+
+	public override string ToString ()
+	{
+		var effects = "";
+		foreach (var i in itemEffectList) {
+			effects += i.ToString () + ", ";
+		}
+		return string.Format ("{0}", effects);
 	}
 
 	//need more generic way to apply effects to targets

@@ -12,11 +12,9 @@ public class Player : ITarget
 
 	public int MaxLevel = 50;
 
-
 	public int Level;
 	public int TotalHP;
 	public int HP;
-
 
 	public int Gold = 0;
 	public List<Item> itemList;
