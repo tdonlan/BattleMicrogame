@@ -64,27 +64,35 @@ public class Item
 	public string Name;
 	public int Price;
 	public int Level;
-	public List<ItemEffect> itemEffectList;
+	public List<ItemEffect> itemEffectList = new List<ItemEffect> ();
 
-	public Item (string name, ItemEffect itemEffect)
+	public Item (string name, ItemEffect itemEffect, int level)
 	{
 		this.Name = name;
-		this.itemEffectList = new List<ItemEffect> (){ itemEffect };
+		this.Level = level;
+		if (itemEffect != null) {
+			this.itemEffectList = new List<ItemEffect> (){ itemEffect };
+		}
+
 	}
 
+	/*
 	public Item (string name, List<ItemEffect> itemEffectList)
 	{
 		this.Name = name;
 		this.itemEffectList = itemEffectList;
 	}
+	*/
 
 	public override string ToString ()
 	{
 		var effects = "";
-		foreach (var i in itemEffectList) {
-			effects += i.ToString () + ", ";
+		if (itemEffectList.Count > 0) {
+			foreach (var i in itemEffectList) {
+				effects += i.ToString () + ", ";
+			}
 		}
-		return string.Format ("{0}", effects);
+		return string.Format ("Lvl:{0}\n{1}", this.Level, effects);
 	}
 
 	//need more generic way to apply effects to targets
@@ -114,13 +122,13 @@ public class Item
 	public static Item getHealingPotion ()
 	{
 		var iEffect = new ItemEffect (EffectType.HealSelf, 25, 1);
-		return new Item ("Healing Potion", iEffect);
+		return new Item ("Healing Potion", iEffect, 1);
 	}
 
 	public static Item getRegenPotion ()
 	{
 		var iEffect = new ItemEffect (EffectType.HealSelf, 5, 5);
-		return new Item ("Regen Potion", iEffect);
+		return new Item ("Regen Potion", iEffect, 1);
 	}
 		
 	//lifetap potion?
@@ -128,14 +136,44 @@ public class Item
 	public static Item getGrenade ()
 	{
 		var iEffect = new ItemEffect (EffectType.DamageEnemy, 25, 1);
-		return new Item ("Grenade", iEffect);
+		return new Item ("Grenade", iEffect, 1);
 	}
 
 	public static Item getPoison ()
 	{
 		var iEffect = new ItemEffect (EffectType.DamageEnemy, 5, 5);
-		return new Item ("Poison", iEffect);
+		return new Item ("Poison", iEffect, 1);
 	}
 		
 }
 
+public class Weapon : Item
+{
+	public int Damage;
+
+	public Weapon (string name, int Damage, int level) : base (name, null, level)
+	{
+		this.Damage = Damage;
+	}
+
+	public override string ToString ()
+	{
+		return base.ToString () + "Dmg: " + Damage;
+	}
+}
+
+public class Armor : Item
+{
+	public int Defense;
+
+	public Armor (string name, int Defense, int level) : base (name, null, level)
+	{
+		this.Defense = Defense;
+	}
+
+	public override string ToString ()
+	{
+		return  base.ToString () + "Defense: " + Defense;
+	}
+
+}
