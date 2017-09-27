@@ -387,7 +387,6 @@ public class GameControllerScript : MonoBehaviour
 	{
 		var count = 0;
 		foreach (var item in gameData.player.itemList) {
-			Debug.Log (string.Format ("Adding item {0} ", item.Name));
 			LoadItemButton (item.Name, count);
 			count++;
 		}

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Player : ITarget
 {
@@ -98,7 +99,6 @@ public class Player : ITarget
 		itemList.Add (ItemFactory.getRegenPotion ());
 		itemList.Add (ItemFactory.getGrenade ());
 		itemList.Add (ItemFactory.getPoison ());
-	
 	}
 
 	public void AttachGameController (GameControllerScript gameController)
@@ -164,6 +164,36 @@ public class Player : ITarget
 		for (int i = effectList.Count - 1; i >= 0; i--) {
 			effectList [i].ApplyEffect (this);
 		}
+	}
+
+	//-----Inventory
+
+	public List<Item> GetWeapons ()
+	{
+
+		var wepList = from i in itemList
+		              where i is Weapon
+		              select i;
+		return wepList.ToList ();
+
+	}
+
+	public List<Item> GetArmor ()
+	{
+		var armorList = from i in itemList
+		                where i is Armor
+		                select i;
+		return armorList.ToList ();
+
+	}
+
+
+	public List<Item> GetItems ()
+	{
+		var iList = from i in itemList
+		            where (!(i is Armor)) && (!(i is Weapon))
+		            select i;
+		return iList.ToList ();
 	}
 
 	//-------- XP Calculations

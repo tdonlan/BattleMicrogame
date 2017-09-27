@@ -24,9 +24,7 @@ public class ItemControllerScript : MonoBehaviour
 	{
 		gameData = GameObject.FindObjectOfType<GameData> ();
 
-		currentItemList = gameData.player.itemList;
-		SetItemEntryList (currentItemList);
-		
+		SelectItems ();
 	}
 	
 	// Update is called once per frame
@@ -40,6 +38,24 @@ public class ItemControllerScript : MonoBehaviour
 		SceneManager.LoadScene ("StartScene", LoadSceneMode.Single);
 	}
 
+	public void SelectWeapons ()
+	{
+		currentItemList = gameData.player.GetWeapons ();
+		SetItemEntryList (currentItemList);
+	}
+
+	public void SelectArmor ()
+	{
+		currentItemList = gameData.player.GetArmor ();
+		SetItemEntryList (currentItemList);
+	}
+
+	public void SelectItems ()
+	{
+		currentItemList = gameData.player.GetItems ();
+		SetItemEntryList (currentItemList);
+	}
+
 	public void DeleteItem (ItemEntryControllerScript itemScript)
 	{
 		gameData.player.itemList.Remove (itemScript.item);
@@ -51,6 +67,11 @@ public class ItemControllerScript : MonoBehaviour
 	//given a list of items (15?), set the itemEntryPanel
 	private void SetItemEntryList (List<Item> itemList)
 	{
+		//clear current  panel
+		foreach (Transform child in ItemEntryListPanel.transform) {
+			GameObject.Destroy (child.gameObject);
+		}
+
 		currentItemEntryList = new List<ItemEntryControllerScript> ();
 		foreach (var i in itemList) {
 			var itemEntry = InitItemEntry (i);
@@ -71,8 +92,11 @@ public class ItemControllerScript : MonoBehaviour
 			}
 		}
 
+		var itemEntryScript = itemEntry.GetComponentInChildren<ItemEntryControllerScript> ();
+		itemEntryScript.item = i;
+
 		itemEntry.transform.parent = ItemEntryListPanel.transform; 
 
-		return itemEntry.GetComponentInChildren<ItemEntryControllerScript> ();
+		return itemEntryScript;
 	}
 }

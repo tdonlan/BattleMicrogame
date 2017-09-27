@@ -76,8 +76,6 @@ public class EnemyFactory
 	//variance = -1 to 1.  will scale the difficulty of the enemy
 	public static Enemy GenerateEnemy (int level, float variance)
 	{
-		Debug.Log (variance);
-
 		level = Mathf.Clamp (Core.vary (level, variance), 1, Enemy.MaxLevel);
 		string name = getName (level, variance);
 		var e = new Enemy (name, level);
