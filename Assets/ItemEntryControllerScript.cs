@@ -27,7 +27,6 @@ public class ItemEntryControllerScript : MonoBehaviour
 
 	public void EquipItem ()
 	{
-		//todo
+		itemControllerScript.EquipItem (this);
 	}
-
 }

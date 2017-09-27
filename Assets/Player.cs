@@ -19,6 +19,28 @@ public class Player : ITarget
 
 	public int Gold = 0;
 	public List<Item> itemList;
+	public Weapon weapon = null;
+	public Armor armor = null;
+
+	public int Damage {
+		get {
+			if (weapon == null) {
+				return Level * 5;
+			} else {
+				return weapon.Damage;
+			}
+		}
+	}
+
+	public int Defense {
+		get { 
+			if (armor == null) {
+				return 0;
+			} else {
+				return armor.Defense;
+			}
+		}
+	}
 
 	public List<ItemEffect> effectList = new List<ItemEffect> ();
 
@@ -82,7 +104,7 @@ public class Player : ITarget
 		}
 	}
 
-	public int Damage;
+
 
 	public Player ()
 	{
@@ -91,7 +113,7 @@ public class Player : ITarget
 		this.HP = this.TotalHP;
 		this.Level = 1;
 		this.XP = 0;
-		this.Damage = 20; //based on weapon
+		//this.Damage = 20; //based on weapon
 
 		itemList = new List<Item> ();
 
@@ -108,7 +130,10 @@ public class Player : ITarget
 
 	public string GetStats ()
 	{
-		return string.Format ("Level: {3}\nXP: {4}/{5}\nHP: {0}/{1}\nDmg: {2}\n Gold: {6}", HP, TotalHP, Damage, Level, XP, getXPNextLevel (), Gold);
+		return string.Format ("Level: {3}\nXP: {4}/{5}\nHP: {0}/{1}\n" +
+		"Dmg:{2}\n" +
+		"Def:{7} \n" +
+		"Gold: {6}", HP, TotalHP, Damage, Level, XP, getXPNextLevel (), Gold, Defense);
 	}
 
 	public override string ToString ()
@@ -132,6 +157,7 @@ public class Player : ITarget
 
 	public bool Hit (int damage)
 	{
+		damage -= this.Defense; //directly apply defense for now
 		gameController.DisplayDmg (false, damage);
 
 		this.HP -= damage;
@@ -196,6 +222,34 @@ public class Player : ITarget
 		return iList.ToList ();
 	}
 
+	public void EquipItem (Item i)
+	{
+		if (i is Weapon) {
+			equipWeapon (i);
+		} else if (i is Armor) {
+			equipArmor (i);
+		} else {
+		}
+	}
+
+	private void equipWeapon (Item i)
+	{
+		if (weapon != null) {
+			this.itemList.Add (weapon);
+		}
+		weapon = (Weapon)i;
+		itemList.Remove (i);
+	}
+
+	private void equipArmor (Item i)
+	{
+		if (armor != null) {
+			this.itemList.Add (armor);
+		}
+		armor = (Armor)i;
+		itemList.Remove (i);
+	}
+
 	//-------- XP Calculations
 
 
@@ -244,7 +298,7 @@ public class Player : ITarget
 			this.Level++;
 			this.TotalHP = this.Level * 50;
 			this.HP = this.TotalHP;
-			this.Damage = this.Level * 10;
+
 		}
 	}
 

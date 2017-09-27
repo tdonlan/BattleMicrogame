@@ -56,9 +56,17 @@ public class ItemControllerScript : MonoBehaviour
 		SetItemEntryList (currentItemList);
 	}
 
+	public void EquipItem (ItemEntryControllerScript itemScript)
+	{
+		gameData.player.EquipItem (itemScript.item);
+		currentItemList.Remove (itemScript.item);
+		currentItemEntryList.Remove (itemScript);
+		Destroy (itemScript.gameObject);
+	}
+
 	public void DeleteItem (ItemEntryControllerScript itemScript)
 	{
-		gameData.player.itemList.Remove (itemScript.item);
+		gameData.player.itemList.Remove (itemScript.item); //call helper on player inventory here
 		currentItemList.Remove (itemScript.item);
 		currentItemEntryList.Remove (itemScript);
 		Destroy (itemScript.gameObject);
