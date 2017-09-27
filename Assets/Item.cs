@@ -115,35 +115,8 @@ public class Item
 		}
 	}
 		
-	//------------- FACTORIES -----------
 
 
-	//put these in a factory / datalist?
-	public static Item getHealingPotion ()
-	{
-		var iEffect = new ItemEffect (EffectType.HealSelf, 25, 1);
-		return new Item ("Healing Potion", iEffect, 1);
-	}
-
-	public static Item getRegenPotion ()
-	{
-		var iEffect = new ItemEffect (EffectType.HealSelf, 5, 5);
-		return new Item ("Regen Potion", iEffect, 1);
-	}
-		
-	//lifetap potion?
-
-	public static Item getGrenade ()
-	{
-		var iEffect = new ItemEffect (EffectType.DamageEnemy, 25, 1);
-		return new Item ("Grenade", iEffect, 1);
-	}
-
-	public static Item getPoison ()
-	{
-		var iEffect = new ItemEffect (EffectType.DamageEnemy, 5, 5);
-		return new Item ("Poison", iEffect, 1);
-	}
 		
 }
 

@@ -93,11 +93,11 @@ public class Player : ITarget
 		this.Damage = 20; //based on weapon
 
 		itemList = new List<Item> ();
-		itemList.Add (Item.getHealingPotion ());
-	
-		itemList.Add (Item.getRegenPotion ());
-		itemList.Add (Item.getGrenade ());
-		itemList.Add (Item.getPoison ());
+
+		itemList.Add (ItemFactory.getHealingPotion ());
+		itemList.Add (ItemFactory.getRegenPotion ());
+		itemList.Add (ItemFactory.getGrenade ());
+		itemList.Add (ItemFactory.getPoison ());
 	
 	}
 

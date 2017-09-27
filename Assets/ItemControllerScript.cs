@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class ItemControllerScript : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class ItemControllerScript : MonoBehaviour
 	public GameObject ItemEntryListPanel;
 
 	private List<Item> currentItemList;
-	private List<GameObject> currentItemEntryList;
+	private List<ItemEntryControllerScript> currentItemEntryList;
 
 	//used for pagination of long item lists
 	private int currentPage;
@@ -23,8 +24,8 @@ public class ItemControllerScript : MonoBehaviour
 	{
 		gameData = GameObject.FindObjectOfType<GameData> ();
 
-
-		SetItemEntryList (gameData.player.itemList);
+		currentItemList = gameData.player.itemList;
+		SetItemEntryList (currentItemList);
 		
 	}
 	
@@ -39,17 +40,25 @@ public class ItemControllerScript : MonoBehaviour
 		SceneManager.LoadScene ("StartScene", LoadSceneMode.Single);
 	}
 
+	public void DeleteItem (ItemEntryControllerScript itemScript)
+	{
+		gameData.player.itemList.Remove (itemScript.item);
+		currentItemList.Remove (itemScript.item);
+		currentItemEntryList.Remove (itemScript);
+		Destroy (itemScript.gameObject);
+	}
+
 	//given a list of items (15?), set the itemEntryPanel
 	private void SetItemEntryList (List<Item> itemList)
 	{
-		currentItemEntryList = new List<GameObject> ();
+		currentItemEntryList = new List<ItemEntryControllerScript> ();
 		foreach (var i in itemList) {
 			var itemEntry = InitItemEntry (i);
 			currentItemEntryList.Add (itemEntry);
 		}
 	}
 
-	private GameObject InitItemEntry (Item i)
+	private ItemEntryControllerScript InitItemEntry (Item i)
 	{
 		var itemEntry = Instantiate (ItemEntryPrefab);
 		var texts = itemEntry.GetComponentsInChildren<Text> ();
@@ -64,6 +73,6 @@ public class ItemControllerScript : MonoBehaviour
 
 		itemEntry.transform.parent = ItemEntryListPanel.transform; 
 
-		return itemEntry;
+		return itemEntry.GetComponentInChildren<ItemEntryControllerScript> ();
 	}
 }

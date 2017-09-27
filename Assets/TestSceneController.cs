@@ -42,6 +42,8 @@ public class TestSceneController : MonoBehaviour
 		var weapon = ItemFactory.GenerateWeapon (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f));
 		var wepStr = weapon.Name + "\n" + weapon.ToString ();
 
+		gameData.player.itemList.Add (weapon);
+
 		testText.text = wepStr;
 	}
 
@@ -50,6 +52,8 @@ public class TestSceneController : MonoBehaviour
 		var armor = ItemFactory.GenerateArmor (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f));
 		var armorStr = armor.Name + "\n" + armor.ToString ();
 
+		gameData.player.itemList.Add (armor);
+
 		testText.text = armorStr;
 	}
 
@@ -57,6 +61,8 @@ public class TestSceneController : MonoBehaviour
 	{
 		var item = ItemFactory.GenerateItem (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f));
 		var itemStr = item.Name + "\n" + item.ToString ();
+
+		gameData.player.itemList.Add (item);
 
 		testText.text = itemStr;
 	}
