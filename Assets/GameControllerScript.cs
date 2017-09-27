@@ -255,7 +255,13 @@ public class GameControllerScript : MonoBehaviour
 		gameData.KillCount++;
 		gameData.player.GetXP (enemy.XP);
 		gameData.player.Gold += enemy.Gold;
-		gameOverScript.Show (string.Format ("You Win! \n XP: {0}\nGold:{1}", enemy.XP, enemy.Gold));
+		gameData.player.itemList.AddRange (enemy.ItemList);
+
+		var itemListStr = "";
+		foreach (var i in enemy.ItemList) {
+			itemListStr += i.Name + "\n";
+		}
+		gameOverScript.Show (string.Format ("You Win! \n XP: {0}\nGold:{1}\nLoot:{2}", enemy.XP, enemy.Gold, itemListStr));
 	}
 
 	public void Lose ()
@@ -396,7 +402,6 @@ public class GameControllerScript : MonoBehaviour
 	{
 		//instantiate prefab
 		var itemButton = Instantiate (ItemButtonPrefab);
-
 
 		//update button text
 		var itemButtonText = itemButton.GetComponentInChildren<Text> ();

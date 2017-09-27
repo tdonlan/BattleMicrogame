@@ -113,7 +113,6 @@ public class Player : ITarget
 		this.HP = this.TotalHP;
 		this.Level = 1;
 		this.XP = 0;
-		//this.Damage = 20; //based on weapon
 
 		itemList = new List<Item> ();
 
@@ -157,7 +156,7 @@ public class Player : ITarget
 
 	public bool Hit (int damage)
 	{
-		damage -= this.Defense; //directly apply defense for now
+		damage = Mathf.Clamp (damage - Defense, 0, 999999); //directly apply defense for now
 		gameController.DisplayDmg (false, damage);
 
 		this.HP -= damage;

@@ -70,7 +70,7 @@ public class Enemy : ITarget
 		}
 		var itemStr = "";
 		foreach (var i in ItemList) {
-			turnsStr += i.ToString () + ", ";
+			itemStr += i.Name + ", ";
 		}
 		return string.Format ("{0}\n Level {1}\n HP {2}/{3} Dmg: {5} \nXP: {4} Gold: {7}\n Items:{8}\n \nTurns: {6}", Name, Level, HP, TotalHP, XP, Damage, turnsStr, Gold, itemStr);
 	}
