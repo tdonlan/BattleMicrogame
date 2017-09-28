@@ -221,32 +221,40 @@ public class Player : ITarget
 		return iList.ToList ();
 	}
 
-	public void EquipItem (Item i)
+	public Item EquipItem (Item i)
 	{
+		Item oldItem = null;
 		if (i is Weapon) {
-			equipWeapon (i);
+			oldItem = equipWeapon (i);
 		} else if (i is Armor) {
-			equipArmor (i);
+			oldItem = equipArmor (i);
 		} else {
 		}
+		return oldItem;
 	}
 
-	private void equipWeapon (Item i)
+	private Item equipWeapon (Item i)
 	{
+		Item oldItem = null;
 		if (weapon != null) {
+			oldItem = weapon;
 			this.itemList.Add (weapon);
 		}
 		weapon = (Weapon)i;
 		itemList.Remove (i);
+		return oldItem;
 	}
 
-	private void equipArmor (Item i)
+	private Item equipArmor (Item i)
 	{
+		Item oldItem = null;
 		if (armor != null) {
+			oldItem = armor;
 			this.itemList.Add (armor);
 		}
 		armor = (Armor)i;
 		itemList.Remove (i);
+		return oldItem;
 	}
 
 	//-------- XP Calculations

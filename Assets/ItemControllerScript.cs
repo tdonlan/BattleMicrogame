@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 public class ItemControllerScript : MonoBehaviour
 {
-
+	
 	const int NumItems = 12;
 
 	public GameData gameData;
@@ -16,6 +16,11 @@ public class ItemControllerScript : MonoBehaviour
 	public GameObject ItemEntryPrefab;
 
 	public GameObject ItemEntryListPanel;
+	public GameObject CurrentItemPanel;
+
+	//alpha, reverseAlpha, level, reverseLevel
+	private int sortType = 0;
+
 	private int itemOffset = 0;
 
 	private List<Item> currentItemList;
@@ -49,6 +54,7 @@ public class ItemControllerScript : MonoBehaviour
 
 	public void SelectWeapons ()
 	{
+		SetCurrentItemText (gameData.player.weapon);
 		itemOffset = 0;
 		currentItemList = gameData.player.GetWeapons ();
 		SetItemEntryList (currentItemList.Take (NumItems).ToList ());
@@ -56,6 +62,7 @@ public class ItemControllerScript : MonoBehaviour
 
 	public void SelectArmor ()
 	{
+		SetCurrentItemText (gameData.player.armor);
 		itemOffset = 0;
 		currentItemList = gameData.player.GetArmor ();
 		SetItemEntryList (currentItemList.Take (NumItems).ToList ());
@@ -68,11 +75,41 @@ public class ItemControllerScript : MonoBehaviour
 		SetItemEntryList (currentItemList.Take (NumItems).ToList ());
 	}
 
+	private void RefreshItems ()
+	{
+		SetItemEntryList (currentItemList.Skip (itemOffset * NumItems).Take (NumItems).ToList ());
+	}
+
 	//this should toggle through sorting criteria (alpha, level, stats)
 	public void SortItems ()
 	{
 		itemOffset = 0;
-		currentItemList = currentItemList.OrderBy (x => x.Name).ToList (); 
+
+		sortType++;
+		if (sortType > 3) {
+			sortType = 0;
+		}
+		switch (sortType) {
+		case 0:
+			//alpha
+			currentItemList = currentItemList.OrderBy (x => x.Name).ToList (); 
+			break;
+		case 1:
+			//reverse alpha
+			currentItemList = currentItemList.OrderBy (x => x.Name).Reverse ().ToList (); 
+			break;
+		case 2:
+			//level
+			currentItemList = currentItemList.OrderBy (x => x.Level).ToList (); 
+			break;
+		case 3:
+			//reverse level
+			currentItemList = currentItemList.OrderBy (x => x.Level).Reverse ().ToList (); 
+			break;
+		default:
+			break;
+		}
+			
 		SetItemEntryList (currentItemList.Take (NumItems).ToList ());
 	}
 
@@ -95,18 +132,34 @@ public class ItemControllerScript : MonoBehaviour
 
 	public void EquipItem (ItemEntryControllerScript itemScript)
 	{
-		gameData.player.EquipItem (itemScript.item);
+		//trade items in player inventory
+		var oldItem = gameData.player.EquipItem (itemScript.item);
+		if (oldItem != null) {
+			currentItemList.Add (oldItem);
+		}
+
 		currentItemList.Remove (itemScript.item);
-		currentItemEntryList.Remove (itemScript);
-		Destroy (itemScript.gameObject);
+
+		SetCurrentItemText (itemScript.item);
+		RefreshItems ();
+	}
+
+	private void SetCurrentItemText (Item i)
+	{
+		var curItemText = CurrentItemPanel.GetComponentInChildren<Text> ();
+		curItemText.text = "";
+		if (i != null) {
+
+			var itemStr = i.Name + "\n" + i.ToString ();
+			curItemText.text = itemStr;
+		}
 	}
 
 	public void DeleteItem (ItemEntryControllerScript itemScript)
 	{
 		gameData.player.itemList.Remove (itemScript.item); //call helper on player inventory here
 		currentItemList.Remove (itemScript.item);
-		currentItemEntryList.Remove (itemScript);
-		Destroy (itemScript.gameObject);
+		RefreshItems ();
 	}
 
 	//given a list of items (12), set the itemEntryPanel
