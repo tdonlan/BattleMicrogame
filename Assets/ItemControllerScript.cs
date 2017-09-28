@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,11 +8,15 @@ using UnityEngine.EventSystems;
 
 public class ItemControllerScript : MonoBehaviour
 {
+
+	const int NumItems = 12;
+
 	public GameData gameData;
 
 	public GameObject ItemEntryPrefab;
 
 	public GameObject ItemEntryListPanel;
+	private int itemOffset = 0;
 
 	private List<Item> currentItemList;
 	private List<ItemEntryControllerScript> currentItemEntryList;
@@ -23,6 +28,10 @@ public class ItemControllerScript : MonoBehaviour
 	void Start ()
 	{
 		gameData = GameObject.FindObjectOfType<GameData> ();
+
+		for (int i = 0; i < 50; i++) {
+			gameData.player.itemList.Add (ItemFactory.GenerateWeapon (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f)));
+		}
 
 		SelectItems ();
 	}
@@ -40,20 +49,48 @@ public class ItemControllerScript : MonoBehaviour
 
 	public void SelectWeapons ()
 	{
+		itemOffset = 0;
 		currentItemList = gameData.player.GetWeapons ();
-		SetItemEntryList (currentItemList);
+		SetItemEntryList (currentItemList.Take (NumItems).ToList ());
 	}
 
 	public void SelectArmor ()
 	{
+		itemOffset = 0;
 		currentItemList = gameData.player.GetArmor ();
-		SetItemEntryList (currentItemList);
+		SetItemEntryList (currentItemList.Take (NumItems).ToList ());
 	}
 
 	public void SelectItems ()
 	{
+		itemOffset = 0;
 		currentItemList = gameData.player.GetItems ();
-		SetItemEntryList (currentItemList);
+		SetItemEntryList (currentItemList.Take (NumItems).ToList ());
+	}
+
+	//this should toggle through sorting criteria (alpha, level, stats)
+	public void SortItems ()
+	{
+		itemOffset = 0;
+		currentItemList = currentItemList.OrderBy (x => x.Name).ToList (); 
+		SetItemEntryList (currentItemList.Take (NumItems).ToList ());
+	}
+
+	public void Next ()
+	{
+		if (itemOffset < Mathf.FloorToInt ((float)currentItemList.Count / (float)NumItems)) {
+			itemOffset++;
+		}
+		SetItemEntryList (currentItemList.Skip (itemOffset * NumItems).Take (NumItems).ToList ());
+	}
+
+	public void Prev ()
+	{
+		if (itemOffset > 0) {
+			itemOffset--;
+		}
+
+		SetItemEntryList (currentItemList.Skip (itemOffset * NumItems).Take (NumItems).ToList ());
 	}
 
 	public void EquipItem (ItemEntryControllerScript itemScript)
@@ -72,7 +109,7 @@ public class ItemControllerScript : MonoBehaviour
 		Destroy (itemScript.gameObject);
 	}
 
-	//given a list of items (15?), set the itemEntryPanel
+	//given a list of items (12), set the itemEntryPanel
 	private void SetItemEntryList (List<Item> itemList)
 	{
 		//clear current  panel
