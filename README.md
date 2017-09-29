@@ -100,9 +100,9 @@ x-run on iphone for testing:
 		x-limit list to 15 items
 		x-sorting.
 
-		-items - seperate sublist for usable items
-		-remove on use.
-		-better random items / abilities
+		x-items - seperate sublist for usable items
+		x-remove on use.
+		x-better random items / abilities
 	-Store screen.
 
 
