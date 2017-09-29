@@ -12,12 +12,12 @@ public class ItemEffectFactory
 		var ratio = (float)level / (float)Enemy.MaxLevel;
 		var numEffects = Mathf.Clamp (Core.vary (Mathf.RoundToInt (ratio * 4) + 1, variance), 1, 4);
 		for (int i = 0; i < numEffects; i++) {
-			effectList.Add (getItemEffect (level, variance));
-		
+			var effectIndex = UnityEngine.Random.Range (0, Enum.GetNames (typeof(EffectType)).Length);
+			var effectType = (EffectType)effectIndex;
+
+			effectList.Add (getItemEffect (level, variance, effectType));
 		}
-
 		return effectList;
-
 	}
 
 	//should pass in the effect type based on name...
@@ -31,6 +31,36 @@ public class ItemEffectFactory
 		var effectIndex = UnityEngine.Random.Range (0, Enum.GetNames (typeof(EffectType)).Length);
 		var effectType = (EffectType)effectIndex;
 		return new ItemEffect (effectType, amt, turns);
+	}
+
+	public static ItemEffect getItemEffect (int level, float variance, EffectType type)
+	{
+		var baseVal = 10;
+		switch (type) {
+		case EffectType.BuffDefense:
+			baseVal = 5;
+			break;
+		case EffectType.BuffDamage:
+			baseVal = 10;
+			break;
+		case EffectType.CureSelf:
+			baseVal = 1;
+			break;
+		case EffectType.DamageEnemy:
+			baseVal = 10;
+			break;
+		case EffectType.HealSelf:
+			baseVal = 25;
+			break;
+		default:
+			break;
+		}
+		var totalAmt = Mathf.RoundToInt (Core.vary (level * baseVal, variance));
+
+		var turns = UnityEngine.Random.Range (1, 5);
+		var amt = Mathf.Clamp (Mathf.RoundToInt ((float)totalAmt / (float)turns), 5, 9999);
+
+		return new ItemEffect (type, amt, turns);
 	}
 }
 
@@ -239,8 +269,5 @@ public class ItemFactory
 		return "";
 
 	}
-
-	
+		
 }
-
-

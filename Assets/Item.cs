@@ -108,6 +108,12 @@ public class Item
 			case EffectType.DamageEnemy:
 				target.AddEffect (effect);
 				break;
+			case EffectType.BuffDamage:
+				source.AddEffect (effect);
+				break;
+			case EffectType.BuffDefense:
+				source.AddEffect (effect);
+				break;
 			default:
 				break;
 			}

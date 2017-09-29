@@ -28,7 +28,7 @@ public class Player : ITarget
 	public int Damage {
 		get {
 			if (weapon == null) {
-				return Level * 5;
+				return Level * 5 + BonusDamage;
 			} else {
 				return weapon.Damage + BonusDamage;
 			}
@@ -40,7 +40,7 @@ public class Player : ITarget
 	public int Defense {
 		get { 
 			if (armor == null) {
-				return 0;
+				return 0 + BonusDefense;
 			} else {
 				return armor.Defense + BonusDefense;
 			}
@@ -132,10 +132,16 @@ public class Player : ITarget
 
 	public string GetStats ()
 	{
+		var effectStr = "";
+		foreach (var e in effectList) {
+			effectStr += e.ToString () + "\n";
+		}
+
 		return string.Format ("Level: {3}\nXP: {4}/{5}\nHP: {0}/{1}\n" +
 		"Dmg:{2}\n" +
 		"Def:{7} \n" +
-		"Gold: {6}", HP, TotalHP, Damage, Level, XP, getXPNextLevel (), Gold, Defense);
+		"Gold: {6}\n" +
+		"Effects: {8}", HP, TotalHP, Damage, Level, XP, getXPNextLevel (), Gold, Defense, effectStr);
 	}
 
 	public override string ToString ()
@@ -154,6 +160,17 @@ public class Player : ITarget
 
 	public void RemoveEffect (ItemEffect effect)
 	{
+		//more elegant way to do this?
+		switch (effect.effectType) {
+		case EffectType.BuffDamage:
+			BonusDamage = 0;
+			break;
+		case EffectType.BuffDefense:
+			BonusDefense = 0;
+			break;
+		default:
+			break;
+		}
 		this.effectList.Remove (effect);	
 	}
 
@@ -189,6 +206,7 @@ public class Player : ITarget
 
 	public void BuffDamage (int amount)
 	{
+		
 		this.BonusDamage = amount;
 	}
 
