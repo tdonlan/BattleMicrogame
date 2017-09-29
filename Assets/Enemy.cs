@@ -18,7 +18,6 @@ public class Enemy : ITarget
 	public const int BaseDamage = 20;
 	public const int BaseGold = 10;
 
-
 	public string Name;
 	public int Level;
 	public int HP;
@@ -40,7 +39,6 @@ public class Enemy : ITarget
 
 	public int turnIndex = 0;
 	public List<TurnData> turnDataList;
-
 
 	public Enemy (string name, int level)
 	{
@@ -121,6 +119,16 @@ public class Enemy : ITarget
 			amount--;
 			effectList.RemoveAt (0);
 		}
+	}
+
+	public void BuffDamage (int amount)
+	{
+		//todo
+	}
+
+	public void BuffDefense (int amount)
+	{
+		//todo
 	}
 
 	public TurnData getNextTurnData ()

@@ -3,9 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+public class ItemEffectFactory
+{
+	public static List<ItemEffect> getItemEffectList (int level, float variance)
+	{
+		List<ItemEffect> effectList = new List<ItemEffect> ();
+
+		var ratio = (float)level / (float)Enemy.MaxLevel;
+		var numEffects = Mathf.Clamp (Core.vary (Mathf.RoundToInt (ratio * 4) + 1, variance), 1, 4);
+		for (int i = 0; i < numEffects; i++) {
+			effectList.Add (getItemEffect (level, variance));
+		
+		}
+
+		return effectList;
+
+	}
+
+	//should pass in the effect type based on name...
+	public static ItemEffect getItemEffect (int level, float variance)
+	{
+		var totalAmt = Mathf.RoundToInt (Core.vary (level * 25, variance));
+
+		var turns = UnityEngine.Random.Range (1, 5);
+		var amt = Mathf.RoundToInt ((float)totalAmt / (float)turns);
+
+		var effectIndex = UnityEngine.Random.Range (0, Enum.GetNames (typeof(EffectType)).Length);
+		var effectType = (EffectType)effectIndex;
+		return new ItemEffect (effectType, amt, turns);
+	}
+}
+
 public class ItemFactory
 {
-
 	public static List<string> itemTypeList = new List<string> () {
 		"potion", "elixir", "ointment", "bandage", "gemstone", "cocktail", "lollipop", "tincture", "flask", "dose", "syringe", "infusion", "powder", "dust"
 	};
@@ -14,7 +44,6 @@ public class ItemFactory
 		"sword", "dagger", "knife", "scimitar", "hatchet", "axe", "blade", 
 		"stilletto", "greatsword", "pike", "spear", "trident", "crossbow", "bow", "battleaxe", 
 		"quarterstaff", "staff", "mace", "flail", "morning star", "ball and chain", "katana"
-
 	};
 
 	public static List<string> armorTypeList = new List<string> () {
@@ -86,27 +115,25 @@ public class ItemFactory
 	public static Item getHealingPotion ()
 	{
 		var iEffect = new ItemEffect (EffectType.HealSelf, 25, 1);
-		return new Item ("Healing Potion", iEffect, 1);
+		return new Item ("Healing Potion", 1, 5, new List<ItemEffect> (){ iEffect });
 	}
 
 	public static Item getRegenPotion ()
 	{
 		var iEffect = new ItemEffect (EffectType.HealSelf, 5, 5);
-		return new Item ("Regen Potion", iEffect, 1);
+		return new Item ("Regen Potion", 1, 5, new List<ItemEffect> (){ iEffect });
 	}
-
-	//lifetap potion?
 
 	public static Item getGrenade ()
 	{
 		var iEffect = new ItemEffect (EffectType.DamageEnemy, 25, 1);
-		return new Item ("Grenade", iEffect, 1);
+		return new Item ("Grenade", 1, 5, new List<ItemEffect> (){ iEffect });
 	}
 
 	public static Item getPoison ()
 	{
 		var iEffect = new ItemEffect (EffectType.DamageEnemy, 5, 5);
-		return new Item ("Poison", iEffect, 1);
+		return new Item ("Poison", 1, 5, new List<ItemEffect> (){ iEffect });
 	}
 
 	//-----------------
@@ -114,16 +141,19 @@ public class ItemFactory
 	public static Item GenerateItem (int level, float variance)
 	{
 		level = Mathf.Clamp (Core.vary (level, variance), 1, Enemy.MaxLevel);
+		var price = Mathf.RoundToInt (Core.vary (level * 10, variance));
 		string name = getItemName (level, variance);
-		return new Item (name, null, level);
+		var effectList = ItemEffectFactory.getItemEffectList (level, variance);
+		return new Item (name, level, price, effectList);
 	}
 
 	public static Weapon GenerateWeapon (int level, float variance)
 	{
 		level = Mathf.Clamp (Core.vary (level, variance), 1, Enemy.MaxLevel);
+		var price = Mathf.RoundToInt (Core.vary (level * 50, variance));
 		string name = getWeaponName (level, variance);
 		int dmg = Mathf.Clamp (Core.vary (level * 10, variance), 1, 999999);
-		var w = new Weapon (name, dmg, level); //add additional abilities
+		var w = new Weapon (name, level, price, dmg); //TODO: add additional abilities
 		return w;
 
 	}
@@ -143,9 +173,10 @@ public class ItemFactory
 	public static Armor GenerateArmor (int level, float variance)
 	{
 		level = Mathf.Clamp (Core.vary (level, variance), 1, Enemy.MaxLevel);
+		var price = Mathf.RoundToInt (Core.vary (level * 25, variance));
 		string name = getArmorName (level, variance);
 		int defense = Mathf.Clamp (Core.vary (level * 5, variance), 1, 999999);
-		var a = new Armor (name, defense, level); //add additional abilities
+		var a = new Armor (name, level, price, defense); //TODO: leveladd additional abilities
 		return a;
 	}
 

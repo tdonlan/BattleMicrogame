@@ -23,22 +23,26 @@ public class Player : ITarget
 	public Weapon weapon = null;
 	public Armor armor = null;
 
+	public int BonusDamage = 0;
+
 	public int Damage {
 		get {
 			if (weapon == null) {
 				return Level * 5;
 			} else {
-				return weapon.Damage;
+				return weapon.Damage + BonusDamage;
 			}
 		}
 	}
+
+	public int BonusDefense;
 
 	public int Defense {
 		get { 
 			if (armor == null) {
 				return 0;
 			} else {
-				return armor.Defense;
+				return armor.Defense + BonusDefense;
 			}
 		}
 	}
@@ -181,6 +185,16 @@ public class Player : ITarget
 			amount--;
 			effectList.RemoveAt (0);
 		}
+	}
+
+	public void BuffDamage (int amount)
+	{
+		this.BonusDamage = amount;
+	}
+
+	public void BuffDefense (int amount)
+	{
+		this.BonusDefense = amount;
 	}
 
 	public void UpdateEffects ()

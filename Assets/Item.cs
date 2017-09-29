@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public enum EffectType
 {
+	BuffDamage,
+	BuffDefense,
 	HealSelf,
 	CureSelf,
 	DamageEnemy,
@@ -47,6 +49,12 @@ public class ItemEffect
 			case EffectType.DamageEnemy:
 				target.Hit (Amount);
 				break;
+			case EffectType.BuffDamage:
+				target.BuffDamage (Amount);
+				break;
+			case EffectType.BuffDefense:
+				target.BuffDefense (Amount);
+				break;
 			default:
 				break;
 			}
@@ -66,28 +74,19 @@ public class Item
 	public int Level;
 	public List<ItemEffect> itemEffectList = new List<ItemEffect> ();
 
-	public Item (string name, ItemEffect itemEffect, int level)
+
+	public Item (string name, int level, int price, List<ItemEffect> itemEffectList)
 	{
 		this.Name = name;
 		this.Level = level;
-		if (itemEffect != null) {
-			this.itemEffectList = new List<ItemEffect> (){ itemEffect };
-		}
-
-	}
-
-	/*
-	public Item (string name, List<ItemEffect> itemEffectList)
-	{
-		this.Name = name;
+		this.Price = price;
 		this.itemEffectList = itemEffectList;
 	}
-	*/
 
 	public override string ToString ()
 	{
 		var effects = "";
-		if (itemEffectList.Count > 0) {
+		if (itemEffectList != null && itemEffectList.Count > 0) {
 			foreach (var i in itemEffectList) {
 				effects += i.ToString () + ", ";
 			}
@@ -120,7 +119,7 @@ public class Weapon : Item
 {
 	public int Damage;
 
-	public Weapon (string name, int Damage, int level) : base (name, null, level)
+	public Weapon (string name, int level, int price, int Damage) : base (name, level, price, null)
 	{
 		this.Damage = Damage;
 	}
@@ -135,7 +134,7 @@ public class Armor : Item
 {
 	public int Defense;
 
-	public Armor (string name, int Defense, int level) : base (name, null, level)
+	public Armor (string name, int level, int price, int Defense) : base (name, level, price, null)
 	{
 		this.Defense = Defense;
 	}
