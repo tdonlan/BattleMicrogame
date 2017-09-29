@@ -8,7 +8,14 @@ using UnityEngine.EventSystems;
 
 public class ItemControllerScript : MonoBehaviour
 {
-	
+
+	public enum ItemDisplayType
+	{
+		Weapon,
+		Armor,
+		Item,
+	}
+
 	const int NumItems = 12;
 
 	public GameData gameData;
@@ -17,14 +24,15 @@ public class ItemControllerScript : MonoBehaviour
 
 	public GameObject ItemEntryListPanel;
 	public GameObject CurrentItemPanel;
+	private ItemDisplayType currentItemDisplay;
 
 	//alpha, reverseAlpha, level, reverseLevel
 	private int sortType = 0;
-
 	private int itemOffset = 0;
 
 	private List<Item> currentItemList;
 	private List<ItemEntryControllerScript> currentItemEntryList;
+
 
 	//used for pagination of long item lists
 	private int currentPage;
@@ -34,11 +42,7 @@ public class ItemControllerScript : MonoBehaviour
 	{
 		gameData = GameObject.FindObjectOfType<GameData> ();
 
-		for (int i = 0; i < 50; i++) {
-			gameData.player.itemList.Add (ItemFactory.GenerateWeapon (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f)));
-		}
-
-		SelectItems ();
+		SelectWeapons ();
 	}
 	
 	// Update is called once per frame
@@ -54,7 +58,8 @@ public class ItemControllerScript : MonoBehaviour
 
 	public void SelectWeapons ()
 	{
-		SetCurrentItemText (gameData.player.weapon);
+		currentItemDisplay = ItemDisplayType.Weapon;
+		SetCurrentItemText ();
 		itemOffset = 0;
 		currentItemList = gameData.player.GetWeapons ();
 		SetItemEntryList (currentItemList.Take (NumItems).ToList ());
@@ -62,7 +67,8 @@ public class ItemControllerScript : MonoBehaviour
 
 	public void SelectArmor ()
 	{
-		SetCurrentItemText (gameData.player.armor);
+		currentItemDisplay = ItemDisplayType.Armor;
+		SetCurrentItemText ();
 		itemOffset = 0;
 		currentItemList = gameData.player.GetArmor ();
 		SetItemEntryList (currentItemList.Take (NumItems).ToList ());
@@ -70,6 +76,8 @@ public class ItemControllerScript : MonoBehaviour
 
 	public void SelectItems ()
 	{
+		currentItemDisplay = ItemDisplayType.Item;
+		SetCurrentItemText ();
 		itemOffset = 0;
 		currentItemList = gameData.player.GetItems ();
 		SetItemEntryList (currentItemList.Take (NumItems).ToList ());
@@ -140,8 +148,32 @@ public class ItemControllerScript : MonoBehaviour
 
 		currentItemList.Remove (itemScript.item);
 
-		SetCurrentItemText (itemScript.item);
+		SetCurrentItemText ();
 		RefreshItems ();
+	}
+
+	private void SetCurrentItemText ()
+	{
+		switch (currentItemDisplay) {
+		case ItemDisplayType.Weapon:
+			SetCurrentItemText (gameData.player.weapon);
+			break;
+		case ItemDisplayType.Armor:
+			SetCurrentItemText (gameData.player.armor);
+			break;
+		case ItemDisplayType.Item:
+			SetCurrentItemText (gameData.player.usableItemList);
+			break;
+		}
+	}
+
+	private void SetCurrentItemText (List<Item> itemList)
+	{
+		var curItemText = CurrentItemPanel.GetComponentInChildren<Text> ();
+		curItemText.text = "";
+		foreach (var i in itemList) {
+			curItemText.text += i.Name + ",    ";
+		}
 	}
 
 	private void SetCurrentItemText (Item i)

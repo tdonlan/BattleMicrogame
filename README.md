@@ -96,9 +96,13 @@ x-run on iphone for testing:
 		x-loot
 		-weapons - give varying dmg + effets for each of the attack types (attack, counter, special)
 	x-inventory 
-		-show current weapon / armor on that screen.
-		-limit list to 15 items
-		-sorting.
+		x-show current weapon / armor on that screen.
+		x-limit list to 15 items
+		x-sorting.
+
+		-items - seperate sublist for usable items
+		-remove on use.
+		-better random items / abilities
 	-Store screen.
 
 

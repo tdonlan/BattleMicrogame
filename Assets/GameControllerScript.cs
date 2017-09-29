@@ -178,7 +178,6 @@ public class GameControllerScript : MonoBehaviour
 		CheckHealth ();
 
 		//Reset for next turn
-
 		LogValue ();
 		EnemyDmgText.text = "";
 		PlayerDmgText.text = "";
@@ -352,13 +351,16 @@ public class GameControllerScript : MonoBehaviour
 	{
 		if (!isPaused) {
 			if (!hasClickedItem) {
-				if (gameData.player.itemList.Count > index) {
+				if (gameData.player.usableItemList.Count > index) {
 					hasClickedItem = true;
-					var item = gameData.player.itemList [index];
-
+					var item = gameData.player.usableItemList [index];
+				
 					//TODO: dont use item yet
 					item.UseItem (gameData.player, enemy);
+					gameData.player.usableItemList.RemoveAt (index);
+
 					logText.text += string.Format ("Used {0}\n", item.Name);
+					LoadPlayerItemButtons ();
 				}
 			}
 
@@ -391,8 +393,12 @@ public class GameControllerScript : MonoBehaviour
 
 	private void LoadPlayerItemButtons ()
 	{
+		foreach (Transform child in ItemButtonPanel.transform) {
+			GameObject.Destroy (child.gameObject);
+		}
+
 		var count = 0;
-		foreach (var item in gameData.player.itemList) {
+		foreach (var item in gameData.player.usableItemList) {
 			LoadItemButton (item.Name, count);
 			count++;
 		}

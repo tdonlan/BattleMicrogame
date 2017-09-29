@@ -19,6 +19,7 @@ public class Player : ITarget
 
 	public int Gold = 0;
 	public List<Item> itemList;
+	public List<Item> usableItemList = new List<Item> ();
 	public Weapon weapon = null;
 	public Armor armor = null;
 
@@ -103,8 +104,6 @@ public class Player : ITarget
 			return Mathf.RoundToInt (((float)HP / (float)TotalHP) * 100);
 		}
 	}
-
-
 
 	public Player ()
 	{
@@ -212,7 +211,6 @@ public class Player : ITarget
 
 	}
 
-
 	public List<Item> GetItems ()
 	{
 		var iList = from i in itemList
@@ -229,6 +227,7 @@ public class Player : ITarget
 		} else if (i is Armor) {
 			oldItem = equipArmor (i);
 		} else {
+			oldItem = equipItem (i);
 		}
 		return oldItem;
 	}
@@ -254,6 +253,19 @@ public class Player : ITarget
 		}
 		armor = (Armor)i;
 		itemList.Remove (i);
+		return oldItem;
+	}
+
+	private Item equipItem (Item i)
+	{
+		Item oldItem = null;
+		if (usableItemList.Count >= 4) {
+			oldItem = usableItemList [0];
+			usableItemList.RemoveAt (0);
+		}
+
+		itemList.Remove (i);
+		usableItemList.Add (i);
 		return oldItem;
 	}
 
