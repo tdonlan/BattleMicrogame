@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Player : ITarget
 {
@@ -12,14 +13,39 @@ public class Player : ITarget
 
 	public int MaxLevel = 50;
 
-
 	public int Level;
 	public int TotalHP;
 	public int HP;
 
-
 	public int Gold = 0;
 	public List<Item> itemList;
+	public List<Item> usableItemList = new List<Item> ();
+	public Weapon weapon = null;
+	public Armor armor = null;
+
+	public int BonusDamage = 0;
+
+	public int Damage {
+		get {
+			if (weapon == null) {
+				return Level * 5 + BonusDamage;
+			} else {
+				return weapon.Damage + BonusDamage;
+			}
+		}
+	}
+
+	public int BonusDefense;
+
+	public int Defense {
+		get { 
+			if (armor == null) {
+				return 0 + BonusDefense;
+			} else {
+				return armor.Defense + BonusDefense;
+			}
+		}
+	}
 
 	public List<ItemEffect> effectList = new List<ItemEffect> ();
 
@@ -83,8 +109,6 @@ public class Player : ITarget
 		}
 	}
 
-	public int Damage;
-
 	public Player ()
 	{
 		this.Name = "Player";
@@ -92,15 +116,13 @@ public class Player : ITarget
 		this.HP = this.TotalHP;
 		this.Level = 1;
 		this.XP = 0;
-		this.Damage = 20; //based on weapon
 
 		itemList = new List<Item> ();
-		itemList.Add (Item.getHealingPotion ());
-	
-		itemList.Add (Item.getRegenPotion ());
-		itemList.Add (Item.getGrenade ());
-		itemList.Add (Item.getPoison ());
-	
+
+		itemList.Add (ItemFactory.getHealingPotion ());
+		itemList.Add (ItemFactory.getRegenPotion ());
+		itemList.Add (ItemFactory.getGrenade ());
+		itemList.Add (ItemFactory.getPoison ());
 	}
 
 	public void AttachGameController (GameControllerScript gameController)
@@ -110,7 +132,16 @@ public class Player : ITarget
 
 	public string GetStats ()
 	{
-		return string.Format ("Level: {3}\nXP: {4}/{5}\nHP: {0}/{1}\nDmg: {2}\n Gold: {6}", HP, TotalHP, Damage, Level, XP, getXPNextLevel (), Gold);
+		var effectStr = "";
+		foreach (var e in effectList) {
+			effectStr += e.ToString () + "\n";
+		}
+
+		return string.Format ("Level: {3}\nXP: {4}/{5}\nHP: {0}/{1}\n" +
+		"Dmg:{2}\n" +
+		"Def:{7} \n" +
+		"Gold: {6}\n" +
+		"Effects: {8}", HP, TotalHP, Damage, Level, XP, getXPNextLevel (), Gold, Defense, effectStr);
 	}
 
 	public override string ToString ()
@@ -129,11 +160,23 @@ public class Player : ITarget
 
 	public void RemoveEffect (ItemEffect effect)
 	{
+		//more elegant way to do this?
+		switch (effect.effectType) {
+		case EffectType.BuffDamage:
+			BonusDamage = 0;
+			break;
+		case EffectType.BuffDefense:
+			BonusDefense = 0;
+			break;
+		default:
+			break;
+		}
 		this.effectList.Remove (effect);	
 	}
 
 	public bool Hit (int damage)
 	{
+		damage = Mathf.Clamp (damage - Defense, 0, 999999); //directly apply defense for now
 		gameController.DisplayDmg (false, damage);
 
 		this.HP -= damage;
@@ -161,11 +204,101 @@ public class Player : ITarget
 		}
 	}
 
+	public void BuffDamage (int amount)
+	{
+		
+		this.BonusDamage = amount;
+	}
+
+	public void BuffDefense (int amount)
+	{
+		this.BonusDefense = amount;
+	}
+
 	public void UpdateEffects ()
 	{
 		for (int i = effectList.Count - 1; i >= 0; i--) {
 			effectList [i].ApplyEffect (this);
 		}
+	}
+
+	//-----Inventory
+
+	public List<Item> GetWeapons ()
+	{
+
+		var wepList = from i in itemList
+		              where i is Weapon
+		              select i;
+		return wepList.ToList ();
+
+	}
+
+	public List<Item> GetArmor ()
+	{
+		var armorList = from i in itemList
+		                where i is Armor
+		                select i;
+		return armorList.ToList ();
+
+	}
+
+	public List<Item> GetItems ()
+	{
+		var iList = from i in itemList
+		            where (!(i is Armor)) && (!(i is Weapon))
+		            select i;
+		return iList.ToList ();
+	}
+
+	public Item EquipItem (Item i)
+	{
+		Item oldItem = null;
+		if (i is Weapon) {
+			oldItem = equipWeapon (i);
+		} else if (i is Armor) {
+			oldItem = equipArmor (i);
+		} else {
+			oldItem = equipItem (i);
+		}
+		return oldItem;
+	}
+
+	private Item equipWeapon (Item i)
+	{
+		Item oldItem = null;
+		if (weapon != null) {
+			oldItem = weapon;
+			this.itemList.Add (weapon);
+		}
+		weapon = (Weapon)i;
+		itemList.Remove (i);
+		return oldItem;
+	}
+
+	private Item equipArmor (Item i)
+	{
+		Item oldItem = null;
+		if (armor != null) {
+			oldItem = armor;
+			this.itemList.Add (armor);
+		}
+		armor = (Armor)i;
+		itemList.Remove (i);
+		return oldItem;
+	}
+
+	private Item equipItem (Item i)
+	{
+		Item oldItem = null;
+		if (usableItemList.Count >= 4) {
+			oldItem = usableItemList [0];
+			usableItemList.RemoveAt (0);
+		}
+
+		itemList.Remove (i);
+		usableItemList.Add (i);
+		return oldItem;
 	}
 
 	//-------- XP Calculations
@@ -216,7 +349,7 @@ public class Player : ITarget
 			this.Level++;
 			this.TotalHP = this.Level * 50;
 			this.HP = this.TotalHP;
-			this.Damage = this.Level * 10;
+
 		}
 	}
 

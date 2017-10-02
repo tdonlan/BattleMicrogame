@@ -178,7 +178,6 @@ public class GameControllerScript : MonoBehaviour
 		CheckHealth ();
 
 		//Reset for next turn
-
 		LogValue ();
 		EnemyDmgText.text = "";
 		PlayerDmgText.text = "";
@@ -255,7 +254,13 @@ public class GameControllerScript : MonoBehaviour
 		gameData.KillCount++;
 		gameData.player.GetXP (enemy.XP);
 		gameData.player.Gold += enemy.Gold;
-		gameOverScript.Show (string.Format ("You Win! \n XP: {0}\nGold:{1}", enemy.XP, enemy.Gold));
+		gameData.player.itemList.AddRange (enemy.ItemList);
+
+		var itemListStr = "";
+		foreach (var i in enemy.ItemList) {
+			itemListStr += i.Name + "\n";
+		}
+		gameOverScript.Show (string.Format ("You Win! \n XP: {0}\nGold:{1}\nLoot:{2}", enemy.XP, enemy.Gold, itemListStr));
 	}
 
 	public void Lose ()
@@ -346,13 +351,16 @@ public class GameControllerScript : MonoBehaviour
 	{
 		if (!isPaused) {
 			if (!hasClickedItem) {
-				if (gameData.player.itemList.Count > index) {
+				if (gameData.player.usableItemList.Count > index) {
 					hasClickedItem = true;
-					var item = gameData.player.itemList [index];
-
+					var item = gameData.player.usableItemList [index];
+				
 					//TODO: dont use item yet
 					item.UseItem (gameData.player, enemy);
+					gameData.player.usableItemList.RemoveAt (index);
+
 					logText.text += string.Format ("Used {0}\n", item.Name);
+					LoadPlayerItemButtons ();
 				}
 			}
 
@@ -385,9 +393,12 @@ public class GameControllerScript : MonoBehaviour
 
 	private void LoadPlayerItemButtons ()
 	{
+		foreach (Transform child in ItemButtonPanel.transform) {
+			GameObject.Destroy (child.gameObject);
+		}
+
 		var count = 0;
-		foreach (var item in gameData.player.itemList) {
-			Debug.Log (string.Format ("Adding item {0} ", item.Name));
+		foreach (var item in gameData.player.usableItemList) {
 			LoadItemButton (item.Name, count);
 			count++;
 		}
@@ -397,7 +408,6 @@ public class GameControllerScript : MonoBehaviour
 	{
 		//instantiate prefab
 		var itemButton = Instantiate (ItemButtonPrefab);
-
 
 		//update button text
 		var itemButtonText = itemButton.GetComponentInChildren<Text> ();

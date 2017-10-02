@@ -87,15 +87,23 @@ x-run on iphone for testing:
 09-03-2017
 	x-more varied enemies (difficulty per level + boss)
 	-better turn icon indicator
-	-gain xp / level up
-	-win battle splash screen (xp, loot gained)
+	x-gain xp / level up
+	x-win battle splash screen (xp, loot gained)
 	-save stats on iphone (with reset option)
-	-testing - level up button - to test enemy generation
+	x-testing - level up button - to test enemy generation
 	
 	-random items
-		-loot
+		x-loot
 		-weapons - give varying dmg + effets for each of the attack types (attack, counter, special)
-	-inventory / store screen.
+	x-inventory 
+		x-show current weapon / armor on that screen.
+		x-limit list to 15 items
+		x-sorting.
+
+		x-items - seperate sublist for usable items
+		x-remove on use.
+		x-better random items / abilities
+	-Store screen.
 
 
 

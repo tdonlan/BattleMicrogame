@@ -13,5 +13,9 @@ public interface ITarget
 
 	void Cure (int amount);
 
+	void BuffDamage (int amount);
+
+	void BuffDefense (int amount);
+
 }
 

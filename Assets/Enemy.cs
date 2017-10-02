@@ -18,7 +18,6 @@ public class Enemy : ITarget
 	public const int BaseDamage = 20;
 	public const int BaseGold = 10;
 
-
 	public string Name;
 	public int Level;
 	public int HP;
@@ -41,7 +40,6 @@ public class Enemy : ITarget
 	public int turnIndex = 0;
 	public List<TurnData> turnDataList;
 
-
 	public Enemy (string name, int level)
 	{
 		this.r = new System.Random ();
@@ -58,7 +56,13 @@ public class Enemy : ITarget
 	//For display stats in game
 	public string GetStats ()
 	{
-		return string.Format ("Level: {3} \nHP: {0}/{1} \nDmg: {2}", HP, TotalHP, Damage, Level);
+
+		var effectStr = "";
+		foreach (var e in effectList) {
+			effectStr += e.ToString () + "\n";
+		}
+
+		return string.Format ("Level: {3} \nHP: {0}/{1} \nDmg: {2}\nEffects:{4}", HP, TotalHP, Damage, Level, effectStr);
 	}
 
 	//for displaying full object info for testing
@@ -70,7 +74,7 @@ public class Enemy : ITarget
 		}
 		var itemStr = "";
 		foreach (var i in ItemList) {
-			turnsStr += i.ToString () + ", ";
+			itemStr += i.Name + ", ";
 		}
 		return string.Format ("{0}\n Level {1}\n HP {2}/{3} Dmg: {5} \nXP: {4} Gold: {7}\n Items:{8}\n \nTurns: {6}", Name, Level, HP, TotalHP, XP, Damage, turnsStr, Gold, itemStr);
 	}
@@ -121,6 +125,16 @@ public class Enemy : ITarget
 			amount--;
 			effectList.RemoveAt (0);
 		}
+	}
+
+	public void BuffDamage (int amount)
+	{
+		//todo
+	}
+
+	public void BuffDefense (int amount)
+	{
+		//todo
 	}
 
 	public TurnData getNextTurnData ()

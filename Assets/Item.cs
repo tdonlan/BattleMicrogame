@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public enum EffectType
 {
+	BuffDamage,
+	BuffDefense,
 	HealSelf,
 	CureSelf,
 	DamageEnemy,
@@ -21,6 +23,11 @@ public class ItemEffect
 		this.effectType = effectType;
 		this.Amount = amount;
 		this.Duration = duration;
+	}
+
+	public override string ToString ()
+	{
+		return string.Format ("{0}:{1}/{2}trns", effectType.ToString (), Amount, Duration);
 	}
 
 	//clone the effect
@@ -42,6 +49,12 @@ public class ItemEffect
 			case EffectType.DamageEnemy:
 				target.Hit (Amount);
 				break;
+			case EffectType.BuffDamage:
+				target.BuffDamage (Amount);
+				break;
+			case EffectType.BuffDefense:
+				target.BuffDefense (Amount);
+				break;
 			default:
 				break;
 			}
@@ -57,18 +70,28 @@ public class ItemEffect
 public class Item
 {
 	public string Name;
-	public List<ItemEffect> itemEffectList;
+	public int Price;
+	public int Level;
+	public List<ItemEffect> itemEffectList = new List<ItemEffect> ();
 
-	public Item (string name, ItemEffect itemEffect)
+
+	public Item (string name, int level, int price, List<ItemEffect> itemEffectList)
 	{
 		this.Name = name;
-		this.itemEffectList = new List<ItemEffect> (){ itemEffect };
+		this.Level = level;
+		this.Price = price;
+		this.itemEffectList = itemEffectList;
 	}
 
-	public Item (string name, List<ItemEffect> itemEffectList)
+	public override string ToString ()
 	{
-		this.Name = name;
-		this.itemEffectList = itemEffectList;
+		var effects = "";
+		if (itemEffectList != null && itemEffectList.Count > 0) {
+			foreach (var i in itemEffectList) {
+				effects += i.ToString () + ", ";
+			}
+		}
+		return string.Format ("Lvl:{0}\n{1}", this.Level, effects);
 	}
 
 	//need more generic way to apply effects to targets
@@ -85,41 +108,46 @@ public class Item
 			case EffectType.DamageEnemy:
 				target.AddEffect (effect);
 				break;
+			case EffectType.BuffDamage:
+				source.AddEffect (effect);
+				break;
+			case EffectType.BuffDefense:
+				source.AddEffect (effect);
+				break;
 			default:
 				break;
 			}
 		}
 	}
-		
-	//------------- FACTORIES -----------
-
-
-	//put these in a factory / datalist?
-	public static Item getHealingPotion ()
-	{
-		var iEffect = new ItemEffect (EffectType.HealSelf, 25, 1);
-		return new Item ("Healing Potion", iEffect);
-	}
-
-	public static Item getRegenPotion ()
-	{
-		var iEffect = new ItemEffect (EffectType.HealSelf, 5, 5);
-		return new Item ("Regen Potion", iEffect);
-	}
-		
-	//lifetap potion?
-
-	public static Item getGrenade ()
-	{
-		var iEffect = new ItemEffect (EffectType.DamageEnemy, 25, 1);
-		return new Item ("Grenade", iEffect);
-	}
-
-	public static Item getPoison ()
-	{
-		var iEffect = new ItemEffect (EffectType.DamageEnemy, 5, 5);
-		return new Item ("Poison", iEffect);
-	}
-		
 }
 
+public class Weapon : Item
+{
+	public int Damage;
+
+	public Weapon (string name, int level, int price, int Damage) : base (name, level, price, null)
+	{
+		this.Damage = Damage;
+	}
+
+	public override string ToString ()
+	{
+		return base.ToString () + "Dmg: " + Damage;
+	}
+}
+
+public class Armor : Item
+{
+	public int Defense;
+
+	public Armor (string name, int level, int price, int Defense) : base (name, level, price, null)
+	{
+		this.Defense = Defense;
+	}
+
+	public override string ToString ()
+	{
+		return  base.ToString () + "Defense: " + Defense;
+	}
+
+}

@@ -76,8 +76,6 @@ public class EnemyFactory
 	//variance = -1 to 1.  will scale the difficulty of the enemy
 	public static Enemy GenerateEnemy (int level, float variance)
 	{
-		Debug.Log (variance);
-
 		level = Mathf.Clamp (Core.vary (level, variance), 1, Enemy.MaxLevel);
 		string name = getName (level, variance);
 		var e = new Enemy (name, level);
@@ -85,6 +83,7 @@ public class EnemyFactory
 		e.HP = e.TotalHP;
 		e.Damage = Mathf.Clamp (Core.vary (e.Damage, variance), Enemy.MinDmg, Enemy.MaxDmg);
 		e.Gold = Mathf.Clamp (Core.vary (e.Gold, variance), 0, 99999);
+		e.ItemList = generateLoot (level, variance);
 		e.XP = Mathf.Clamp (e.XP + Mathf.RoundToInt (e.XP * variance), 10, 9999999);
 	
 		e.turnDataList = generateTurnDataList (level, variance);
@@ -148,7 +147,7 @@ public class EnemyFactory
 
 		var ratio = (float)level / (float)Enemy.MaxLevel;
 
-		var numTurns = Mathf.Clamp (Core.vary (Mathf.RoundToInt (ratio * 4) + 1, variance), 1, 6);
+		var numTurns = Mathf.Clamp (Core.vary (Mathf.RoundToInt (ratio * 4) + 1, variance), 1, 4);
 		for (int i = 1; i <= numTurns; i++) {
 			turnDataList.Add (new TurnData () {
 				duration = UnityEngine.Random.Range (.5f, 2f),
@@ -156,5 +155,30 @@ public class EnemyFactory
 			});
 		}
 		return turnDataList;
+	}
+
+	private static List<Item> generateLoot (int level, float variance)
+	{
+		List<Item> lootList = new List<Item> ();
+		var ratio = (float)level / (float)Enemy.MaxLevel;
+		var numLoot = Mathf.Clamp (Core.vary (Mathf.RoundToInt (ratio) + 1, variance), 0, 5);
+
+		for (int i = 0; i < numLoot; i++) {
+
+			var itemVariance = UnityEngine.Random.Range (variance / 4, variance);
+
+			var lootType = UnityEngine.Random.Range (0, 1f);
+			if (lootType > .666f) {
+				lootList.Add (ItemFactory.GenerateWeapon (level, itemVariance));
+			} else if (lootType > .333f) {
+				lootList.Add (ItemFactory.GenerateArmor (level, itemVariance));
+			} else {
+				lootList.Add (ItemFactory.GenerateItem (level, itemVariance));
+			}
+
+		}
+
+		return lootList;
+
 	}
 }
