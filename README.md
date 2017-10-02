@@ -106,6 +106,14 @@ x-run on iphone for testing:
 	-Store screen.
 
 
-
+MVP
+	-udate to latest unity version?
+	-skinning UI
+	-avatars for players / enemies
+	-icons for items
+	-store
+	-sound
+	-enemy selection (select from 3)
+	-save progress with iphone localdata.
 
 
