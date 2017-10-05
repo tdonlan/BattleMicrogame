@@ -31,7 +31,6 @@ public class SplashScreenScript : MonoBehaviour
 	{
 		if (!isHiding) {
 			displayTimer += Time.deltaTime;
-			Debug.Log (string.Format ("{0} / {1} ", displayTimer, displayTime));
 			if (displayTimer >= displayTime) {
 				Hide ();
 			}
@@ -41,7 +40,6 @@ public class SplashScreenScript : MonoBehaviour
 	public void Show ()
 	{
 		displayTimer = 0;
-		Debug.Log ("Showing splash screen");
 		PlayerText.text = gameControllerScript.gameData.player.Name;
 		EnemyText.text = gameControllerScript.enemy.Name;
 		isHiding = false;
@@ -50,7 +48,6 @@ public class SplashScreenScript : MonoBehaviour
 
 	public void Hide ()
 	{
-		Debug.Log ("Calling splash screen hide");
 		isHiding = true;
 		gameControllerScript.isStart = true;
 		rectTransform.localPosition = new Vector3 (0, -3000, 0);

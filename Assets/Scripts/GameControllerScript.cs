@@ -92,6 +92,11 @@ public class GameControllerScript : MonoBehaviour
 	public GameObject TurnInfoPrefab;
 	public List<GameObject> TurnInfoList;
 
+	//images
+	public Sprite AttackSprite;
+	public Sprite CounterSprite;
+	public Sprite SpecialSprite;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -437,20 +442,6 @@ public class GameControllerScript : MonoBehaviour
 	private GameObject InitTurnInfo ()
 	{
 		var turnInfo = Instantiate (TurnInfoPrefab);
-		var tiImage = turnInfo.GetComponent<Image> ();
-
-		var tiColor = Color.grey;
-		tiImage.color = tiColor;
-
-		var texts = turnInfo.GetComponentsInChildren<Text> ();
-		foreach (var t in texts) {
-			if (t.gameObject.name == "AttackText") {
-				t.text = "?";
-			}
-			if (t.gameObject.name == "OutcomeText") {
-				t.text = "";
-			}
-		}
 
 		turnInfo.transform.parent = TurnInfoPanel.transform;
 
@@ -479,7 +470,7 @@ public class GameControllerScript : MonoBehaviour
 
 		var tiImage = turnInfo.GetComponent<Image> ();
 	
-		var tiColor = Color.grey;
+		var tiColor = Color.white;
 		switch (outcome) {
 		case Outcome.Win:
 			tiColor = Color.green;
@@ -495,13 +486,23 @@ public class GameControllerScript : MonoBehaviour
 		}
 		tiImage.color = tiColor;
 
-		var texts = turnInfo.GetComponentsInChildren<Text> ();
-		foreach (var t in texts) {
-			if (t.gameObject.name == "AttackText") {
-				t.text = enemyAttack.ToString ();
-			}
-			if (t.gameObject.name == "OutcomeText") {
-				t.text = outcome.ToString ();
+		var images = turnInfo.GetComponentsInChildren<Image> ();
+		foreach (var i in images) {
+			if (i.gameObject.name == "AttackImage") {
+				switch (enemyAttack) {
+				case AttackType.Attack:
+					i.sprite = AttackSprite;
+					break;
+				case AttackType.Counter:
+					i.sprite = CounterSprite;
+					break;
+				case AttackType.Special:
+					i.sprite = SpecialSprite;
+					break;
+				default:
+					break;
+
+				}
 			}
 		}
 	}

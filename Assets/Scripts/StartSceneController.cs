@@ -40,7 +40,6 @@ public class StartSceneController : MonoBehaviour
 
 	public void StartBattle ()
 	{
-		Debug.Log ("Loading GameScene");
 		SceneManager.LoadScene ("GameScene", LoadSceneMode.Single);
 	}
 
