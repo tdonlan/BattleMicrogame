@@ -153,7 +153,6 @@ public class GameControllerScript : MonoBehaviour
 			}
 		} else if (!isPaused) {
 			if (isCooldown) {
-				slider.value = 0;
 				cooldownTimer += Time.deltaTime;
 				if (cooldownTimer >= totalCooldownTimer) {
 					nextTurn ();
@@ -171,6 +170,7 @@ public class GameControllerScript : MonoBehaviour
 
 	private void nextTurn ()
 	{
+		slider.value = 0;
 		gameData.player.UpdateEffects ();
 		enemy.UpdateEffects ();
 
@@ -507,44 +507,5 @@ public class GameControllerScript : MonoBehaviour
 		}
 	}
 
-	//DEPRECATED
-	private void LoadTurnInfo (AttackType enemyAttack, Outcome outcome)
-	{
-		//remove front of list, if too many.
-		if (TurnInfoPanel.transform.childCount > 5) {
-			GameObject.Destroy (TurnInfoPanel.transform.GetChild (0).gameObject);
-		}
 
-		var turnInfo = Instantiate (TurnInfoPrefab);
-		var tiImage = turnInfo.GetComponent<Image> ();
-
-
-		var tiColor = Color.grey;
-		switch (outcome) {
-		case Outcome.Win:
-			tiColor = Color.green;
-			break;
-		case Outcome.Draw:
-			tiColor = Color.yellow;
-			break;
-		case Outcome.Lose:
-			tiColor = Color.red;
-			break;
-		default:
-			break;
-		}
-		tiImage.color = tiColor;
-
-		var texts = turnInfo.GetComponentsInChildren<Text> ();
-		foreach (var t in texts) {
-			if (t.gameObject.name == "AttackText") {
-				t.text = enemyAttack.ToString ();
-			}
-			if (t.gameObject.name == "OutcomeText") {
-				t.text = outcome.ToString ();
-			}
-		}
-			
-		turnInfo.transform.parent = TurnInfoPanel.transform;
-	}
 }
