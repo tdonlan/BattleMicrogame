@@ -107,13 +107,16 @@ x-run on iphone for testing:
 
 
 MVP
-	-udate to latest unity version?
-	-skinning UI
+	x-udate to latest unity version?
+	x-skinning UI
 	-avatars for players / enemies
 	-icons for items
 	-store
 	-sound
 	-enemy selection (select from 3)
 	-save progress with iphone localdata.
+
+	-basic map populated with locdata + timestamp + perlin noise?
+	
 
 
