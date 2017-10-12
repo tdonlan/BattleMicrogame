@@ -118,5 +118,8 @@ MVP
 
 	-basic map populated with locdata + timestamp + perlin noise?
 	
-
+Store
+	-pass in level and variance to populate store
+	-similar interface to inventory - buy/sell
+	-show player's money.
 

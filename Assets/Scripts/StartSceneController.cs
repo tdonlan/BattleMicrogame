@@ -57,4 +57,9 @@ public class StartSceneController : MonoBehaviour
 	{
 		SceneManager.LoadScene ("ItemScene", LoadSceneMode.Single);
 	}
+
+	public void ShowStore ()
+	{
+		SceneManager.LoadScene ("StoreScene", LoadSceneMode.Single);
+	}
 }

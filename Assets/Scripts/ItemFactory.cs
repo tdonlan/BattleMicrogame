@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class ItemEffectFactory
 {
+
+
+
 	public static List<ItemEffect> getItemEffectList (int level, float variance)
 	{
 		List<ItemEffect> effectList = new List<ItemEffect> ();
@@ -167,6 +170,55 @@ public class ItemFactory
 	}
 
 	//-----------------
+
+	public static List<Item> GenerateLoot (int level, float variance)
+	{
+		List<Item> lootList = new List<Item> ();
+		var ratio = (float)level / (float)Enemy.MaxLevel;
+		var numLoot = Mathf.Clamp (Core.vary (Mathf.RoundToInt (ratio) + 1, variance), 0, 5);
+
+		for (int i = 0; i < numLoot; i++) {
+
+			var itemVariance = UnityEngine.Random.Range (variance / 4, variance);
+
+			var lootType = UnityEngine.Random.Range (0, 1f);
+			if (lootType > .666f) {
+				lootList.Add (ItemFactory.GenerateWeapon (level, itemVariance));
+			} else if (lootType > .333f) {
+				lootList.Add (ItemFactory.GenerateArmor (level, itemVariance));
+			} else {
+				lootList.Add (ItemFactory.GenerateItem (level, itemVariance));
+			}
+
+		}
+
+		return lootList;
+
+	}
+
+	public static List<Item> GenerateStore (int level, float variance)
+	{
+		List<Item> lootList = new List<Item> ();
+
+		var numLoot = Mathf.Clamp (Core.vary (10, variance), 1, 99);
+
+		for (int i = 0; i < numLoot; i++) {
+
+			var itemVariance = UnityEngine.Random.Range (variance / 4, variance);
+
+			var lootType = UnityEngine.Random.Range (0, 1f);
+			if (lootType > .666f) {
+				lootList.Add (ItemFactory.GenerateWeapon (level, itemVariance));
+			} else if (lootType > .333f) {
+				lootList.Add (ItemFactory.GenerateArmor (level, itemVariance));
+			} else {
+				lootList.Add (ItemFactory.GenerateItem (level, itemVariance));
+			}
+
+		}
+
+		return lootList;
+	}
 
 	public static Item GenerateItem (int level, float variance)
 	{

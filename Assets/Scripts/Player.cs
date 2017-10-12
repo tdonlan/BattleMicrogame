@@ -17,7 +17,7 @@ public class Player : ITarget
 	public int TotalHP;
 	public int HP;
 
-	public int Gold = 0;
+	public int Gold = 10000;
 	public List<Item> itemList;
 	public List<Item> usableItemList = new List<Item> ();
 	public Weapon weapon = null;
