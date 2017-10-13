@@ -267,9 +267,10 @@ public class GameControllerScript : MonoBehaviour
 
 	public void Lose ()
 	{
-		gameOverScript.Show ("You Died!");
+		var lostGold = Mathf.FloorToInt (gameData.player.Gold * .1f);
+		gameOverScript.Show (string.Format ("You Died!\n You lost {0} gold! ", lostGold));
 		gameData.player.HP = gameData.player.TotalHP;
-		//remove some money / xp?
+		gameData.player.Gold -= lostGold;
 	}
 
 	//who wins the battle?

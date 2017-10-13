@@ -111,7 +111,7 @@ MVP
 	x-skinning UI
 	-avatars for players / enemies
 	-icons for items
-	-store
+	x-store
 	-sound
 	-enemy selection (select from 3)
 	-save progress with iphone localdata.
@@ -120,6 +120,6 @@ MVP
 	
 Store
 	-pass in level and variance to populate store
-	-similar interface to inventory - buy/sell
-	-show player's money.
+	x-similar interface to inventory - buy/sell
+	x-show player's money.
 
