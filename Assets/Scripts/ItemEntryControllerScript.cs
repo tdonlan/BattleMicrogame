@@ -6,11 +6,13 @@ public class ItemEntryControllerScript : MonoBehaviour
 {
 	public Item item;
 	public ItemControllerScript itemControllerScript;
+	public StoreControllerScript storeControllerScript;
 
 	// Use this for initialization
 	void Start ()
 	{
 		itemControllerScript = GameObject.FindObjectOfType<ItemControllerScript> ();
+		storeControllerScript = GameObject.FindObjectOfType<StoreControllerScript> ();
 	}
 	
 	// Update is called once per frame
@@ -28,5 +30,15 @@ public class ItemEntryControllerScript : MonoBehaviour
 	public void EquipItem ()
 	{
 		itemControllerScript.EquipItem (this);
+	}
+
+	public void SellItem ()
+	{
+		storeControllerScript.SellItem (this);
+	}
+
+	public void BuyItem ()
+	{
+		storeControllerScript.BuyItem (this);
 	}
 }

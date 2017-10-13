@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ItemControllerScript : MonoBehaviour
+public class StoreControllerScript : MonoBehaviour
 {
 
 	public enum ItemDisplayType
@@ -23,15 +23,18 @@ public class ItemControllerScript : MonoBehaviour
 	public GameObject ItemEntryPrefab;
 
 	public GameObject ItemEntryListPanel;
-	public GameObject CurrentItemPanel;
 	private ItemDisplayType currentItemDisplay;
 
 	//alpha, reverseAlpha, level, reverseLevel
 	private int sortType = 0;
 	private int itemOffset = 0;
 
+	private bool isSell = true;
+	private List<Item> storeList;
 	private List<Item> currentItemList;
 	private List<ItemEntryControllerScript> currentItemEntryList;
+
+	public Text PlayerGoldText;
 
 
 	//used for pagination of long item lists
@@ -41,14 +44,16 @@ public class ItemControllerScript : MonoBehaviour
 	void Start ()
 	{
 		gameData = GameObject.FindObjectOfType<GameData> ();
+		storeList = ItemFactory.GenerateStore (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f));
+		PlayerGoldText.text = string.Format ("{0}", gameData.player.Gold);
 
 		SelectWeapons ();
 	}
-	
+
 	// Update is called once per frame
 	void Update ()
 	{
-		
+
 	}
 
 	public void BackButton ()
@@ -56,35 +61,72 @@ public class ItemControllerScript : MonoBehaviour
 		SceneManager.LoadScene ("StartScene", LoadSceneMode.Single);
 	}
 
+	public void SelectBuyView ()
+	{
+		isSell = false;
+		SelectWeapons ();
+	}
+
+	public void SelectSellView ()
+	{
+		isSell = true;
+		SelectWeapons ();
+	}
+
 	public void SelectWeapons ()
 	{
 		currentItemDisplay = ItemDisplayType.Weapon;
-		SetCurrentItemText ();
 		itemOffset = 0;
-		currentItemList = gameData.player.GetWeapons ();
-		SetItemEntryList (currentItemList.Take (NumItems).ToList ());
+		if (isSell) {
+			currentItemList = gameData.player.GetWeapons ();
+			SetItemEntryList (currentItemList.Take (NumItems).ToList ());
+		} else {
+			var wepList = from i in storeList
+			              where i is Weapon
+			              select i;
+			currentItemList = wepList.ToList ();
+			SetItemEntryList (currentItemList.Take (NumItems).ToList ());
+		}
+
 	}
 
 	public void SelectArmor ()
 	{
 		currentItemDisplay = ItemDisplayType.Armor;
-		SetCurrentItemText ();
 		itemOffset = 0;
-		currentItemList = gameData.player.GetArmor ();
-		SetItemEntryList (currentItemList.Take (NumItems).ToList ());
+		if (isSell) {
+			currentItemList = gameData.player.GetArmor ();
+			SetItemEntryList (currentItemList.Take (NumItems).ToList ());
+		} else {
+			var armorList = from i in storeList
+			                where i is Armor
+			                select i;
+			currentItemList = armorList.ToList ();
+			SetItemEntryList (currentItemList.Take (NumItems).ToList ());
+		}
+	
 	}
 
 	public void SelectItems ()
 	{
 		currentItemDisplay = ItemDisplayType.Item;
-		SetCurrentItemText ();
 		itemOffset = 0;
-		currentItemList = gameData.player.GetItems ();
-		SetItemEntryList (currentItemList.Take (NumItems).ToList ());
+		if (isSell) {
+			currentItemList = gameData.player.GetItems ();
+			SetItemEntryList (currentItemList.Take (NumItems).ToList ());
+		} else {
+			var iList = from i in storeList
+			            where (!(i is Armor)) && (!(i is Weapon))
+			            select i;
+			currentItemList = iList.ToList ();
+			SetItemEntryList (currentItemList.Take (NumItems).ToList ());
+		}
+	
 	}
 
 	private void RefreshItems ()
 	{
+		PlayerGoldText.text = string.Format ("{0} gp", gameData.player.Gold);
 		SetItemEntryList (currentItemList.Skip (itemOffset * NumItems).Take (NumItems).ToList ());
 	}
 
@@ -117,7 +159,7 @@ public class ItemControllerScript : MonoBehaviour
 		default:
 			break;
 		}
-			
+
 		SetItemEntryList (currentItemList.Take (NumItems).ToList ());
 	}
 
@@ -138,60 +180,26 @@ public class ItemControllerScript : MonoBehaviour
 		SetItemEntryList (currentItemList.Skip (itemOffset * NumItems).Take (NumItems).ToList ());
 	}
 
-	public void EquipItem (ItemEntryControllerScript itemScript)
+	public void SellItem (ItemEntryControllerScript itemScript)
 	{
-		//trade items in player inventory
-		var oldItem = gameData.player.EquipItem (itemScript.item);
-		if (oldItem != null) {
-			currentItemList.Add (oldItem);
-		}
-
-		currentItemList.Remove (itemScript.item);
-
-		SetCurrentItemText ();
-		RefreshItems ();
-	}
-
-	private void SetCurrentItemText ()
-	{
-		switch (currentItemDisplay) {
-		case ItemDisplayType.Weapon:
-			SetCurrentItemText (gameData.player.weapon);
-			break;
-		case ItemDisplayType.Armor:
-			SetCurrentItemText (gameData.player.armor);
-			break;
-		case ItemDisplayType.Item:
-			SetCurrentItemText (gameData.player.usableItemList);
-			break;
+		if (gameData.player.itemList.Contains (itemScript.item)) {
+			storeList.Add (itemScript.item);
+			gameData.player.Gold += itemScript.item.Price; //multiplier for store?
+			gameData.player.itemList.Remove (itemScript.item);
+			currentItemList.Remove (itemScript.item);
+			RefreshItems ();
 		}
 	}
 
-	private void SetCurrentItemText (List<Item> itemList)
+	public void BuyItem (ItemEntryControllerScript itemScript)
 	{
-		var curItemText = CurrentItemPanel.GetComponentInChildren<Text> ();
-		curItemText.text = "";
-		foreach (var i in itemList) {
-			curItemText.text += i.Name + ",    ";
+		if (gameData.player.Gold >= itemScript.item.Price && storeList.Contains (itemScript.item)) {
+			storeList.Remove (itemScript.item);
+			gameData.player.Gold -= itemScript.item.Price;
+			currentItemList.Remove (itemScript.item);
+			gameData.player.itemList.Add (itemScript.item);
+			RefreshItems ();
 		}
-	}
-
-	private void SetCurrentItemText (Item i)
-	{
-		var curItemText = CurrentItemPanel.GetComponentInChildren<Text> ();
-		curItemText.text = "";
-		if (i != null) {
-
-			var itemStr = i.Name + "\n" + i.ToString ();
-			curItemText.text = itemStr;
-		}
-	}
-
-	public void DeleteItem (ItemEntryControllerScript itemScript)
-	{
-		gameData.player.itemList.Remove (itemScript.item); //call helper on player inventory here
-		currentItemList.Remove (itemScript.item);
-		RefreshItems ();
 	}
 
 	//given a list of items (12), set the itemEntryPanel
@@ -218,21 +226,32 @@ public class ItemControllerScript : MonoBehaviour
 				t.text = i.Name;
 			}
 			if (t.gameObject.name == "ItemStatsText") {
-				t.text = i.ToString ();
+				t.text = i.ToString () + " Price: " + i.Price;
 			}
 		}
-
 		var buttons = itemEntry.GetComponentsInChildren<Button> ();
 		foreach (var b in buttons) {
-			if (b.gameObject.name == "BuyButton") {
+			if (b.gameObject.name == "EquipButton") {
 				b.gameObject.SetActive (false);
+			}
+			if (b.gameObject.name == "DropButton") {
+				b.gameObject.SetActive (false);
+			}
+			if (b.gameObject.name == "BuyButton") {
+				if (isSell) {
+					b.gameObject.SetActive (false);
+				} else {
+					b.gameObject.SetActive (true);
+				}
 			}
 			if (b.gameObject.name == "SellButton") {
-				b.gameObject.SetActive (false);
+				if (isSell) {
+					b.gameObject.SetActive (true);
+				} else {
+					b.gameObject.SetActive (false);
+				}
 			}
-
 		}
-	
 
 		var itemEntryScript = itemEntry.GetComponentInChildren<ItemEntryControllerScript> ();
 		itemEntryScript.item = i;
