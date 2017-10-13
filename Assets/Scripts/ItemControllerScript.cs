@@ -222,6 +222,18 @@ public class ItemControllerScript : MonoBehaviour
 			}
 		}
 
+		var buttons = itemEntry.GetComponentsInChildren<Button> ();
+		foreach (var b in buttons) {
+			if (b.gameObject.name == "BuyButton") {
+				b.gameObject.SetActive (false);
+			}
+			if (b.gameObject.name == "SellButton") {
+				b.gameObject.SetActive (false);
+			}
+
+		}
+	
+
 		var itemEntryScript = itemEntry.GetComponentInChildren<ItemEntryControllerScript> ();
 		itemEntryScript.item = i;
 

@@ -226,7 +226,7 @@ public class StoreControllerScript : MonoBehaviour
 				t.text = i.Name;
 			}
 			if (t.gameObject.name == "ItemStatsText") {
-				t.text = i.ToString ();
+				t.text = i.ToString () + " Price: " + i.Price;
 			}
 		}
 		var buttons = itemEntry.GetComponentsInChildren<Button> ();
