@@ -74,7 +74,7 @@ public class EnemyFactory
 	};
 
 	//variance = -1 to 1.  will scale the difficulty of the enemy
-	public static Enemy GenerateEnemy (int level, float variance)
+	public static Enemy GenerateEnemy (int level, float variance, AssetData assetData)
 	{
 		level = Mathf.Clamp (Core.vary (level, variance), 1, Enemy.MaxLevel);
 		string name = getName (level, variance);
@@ -85,6 +85,7 @@ public class EnemyFactory
 		e.Gold = Mathf.Clamp (Core.vary (e.Gold, variance), 0, 99999);
 		e.ItemList = ItemFactory.GenerateLoot (level, variance);
 		e.XP = Mathf.Clamp (e.XP + Mathf.RoundToInt (e.XP * variance), 10, 9999999);
+		e.avatarSprite = getSprite (e.Name, assetData);
 	
 		e.turnDataList = generateTurnDataList (level, variance);
 		return e;
@@ -94,6 +95,12 @@ public class EnemyFactory
 	{
 		return string.Format ("{0}{1} {2}{3}", getProperName (variance), getNamePrefix (variance), getType (level), getSuffix (variance));
 	}
+
+	private static Sprite getSprite (string name, AssetData assetData)
+	{
+		return assetData.DemonList [0];
+	}
+
 
 	private static string getType (int level)
 	{

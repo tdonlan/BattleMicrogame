@@ -31,7 +31,7 @@ public class TestSceneController : MonoBehaviour
 
 	public void GenerateEnemy ()
 	{
-		var enemy = EnemyFactory.GenerateEnemy (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f));
+		var enemy = EnemyFactory.GenerateEnemy (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f), gameData.assetData);
 
 		var enemyStr = enemy.ToString ();
 		testText.text = enemyStr;

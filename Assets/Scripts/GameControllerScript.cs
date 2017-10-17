@@ -81,9 +81,13 @@ public class GameControllerScript : MonoBehaviour
 	public Slider PlayerHPSlider;
 	public Slider EnemyHPSlider;
 
+	public Text PlayerNameText;
 	public Text PlayerStatsText;
+	public Image PlayerSprite;
+
 	public Text EnemyNameText;
 	public Text EnemyStatsText;
+	public Image EnemySprite;
 
 	public GameObject ItemButtonPanel;
 	public GameObject ItemButtonPrefab;
@@ -120,7 +124,7 @@ public class GameControllerScript : MonoBehaviour
 		isStart = false;
 		startTimer = 3;
 
-		this.enemy = EnemyFactory.GenerateEnemy (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f));
+		this.enemy = EnemyFactory.GenerateEnemy (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f), gameData.assetData);
 		this.enemy.AttachGameController (this);
 
 		currentTurnData = enemy.getNextTurnData ();
@@ -374,8 +378,13 @@ public class GameControllerScript : MonoBehaviour
 	private void UpdateStats ()
 	{
 		PlayerStatsText.text = gameData.player.GetStats ();
+		PlayerSprite.sprite = gameData.player.avatarSprite;
+
 		EnemyNameText.text = enemy.Name;
 		EnemyStatsText.text = enemy.GetStats ();
+		EnemySprite.sprite = enemy.avatarSprite;
+
+
 		PlayerHPSlider.value = gameData.player.HPSliderValue;
 		EnemyHPSlider.value = enemy.HPSliderValue;
 	}

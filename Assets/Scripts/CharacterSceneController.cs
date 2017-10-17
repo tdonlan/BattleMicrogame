@@ -69,5 +69,6 @@ public class CharacterSceneController : MonoBehaviour
 			playerSpriteIndex = 0;
 		}
 		playerImg.sprite = PlayerSpriteList [playerSpriteIndex];
+		gameData.player.avatarSprite = PlayerSpriteList [playerSpriteIndex];
 	}
 }
