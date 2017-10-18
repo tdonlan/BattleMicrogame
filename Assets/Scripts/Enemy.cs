@@ -19,6 +19,7 @@ public class Enemy : ITarget
 	public const int BaseGold = 10;
 
 	public string Name;
+	public string type;
 	public Sprite avatarSprite;
 	public int Level;
 	public int HP;

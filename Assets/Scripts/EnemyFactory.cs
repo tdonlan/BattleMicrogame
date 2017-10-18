@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class EnemyFactory
 {
-
 	//use variance for scaling
 	static List<string> prefixList = new List<string> () {
 		"Dying",
@@ -73,32 +72,61 @@ public class EnemyFactory
 		"stu"
 	};
 
+	//TODO: Load this from a csv
+	static Dictionary<string,SpriteAssetData> enemySpriteLookup = new Dictionary<string, SpriteAssetData> () {
+		{ "Rat",new SpriteAssetData ("Quad", 0) }, 
+		{ "Spider",new SpriteAssetData ("Pest", 16) },
+		{ "Snake",new SpriteAssetData ("Reptile", 6) }, 
+		{ "Imp",new SpriteAssetData ("Demon", 25) }, 
+		{ "Kobold",new SpriteAssetData ("Demon", 5) }, 
+		{ "Goblin",new SpriteAssetData ("Humanoid", 33) }, 
+		{ "Brigand",new SpriteAssetData ("Humanoid", 17) }, 
+		{ "Orc",new SpriteAssetData ("Humanoid", 27) }, 
+		{ "Zombie",new SpriteAssetData ("Undead", 4) }, 
+		{ "Orc Warlord",new SpriteAssetData ("Humanoid", 30) }, 
+		{ "Dire Wolf",new SpriteAssetData ("Quad", 7) }, 
+		{ "Werewolf",new SpriteAssetData ("Humanoid", 49) }, 
+		{ "Gryphon",new SpriteAssetData ("Demon", 2) }, 
+		{ "Drake",new SpriteAssetData ("Reptile", 13) }, 
+		{ "Wyvern",new SpriteAssetData ("Reptile", 3) },
+		{ "Wraith",new SpriteAssetData ("Undead", 36) }, 
+		{ "Skeleton Warrior",new SpriteAssetData ("Undead", 16) }, 
+		{ "Ogre",new SpriteAssetData ("Humanoid", 9) }, 
+		{ "Giant",new SpriteAssetData ("Humanoid", 1) }, 
+		{ "Vampire",new SpriteAssetData ("Undead", 26) }, 
+		{ "Dragon",new SpriteAssetData ("Reptile", 27) }, 
+		{ "Lich",new SpriteAssetData ("Undead", 22) }
+	};
+
 	//variance = -1 to 1.  will scale the difficulty of the enemy
 	public static Enemy GenerateEnemy (int level, float variance, AssetData assetData)
 	{
 		level = Mathf.Clamp (Core.vary (level, variance), 1, Enemy.MaxLevel);
-		string name = getName (level, variance);
+	
+		string type = getType (level);
+		string name = getName (type, variance);
 		var e = new Enemy (name, level);
+		e.type = type;
 		e.TotalHP = Mathf.Clamp (Core.vary (e.TotalHP, variance), Enemy.MinHp, Enemy.MaxHp);
 		e.HP = e.TotalHP;
 		e.Damage = Mathf.Clamp (Core.vary (e.Damage, variance), Enemy.MinDmg, Enemy.MaxDmg);
 		e.Gold = Mathf.Clamp (Core.vary (e.Gold, variance), 0, 99999);
 		e.ItemList = ItemFactory.GenerateLoot (level, variance);
 		e.XP = Mathf.Clamp (e.XP + Mathf.RoundToInt (e.XP * variance), 10, 9999999);
-		e.avatarSprite = getSprite (e.Name, assetData);
+		e.avatarSprite = getSprite (e.type, assetData);
 	
 		e.turnDataList = generateTurnDataList (level, variance);
 		return e;
 	}
 
-	private static string getName (int level, float variance)
+	private static string getName (string type, float variance)
 	{
-		return string.Format ("{0}{1} {2}{3}", getProperName (variance), getNamePrefix (variance), getType (level), getSuffix (variance));
+		return string.Format ("{0}{1} {2}{3}", getProperName (variance), getNamePrefix (variance), type, getSuffix (variance));
 	}
 
-	private static Sprite getSprite (string name, AssetData assetData)
+	private static Sprite getSprite (string type, AssetData assetData)
 	{
-		return assetData.DemonList [0];
+		return assetData.getSprite (enemySpriteLookup [type]);
 	}
 
 
