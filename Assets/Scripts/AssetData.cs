@@ -61,7 +61,7 @@ public class AssetData
 		LongWepList = LoadSpriteResource ("LongWep");
 		MedWepList = LoadSpriteResource ("MedWep");
 		PotionList = LoadSpriteResource ("Potion");
-		ShortWepList = LoadSpriteResource ("ShortWep ");
+		ShortWepList = LoadSpriteResource ("ShortWep");
 	}
 
 	private List<Sprite> LoadSpriteResource (string name)

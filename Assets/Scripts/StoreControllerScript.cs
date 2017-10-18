@@ -232,7 +232,9 @@ public class StoreControllerScript : MonoBehaviour
 		var buttons = itemEntry.GetComponentsInChildren<Button> ();
 		foreach (var b in buttons) {
 			if (b.gameObject.name == "EquipButton") {
-				b.gameObject.SetActive (false);
+				b.enabled = false;
+				var img = b.transform.GetChild (0).GetComponent<Image> ();
+				img.sprite = i.itemSprite;
 			}
 			if (b.gameObject.name == "DropButton") {
 				b.gameObject.SetActive (false);
