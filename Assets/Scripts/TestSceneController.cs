@@ -39,7 +39,7 @@ public class TestSceneController : MonoBehaviour
 
 	public void GenerateWeapon ()
 	{
-		var weapon = ItemFactory.GenerateWeapon (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f));
+		var weapon = ItemFactory.GenerateWeapon (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f), gameData.assetData);
 		var wepStr = weapon.Name + "\n" + weapon.ToString ();
 
 		gameData.player.itemList.Add (weapon);
@@ -49,7 +49,7 @@ public class TestSceneController : MonoBehaviour
 
 	public void GenerateArmor ()
 	{
-		var armor = ItemFactory.GenerateArmor (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f));
+		var armor = ItemFactory.GenerateArmor (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f), gameData.assetData);
 		var armorStr = armor.Name + "\n" + armor.ToString ();
 
 		gameData.player.itemList.Add (armor);
@@ -59,7 +59,7 @@ public class TestSceneController : MonoBehaviour
 
 	public void GenerateItem ()
 	{
-		var item = ItemFactory.GenerateItem (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f));
+		var item = ItemFactory.GenerateItem (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f), gameData.assetData);
 		var itemStr = item.Name + "\n" + item.ToString ();
 
 		gameData.player.itemList.Add (item);

@@ -19,6 +19,7 @@ public class SpriteAssetData
 
 public class AssetData
 {
+	//Avatars
 	public List<Sprite> PlayerList;
 	public List<Sprite> DemonList;
 	public List<Sprite> ElementalList;
@@ -28,6 +29,14 @@ public class AssetData
 	public List<Sprite> MiscList;
 	public List<Sprite> PestList;
 	public List<Sprite> QuadList;
+
+	//Items
+	public List<Sprite> ArmorList;
+	public List<Sprite> ChestList;
+	public List<Sprite> LongWepList;
+	public List<Sprite> MedWepList;
+	public List<Sprite> PotionList;
+	public List<Sprite> ShortWepList;
 
 	public AssetData ()
 	{
@@ -46,6 +55,13 @@ public class AssetData
 		MiscList = LoadSpriteResource ("Misc1");
 		PestList = LoadSpriteResource ("Pest1");
 		QuadList = LoadSpriteResource ("Quadraped1");
+
+		ArmorList = LoadSpriteResource ("Armor");
+		ChestList = LoadSpriteResource ("Chest1");
+		LongWepList = LoadSpriteResource ("LongWep");
+		MedWepList = LoadSpriteResource ("MedWep");
+		PotionList = LoadSpriteResource ("Potion");
+		ShortWepList = LoadSpriteResource ("ShortWep ");
 	}
 
 	private List<Sprite> LoadSpriteResource (string name)
@@ -85,6 +101,25 @@ public class AssetData
 			break;
 		case "Quad":
 			spriteList = QuadList;
+			break;
+
+		case "Armor":
+			spriteList = ArmorList;
+			break;
+		case "Chest":
+			spriteList = ChestList;
+			break;
+		case "LongWep":
+			spriteList = LongWepList;
+			break;
+		case "MedWep":
+			spriteList = MedWepList;
+			break;
+		case "ShortWep":
+			spriteList = ShortWepList;
+			break;
+		case "Potion":
+			spriteList = PotionList;
 			break;
 		default:
 			spriteList = DemonList;

@@ -111,7 +111,7 @@ public class EnemyFactory
 		e.HP = e.TotalHP;
 		e.Damage = Mathf.Clamp (Core.vary (e.Damage, variance), Enemy.MinDmg, Enemy.MaxDmg);
 		e.Gold = Mathf.Clamp (Core.vary (e.Gold, variance), 0, 99999);
-		e.ItemList = ItemFactory.GenerateLoot (level, variance);
+		e.ItemList = ItemFactory.GenerateLoot (level, variance, assetData);
 		e.XP = Mathf.Clamp (e.XP + Mathf.RoundToInt (e.XP * variance), 10, 9999999);
 		e.avatarSprite = getSprite (e.type, assetData);
 	

@@ -109,7 +109,7 @@ x-run on iphone for testing:
 MVP
 	x-udate to latest unity version?
 	x-skinning UI
-	-avatars for players / enemies
+	x-avatars for players / enemies
 	-icons for items
 	x-store
 	-sound

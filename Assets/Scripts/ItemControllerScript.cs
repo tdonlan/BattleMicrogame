@@ -224,6 +224,11 @@ public class ItemControllerScript : MonoBehaviour
 
 		var buttons = itemEntry.GetComponentsInChildren<Button> ();
 		foreach (var b in buttons) {
+			if (b.gameObject.name == "EquipButton") {
+				Image img = b.GetComponentInChildren<Image> ();
+				img.sprite = i.itemSprite;
+			}
+
 			if (b.gameObject.name == "BuyButton") {
 				b.gameObject.SetActive (false);
 			}
