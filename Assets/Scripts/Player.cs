@@ -122,10 +122,10 @@ public class Player : ITarget
 	
 		itemList = new List<Item> ();
 
-		itemList.Add (ItemFactory.getHealingPotion ());
-		itemList.Add (ItemFactory.getRegenPotion ());
-		itemList.Add (ItemFactory.getGrenade ());
-		itemList.Add (ItemFactory.getPoison ());
+		itemList.Add (ItemFactory.getHealingPotion (assetData));
+		itemList.Add (ItemFactory.getRegenPotion (assetData));
+		itemList.Add (ItemFactory.getGrenade (assetData));
+		itemList.Add (ItemFactory.getPoison (assetData));
 	}
 
 	public void AttachGameController (GameControllerScript gameController)

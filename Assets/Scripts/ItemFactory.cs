@@ -182,28 +182,36 @@ public class ItemFactory
 
 	//------ Factories
 	//put these in a factory / datalist?
-	public static Item getHealingPotion ()
+	public static Item getHealingPotion (AssetData assetData)
 	{
 		var iEffect = new ItemEffect (EffectType.HealSelf, 25, 1);
-		return new Item ("Healing Potion", 1, 5, new List<ItemEffect> (){ iEffect });
+		var i = new Item ("Healing Potion", 1, 5, new List<ItemEffect> (){ iEffect });
+		i.itemSprite = getItemSprite (assetData);
+		return i;
 	}
 
-	public static Item getRegenPotion ()
+	public static Item getRegenPotion (AssetData assetData)
 	{
 		var iEffect = new ItemEffect (EffectType.HealSelf, 5, 5);
-		return new Item ("Regen Potion", 1, 5, new List<ItemEffect> (){ iEffect });
+		var i = new Item ("Regen Potion", 1, 5, new List<ItemEffect> (){ iEffect });
+		i.itemSprite = getItemSprite (assetData);
+		return i;
 	}
 
-	public static Item getGrenade ()
+	public static Item getGrenade (AssetData assetData)
 	{
 		var iEffect = new ItemEffect (EffectType.DamageEnemy, 25, 1);
-		return new Item ("Grenade", 1, 5, new List<ItemEffect> (){ iEffect });
+		var i = new Item ("Grenade", 1, 5, new List<ItemEffect> (){ iEffect });
+		i.itemSprite = getItemSprite (assetData);
+		return i;
 	}
 
-	public static Item getPoison ()
+	public static Item getPoison (AssetData assetData)
 	{
 		var iEffect = new ItemEffect (EffectType.DamageEnemy, 5, 5);
-		return new Item ("Poison", 1, 5, new List<ItemEffect> (){ iEffect });
+		var i = new Item ("Poison", 1, 5, new List<ItemEffect> (){ iEffect });
+		i.itemSprite = getItemSprite (assetData);
+		return i;
 	}
 
 	//-----------------
