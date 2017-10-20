@@ -70,10 +70,11 @@ public class ItemEffect
 public class Item
 {
 	public string Name;
+	public string Type;
+	public Sprite itemSprite;
 	public int Price;
 	public int Level;
 	public List<ItemEffect> itemEffectList = new List<ItemEffect> ();
-
 
 	public Item (string name, int level, int price, List<ItemEffect> itemEffectList)
 	{

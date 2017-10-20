@@ -15,14 +15,10 @@ public class StartSceneController : MonoBehaviour
 	void Start ()
 	{
 		gameData = GameObject.FindObjectOfType<GameData> ();
-
-	}
-
-	void OnLevelWasLoaded ()
-	{
 		PopulateEnemyBattleButtons ();
+
 	}
-	
+
 	// Update is called once per frame
 	void Update ()
 	{

@@ -19,6 +19,8 @@ public class Enemy : ITarget
 	public const int BaseGold = 10;
 
 	public string Name;
+	public string type;
+	public Sprite avatarSprite;
 	public int Level;
 	public int HP;
 	public int TotalHP;
@@ -51,6 +53,8 @@ public class Enemy : ITarget
 		this.Damage = level * Enemy.BaseDamage;
 		this.XP = level * Enemy.BaseXP;
 		this.Gold = level * Enemy.BaseGold;
+
+		//this.avatarSprite = gameController.gameData.assetData.DemonList [0];
 	}
 
 	//For display stats in game

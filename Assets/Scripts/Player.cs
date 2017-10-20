@@ -8,6 +8,7 @@ public class Player : ITarget
 	private GameControllerScript gameController;
 
 	public string Name;
+	public Sprite avatarSprite;
 
 	public int XP;
 
@@ -109,7 +110,7 @@ public class Player : ITarget
 		}
 	}
 
-	public Player ()
+	public Player (AssetData assetData)
 	{
 		this.Name = "Player";
 		this.TotalHP = 100;
@@ -117,12 +118,14 @@ public class Player : ITarget
 		this.Level = 1;
 		this.XP = 0;
 
+		this.avatarSprite = assetData.PlayerList [0];
+	
 		itemList = new List<Item> ();
 
-		itemList.Add (ItemFactory.getHealingPotion ());
-		itemList.Add (ItemFactory.getRegenPotion ());
-		itemList.Add (ItemFactory.getGrenade ());
-		itemList.Add (ItemFactory.getPoison ());
+		itemList.Add (ItemFactory.getHealingPotion (assetData));
+		itemList.Add (ItemFactory.getRegenPotion (assetData));
+		itemList.Add (ItemFactory.getGrenade (assetData));
+		itemList.Add (ItemFactory.getPoison (assetData));
 	}
 
 	public void AttachGameController (GameControllerScript gameController)

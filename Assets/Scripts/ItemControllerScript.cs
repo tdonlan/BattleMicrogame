@@ -224,6 +224,11 @@ public class ItemControllerScript : MonoBehaviour
 
 		var buttons = itemEntry.GetComponentsInChildren<Button> ();
 		foreach (var b in buttons) {
+			if (b.gameObject.name == "EquipButton") {
+				var img = b.transform.GetChild (0).GetComponent<Image> ();
+				img.sprite = i.itemSprite;
+			}
+
 			if (b.gameObject.name == "BuyButton") {
 				b.gameObject.SetActive (false);
 			}
@@ -232,7 +237,6 @@ public class ItemControllerScript : MonoBehaviour
 			}
 
 		}
-	
 
 		var itemEntryScript = itemEntry.GetComponentInChildren<ItemEntryControllerScript> ();
 		itemEntryScript.item = i;

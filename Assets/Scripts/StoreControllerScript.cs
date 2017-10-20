@@ -44,7 +44,7 @@ public class StoreControllerScript : MonoBehaviour
 	void Start ()
 	{
 		gameData = GameObject.FindObjectOfType<GameData> ();
-		storeList = ItemFactory.GenerateStore (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f));
+		storeList = ItemFactory.GenerateStore (gameData.player.Level, UnityEngine.Random.Range (-1f, 1f), gameData.assetData);
 		PlayerGoldText.text = string.Format ("{0}", gameData.player.Gold);
 
 		SelectWeapons ();
@@ -232,7 +232,9 @@ public class StoreControllerScript : MonoBehaviour
 		var buttons = itemEntry.GetComponentsInChildren<Button> ();
 		foreach (var b in buttons) {
 			if (b.gameObject.name == "EquipButton") {
-				b.gameObject.SetActive (false);
+				b.enabled = false;
+				var img = b.transform.GetChild (0).GetComponent<Image> ();
+				img.sprite = i.itemSprite;
 			}
 			if (b.gameObject.name == "DropButton") {
 				b.gameObject.SetActive (false);

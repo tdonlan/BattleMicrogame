@@ -10,10 +10,14 @@ public class GameData : MonoBehaviour
 
 	public List<Enemy> enemyList;
 
+	public AssetData assetData;
+
 	// Use this for initialization
 	void Start ()
 	{
 		DontDestroyOnLoad (gameObject);
+		this.assetData = new AssetData ();
+
 		InitPlayer ();
 
 		enemyList = new List<Enemy> ();
@@ -23,7 +27,8 @@ public class GameData : MonoBehaviour
 
 	private void InitPlayer ()
 	{
-		this.player = new Player ();
+		this.player = new Player (this.assetData);
+	
 	}
 	
 	// Update is called once per frame
@@ -35,9 +40,9 @@ public class GameData : MonoBehaviour
 
 	private void PopulateEnemyList (int level)
 	{
-		enemyList.Add (EnemyFactory.GenerateEnemy (level, -.5f));
-		enemyList.Add (EnemyFactory.GenerateEnemy (level, 0));
-		enemyList.Add (EnemyFactory.GenerateEnemy (level, .5f));
+		enemyList.Add (EnemyFactory.GenerateEnemy (level, -.5f, this.assetData));
+		enemyList.Add (EnemyFactory.GenerateEnemy (level, 0, this.assetData));
+		enemyList.Add (EnemyFactory.GenerateEnemy (level, .5f, this.assetData));
 	}
 
 	//remove given enemy from list, populate a new one of same difficulty
@@ -48,16 +53,16 @@ public class GameData : MonoBehaviour
 
 		switch (index) {
 		case 0: //easy
-			enemyList.Insert (index, EnemyFactory.GenerateEnemy (player.Level, -.5f));
+			enemyList.Insert (index, EnemyFactory.GenerateEnemy (player.Level, -.5f, this.assetData));
 			break;
 		case 1:
-			enemyList.Insert (index, EnemyFactory.GenerateEnemy (player.Level, 0));
+			enemyList.Insert (index, EnemyFactory.GenerateEnemy (player.Level, 0, this.assetData));
 			break;
 		case 2:
-			enemyList.Insert (index, EnemyFactory.GenerateEnemy (player.Level, .5f));
+			enemyList.Insert (index, EnemyFactory.GenerateEnemy (player.Level, .5f, this.assetData));
 			break;
 		default:
-			enemyList.Insert (index, EnemyFactory.GenerateEnemy (player.Level, 0));
+			enemyList.Insert (index, EnemyFactory.GenerateEnemy (player.Level, 0, this.assetData));
 			break;
 		}
 	}
