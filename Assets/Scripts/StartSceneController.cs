@@ -58,4 +58,9 @@ public class StartSceneController : MonoBehaviour
 	{
 		SceneManager.LoadScene ("StoreScene", LoadSceneMode.Single);
 	}
+
+	public void ShowLoc ()
+	{
+		SceneManager.LoadScene ("LocScene", LoadSceneMode.Single);
+	}
 }
