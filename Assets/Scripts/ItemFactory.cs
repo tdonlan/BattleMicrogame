@@ -265,8 +265,6 @@ public class ItemFactory
 		return lootList;
 	}
 
-
-
 	public static Weapon GenerateWeapon (int level, float variance, AssetData assetData)
 	{
 		level = Mathf.Clamp (Core.vary (level, variance), 1, Enemy.MaxLevel);
@@ -276,7 +274,8 @@ public class ItemFactory
 		int dmg = Mathf.Clamp (Core.vary (level * 10, variance), 1, 999999);
 		var w = new Weapon (name, level, price, dmg); //TODO: add additional abilities
 		w.Type = type;
-		w.itemSprite = getWeaponSprite (type, assetData);
+		w.spriteAssetData = getWeaponSpriteData (type, assetData);
+		w.itemSprite = assetData.getSprite (w.spriteAssetData);
 		return w;
 	}
 
@@ -289,6 +288,11 @@ public class ItemFactory
 	private static Sprite getWeaponSprite (string type, AssetData assetData)
 	{
 		return assetData.getSprite (weaponSpriteLookup [type]);
+	}
+
+	private static SpriteAssetData getWeaponSpriteData (string type, AssetData assetData)
+	{
+		return weaponSpriteLookup [type];
 	}
 
 
@@ -306,7 +310,8 @@ public class ItemFactory
 		int defense = Mathf.Clamp (Core.vary (level * 5, variance), 1, 999999);
 		var a = new Armor (name, level, price, defense); //TODO: leveladd additional abilities
 		a.Type = type;
-		a.itemSprite = getArmorSprite (type, assetData);
+		a.spriteAssetData = getArmorSpriteData (type, assetData);
+		a.itemSprite = assetData.getSprite (a.spriteAssetData);
 		return a;
 	}
 
@@ -316,9 +321,15 @@ public class ItemFactory
 		return name [0].ToString ().ToUpper () + name.Substring (1);
 	}
 
+	//deprecated
 	private static Sprite getArmorSprite (string type, AssetData assetData)
 	{
 		return assetData.getSprite (armorSpriteLookup [type]);
+	}
+
+	private static SpriteAssetData getArmorSpriteData (string type, AssetData assetData)
+	{
+		return armorSpriteLookup [type];
 	}
 
 	private static string getArmorType (int level)
@@ -333,7 +344,8 @@ public class ItemFactory
 		string name = getItemName (level, variance);
 		var effectList = ItemEffectFactory.getItemEffectList (level, variance);
 		var i = new Item (name, level, price, effectList);
-		i.itemSprite = getItemSprite (assetData);
+		i.spriteAssetData = getItemSpriteData (assetData);
+		i.itemSprite = assetData.getSprite (i.spriteAssetData);
 		return i;
 	}
 
@@ -349,9 +361,15 @@ public class ItemFactory
 	}
 
 	//just return a random potion
+	//Deprecated
 	private static Sprite getItemSprite (AssetData assetData)
 	{
 		return assetData.PotionList [UnityEngine.Random.Range (0, assetData.PotionList.Count - 1)];
+	}
+
+	private static SpriteAssetData getItemSpriteData (AssetData assetData)
+	{
+		return new SpriteAssetData ("Potion", UnityEngine.Random.Range (0, assetData.PotionList.Count - 1)); 
 	}
 
 	private static string getProperName (float variance)

@@ -127,6 +127,12 @@ public class Item
 			}
 		}
 	}
+
+	//when loading from save data, reload the sprite image
+	public void ReloadImage (AssetData assetData)
+	{
+		this.itemSprite = assetData.getSprite (this.spriteAssetData);
+	}
 }
 
 [Serializable]

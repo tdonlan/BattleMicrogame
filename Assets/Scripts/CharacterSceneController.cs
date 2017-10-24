@@ -73,7 +73,7 @@ public class CharacterSceneController : MonoBehaviour
 
 		playerImg.sprite = gameData.assetData.getSprite (spriteAssetData);
 		gameData.player.spriteAssetData = spriteAssetData;
-		gameData.player.avatarSprite = playerImg.sprite;
+		gameData.player.avatarSprite = gameData.assetData.getSprite (spriteAssetData);
 	}
 
 	public void Save ()

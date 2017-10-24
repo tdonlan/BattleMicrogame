@@ -33,8 +33,7 @@ public class SavePlayerData
 		sp.HP = p.HP;
 		sp.Gold = p.Gold;
 
-		sp.avatarSprite = p.avatarSprite;
-
+		sp.spriteAssetData = p.spriteAssetData;
 		sp.itemList = p.itemList;
 		sp.usableItemList = p.usableItemList;
 		sp.weapon = p.weapon;
@@ -161,7 +160,7 @@ public class Player : ITarget
 		this.XP = 0;
 
 		this.spriteAssetData = new SpriteAssetData ("Player", 0);
-		this.avatarSprite = assetData.PlayerList [0];
+		this.avatarSprite = assetData.getSprite (this.spriteAssetData);
 	
 		itemList = new List<Item> ();
 

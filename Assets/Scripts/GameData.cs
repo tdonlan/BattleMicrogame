@@ -85,7 +85,7 @@ public class GameData : MonoBehaviour
 		file.Close (); // closes file
 		Debug.Log ("Data Saved to " + path);
 
-		Load ();
+		//Load ();
 
 	}
 
@@ -101,6 +101,21 @@ public class GameData : MonoBehaviour
 			Debug.Log ("Just loaded" + json);
 
 			this.player = new Player (this.assetData, sp);
+
+			if (sp.weapon != null) {
+				sp.weapon.ReloadImage (this.assetData);
+			}
+
+			if (sp.armor != null) {
+				sp.armor.ReloadImage (this.assetData);
+			}
+
+			foreach (var i in sp.itemList) {
+				i.ReloadImage (this.assetData);
+			}
+			foreach (var i in sp.usableItemList) {
+				i.ReloadImage (this.assetData);
+			}
 		}
 	}
 }
