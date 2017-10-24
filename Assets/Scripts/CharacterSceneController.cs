@@ -14,14 +14,13 @@ public class CharacterSceneController : MonoBehaviour
 	public Image playerImg;
 
 	private int playerSpriteIndex = 0;
-	private List<Sprite> PlayerSpriteList;
 
 	// Use this for initialization
 	void Start ()
 	{
 		gameData = GameObject.FindObjectOfType<GameData> ();
 		SetStatsText ();
-		loadResources ();
+		SetPlayerImg ();
 	}
 	
 	// Update is called once per frame
@@ -30,14 +29,14 @@ public class CharacterSceneController : MonoBehaviour
 		
 	}
 
-	private void loadResources ()
+	private void SetPlayerImg ()
 	{
-		PlayerSpriteList = Resources.LoadAll ("Player1", typeof(Sprite)).Cast<Sprite> ().ToList ();
-		/*
-		foreach (var s in playerSprites) {
-			PlayerSpriteList.Add (s);
+		if (gameData.player.avatarSprite == null) {
+			var spriteAssetData = new SpriteAssetData ("Player", playerSpriteIndex);
+			gameData.player.spriteAssetData = spriteAssetData;
+			gameData.player.avatarSprite = playerImg.sprite;
 		}
-		*/
+		playerImg.sprite = gameData.player.avatarSprite;
 	}
 
 	private void SetStatsText ()
@@ -64,12 +63,17 @@ public class CharacterSceneController : MonoBehaviour
 
 	public void NextImg ()
 	{
+		var playerSpriteList = gameData.assetData.PlayerList;
 		playerSpriteIndex++;
-		if (playerSpriteIndex >= PlayerSpriteList.Count) {
+		if (playerSpriteIndex >= playerSpriteList.Count) {
 			playerSpriteIndex = 0;
 		}
-		playerImg.sprite = PlayerSpriteList [playerSpriteIndex];
-		gameData.player.avatarSprite = PlayerSpriteList [playerSpriteIndex];
+			
+		var spriteAssetData = new SpriteAssetData ("Player", playerSpriteIndex);
+
+		playerImg.sprite = gameData.assetData.getSprite (spriteAssetData);
+		gameData.player.spriteAssetData = spriteAssetData;
+		gameData.player.avatarSprite = playerImg.sprite;
 	}
 
 	public void Save ()

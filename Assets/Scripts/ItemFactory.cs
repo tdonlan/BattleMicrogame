@@ -326,7 +326,6 @@ public class ItemFactory
 		return armorTypeList [UnityEngine.Random.Range (0, armorTypeList.Count)];
 	}
 
-
 	public static Item GenerateItem (int level, float variance, AssetData assetData)
 	{
 		level = Mathf.Clamp (Core.vary (level, variance), 1, Enemy.MaxLevel);

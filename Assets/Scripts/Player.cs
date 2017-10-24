@@ -9,6 +9,7 @@ public class SavePlayerData
 {
 	public string Name;
 
+	public SpriteAssetData spriteAssetData;
 	[System.NonSerialized]
 	public Sprite avatarSprite;
 
@@ -48,6 +49,7 @@ public class Player : ITarget
 	private GameControllerScript gameController;
 
 	public string Name;
+	public SpriteAssetData spriteAssetData;
 	public Sprite avatarSprite;
 
 	public int XP;

@@ -41,7 +41,6 @@ public class AssetData
 	public AssetData ()
 	{
 		LoadSprites ();
-
 	}
 
 	private void LoadSprites ()
@@ -82,16 +81,16 @@ public class AssetData
 			spriteList = DemonList;
 			break;
 		case "Elemental":
-			spriteList = DemonList;
+			spriteList = ElementalList;
 			break;
 		case "Humanoid":
-			spriteList = DemonList;
+			spriteList = HumanoidList;
 			break;
 		case "Reptile":
-			spriteList = DemonList;
+			spriteList = ReptileList;
 			break;
 		case "Undead":
-			spriteList = DemonList;
+			spriteList = UndeadList;
 			break;
 		case "Misc":
 			spriteList = MiscList;

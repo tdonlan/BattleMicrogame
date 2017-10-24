@@ -75,6 +75,7 @@ public class Item
 	public string Name;
 	public string Type;
 
+	public SpriteAssetData spriteAssetData;
 	[System.NonSerialized]
 	public Sprite itemSprite;
 
