@@ -100,9 +100,8 @@ public class GameData : MonoBehaviour
 			string json = JsonUtility.ToJson (sp);
 			Debug.Log ("Just loaded" + json);
 
-
+			this.player = new Player (this.assetData, sp);
 		}
-
 	}
 }
 

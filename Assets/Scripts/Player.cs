@@ -160,6 +160,7 @@ public class Player : ITarget
 		this.Level = 1;
 		this.XP = 0;
 
+		this.spriteAssetData = new SpriteAssetData ("Player", 0);
 		this.avatarSprite = assetData.PlayerList [0];
 	
 		itemList = new List<Item> ();
@@ -172,15 +173,19 @@ public class Player : ITarget
 
 	public Player (AssetData assetData, SavePlayerData sp)
 	{
-
 		this.Name = sp.Name;
 		this.TotalHP = sp.TotalHP;
 		this.HP = sp.HP;
 		this.Level = sp.Level;
 		this.XP = sp.XP;
 
-		this.avatarSprite = assetData.PlayerList [0];
-		itemList = new List<Item> ();
+		this.spriteAssetData = sp.spriteAssetData;
+
+		this.avatarSprite = assetData.getSprite (sp.spriteAssetData);
+		this.itemList = sp.itemList;
+		this.usableItemList = sp.usableItemList;
+		this.weapon = sp.weapon;
+		this.armor = sp.armor;
 	}
 
 	public void AttachGameController (GameControllerScript gameController)

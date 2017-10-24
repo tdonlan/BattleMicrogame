@@ -79,6 +79,12 @@ public class CharacterSceneController : MonoBehaviour
 	public void Save ()
 	{
 		gameData.Save ();
+	}
 
+	public void Load ()
+	{
+		gameData.Load ();
+		SetStatsText ();
+		SetPlayerImg ();
 	}
 }

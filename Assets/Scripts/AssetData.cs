@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Linq;
 
 
+[Serializable]
 public class SpriteAssetData
 {
 	public string sheetName;
