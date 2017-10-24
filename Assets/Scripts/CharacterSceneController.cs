@@ -71,4 +71,10 @@ public class CharacterSceneController : MonoBehaviour
 		playerImg.sprite = PlayerSpriteList [playerSpriteIndex];
 		gameData.player.avatarSprite = PlayerSpriteList [playerSpriteIndex];
 	}
+
+	public void Save ()
+	{
+		gameData.Save ();
+
+	}
 }

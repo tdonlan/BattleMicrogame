@@ -2,6 +2,46 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
+
+[Serializable]
+public class SavePlayerData
+{
+	public string Name;
+
+	[System.NonSerialized]
+	public Sprite avatarSprite;
+
+	public int XP;
+	public int Level;
+	public int TotalHP;
+	public int HP;
+	public int Gold;
+	public List<Item> itemList;
+	public List<Item> usableItemList = new List<Item> ();
+	public Weapon weapon = null;
+	public Armor armor = null;
+
+	public static SavePlayerData fromPlayer (Player p)
+	{
+		SavePlayerData sp = new SavePlayerData ();
+		sp.Name = p.Name;
+		sp.XP = p.XP;
+		sp.Level = p.Level;
+		sp.TotalHP = p.TotalHP;
+		sp.HP = p.HP;
+		sp.Gold = p.Gold;
+
+		sp.avatarSprite = p.avatarSprite;
+
+		sp.itemList = p.itemList;
+		sp.usableItemList = p.usableItemList;
+		sp.weapon = p.weapon;
+		sp.armor = p.armor;
+
+		return sp;
+	}
+}
 
 public class Player : ITarget
 {
@@ -126,6 +166,19 @@ public class Player : ITarget
 		itemList.Add (ItemFactory.getRegenPotion (assetData));
 		itemList.Add (ItemFactory.getGrenade (assetData));
 		itemList.Add (ItemFactory.getPoison (assetData));
+	}
+
+	public Player (AssetData assetData, SavePlayerData sp)
+	{
+
+		this.Name = sp.Name;
+		this.TotalHP = sp.TotalHP;
+		this.HP = sp.HP;
+		this.Level = sp.Level;
+		this.XP = sp.XP;
+
+		this.avatarSprite = assetData.PlayerList [0];
+		itemList = new List<Item> ();
 	}
 
 	public void AttachGameController (GameControllerScript gameController)

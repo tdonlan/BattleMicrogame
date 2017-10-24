@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public enum EffectType
 {
@@ -11,6 +12,7 @@ public enum EffectType
 	DamageEnemy,
 }
 
+[Serializable]
 public class ItemEffect
 {
 	//TODO: Need to include the target as a flag, instead of baked into effectType
@@ -67,11 +69,15 @@ public class ItemEffect
 	}
 }
 
+[Serializable]
 public class Item
 {
 	public string Name;
 	public string Type;
+
+	[System.NonSerialized]
 	public Sprite itemSprite;
+
 	public int Price;
 	public int Level;
 	public List<ItemEffect> itemEffectList = new List<ItemEffect> ();
@@ -122,6 +128,7 @@ public class Item
 	}
 }
 
+[Serializable]
 public class Weapon : Item
 {
 	public int Damage;
@@ -137,6 +144,7 @@ public class Weapon : Item
 	}
 }
 
+[Serializable]
 public class Armor : Item
 {
 	public int Defense;
