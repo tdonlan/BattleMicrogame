@@ -20,6 +20,8 @@ public class Enemy : ITarget
 
 	public string Name;
 	public string type;
+
+	public SpriteAssetData spriteAssetData;
 	public Sprite avatarSprite;
 	public int Level;
 	public int HP;
